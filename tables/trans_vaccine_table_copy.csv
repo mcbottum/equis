@@ -1,0 +1,17 @@
+vaccination,bot-vax_b,calvenza_ehv,calvenza_eiv,calvenza_ehv_eiv,cephalovac_vewt,coli_endotox,encevac,encevac_t,encevac_t_and_vee,encevac_tc-4,encevac_tc-4_and_vee,endovac-equi,equi-flu_ewt,equiloid_innovator,fluvac_innovator_4_1,fluvac_innovator_4,fluvac_innovator_5,fluvac_innovator_triple_e-ft,fluvac_innovator_6,mystique,pneumabort_k_and_1b,prestige_ii,prestige_5,prestige_5_and_vee,prodigy,rabvac_3,rhinomune,strepguard,strepvax_ii,super-tet_oxoid,tetanus_antitoxin,west_nile_innovator,west_nile_innovator_and_ewt,west_nile_innovator_and_vewt
+west_nile,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1
+eastern_equine_encephalomyelitis_\(eee),0,0,0,0,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1
+western_equine_encephalomyelitis_(wee),0,0,0,0,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1
+venezuelan_equine_encephalomyelitis_(vee),0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1
+tetanus,0,0,0,0,1,0,0,1,1,1,1,0,1,1,0,1,1,1,1,0,0,0,1,1,0,0,0,0,0,1,1,,1,1
+equine_influenza_a-1,0,0,1,1,0,0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0
+equine_influenza_a-2,0,0,1,1,0,0,0,0,0,1,1,0,1,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0
+equine_herpes_virus_ehv-1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,0,0,0,0,0,0
+equine_herpes_virus_ehv-4,0,1,,1,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0
+potomac_horse_fever,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+strangles,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0
+e-coli,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+salmonella,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+botulism,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+rabies,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0
+frequency,12,12,12,12,12,0,12,12,12,12,12,0,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12

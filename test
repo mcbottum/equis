@@ -1,0 +1,30 @@
+<?
+function get_db(){
+	$db=equis; //home
+	//$db=abaits5_equis;//server
+	return $db;
+}
+function get_conn(){
+	$conn=mysql_connect("localhost","root","") or die(mysql_error());//home
+	//$conn=mysql_connect("localhost","abaits5_mcbottum","annakai1") or die(mysql_error());//server
+	return $conn;
+}
+function getReminders($horse,$db){//get reminders for the next 3 days
+	$conn=get_conn();
+	$today=date('Y-m-d');
+	$today=strtotime($today);
+	$future=strtotime("+3",$today);
+	$future=date('Y-m-d',$future);
+	$sql_p="SELECT * FROM physical WHERE next_date BETWEEN NOW() AND '$future'";
+	$p_result=mysql_query($sql_p, $conn);
+	while($row = mysql_fetch_array($p_result)){
+		$p_table[]=$row;
+	}
+	return $reminders;
+	mysql_close($conn);
+}
+$try=getReminders("1","equis");
+foreach($try as $this){
+	print $this[next_date];
+}
+?>

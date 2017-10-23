@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Layout Example</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+  <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+	$('#body').layout();
+	$( "#accordion" ).accordion({heightStyle: "content",icons: icons });
+});
+</script>
+</head>
+<body id="body">
+<div class="ui-layout-center">Center
+	<p><a href="http://layout.jquery-dev.net/demos.html">Go to the Demos page</a></p>
+	<p>* Pane-resizing is disabled because ui.draggable.js is not linked</p>
+	<p>* Pane-animation is disabled because ui.effects.js is not linked</p>
+</div>
+<div class="ui-layout-north">North</div>
+<div class="ui-layout-south">South</div>
+<div class="ui-layout-east">East</div>
+<div class="ui-layout-west">West</div>
+</body>
+</html>

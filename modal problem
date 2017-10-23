@@ -1,0 +1,147 @@
+<div id="fragment-10"><!--ADMIN TAB !!!!!-->
+<div class='accordion'>
+<?
+	if($_SESSION['passwordcheck']=='pass'){
+        if($login_data){
+        	print "<h3>Access Levels for Current Users</h3>";
+        	print "<div>";//inner accordion
+        	print "<table>";
+        	foreach($login_data as $row){		
+  	  	 		$delete_table=6;
+ 			 	print "<form action='javascript:delete_record(".$row[key].",".$delete_table.")' method='post' enctype='multipart/form-data'>"; 
+  	  	 			print "<tr>";
+  	  	 				foreach($login_field_labels as $label){
+  	  	 					if($label!="key"&&$label!="password"){
+  	  	 						if($label=='access'||$label=='email'){
+  	  	 							print "<td width='50' style='font-weight:bold;'>".$label."</td>";
+  	  	 						}
+  	  	 						print "<td width='50'>".$row[$label]."</td>";
+  	     					}
+  	  	 				}
+  	  	 			if($_SESSION[access]=="global"){
+  	  	 				print "<input type='hidden' id='admin_delete' value='".$row[key]."'>";
+  	     				print "<td><input 	id='delete_admin' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete User' /></td>";
+  	  	 			}
+  	  	 			print "</tr>";
+  	     		print "</form>";
+ 			 }
+ 			 print "</table>";
+ 	 print "</div>";//inner accordion div
+        }//end if login data
+  	    	
+     }//end if pass check
+        ?>		 
+<!--ADD NEW ADMIN -->
+	<h3>Enter New Administrator Data</h3>
+    <div id="insert_admin_response"><!--start inner accordion div-->
+    	<?if($_SESSION['access']=='global'){//allow to update information
+         ?>
+  	  	<form action='javascript:insert_admin()' method='post'>
+  	  	 <?
+  	  	 print "<input type='hidden' name='horse_key' id='horse_key' value='".$horse_key."' />";
+			print "<table>";
+  	  	 		foreach($login_field_labels as $label){
+  	  	 			if($label!="key"&&$label!="access"){
+  	  	 				print "<tr>";
+  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><input type='text' id=".$label."></td>";
+  	  	 				print "</tr>";
+  	  	 			}
+  	  	 		}
+  	  	 	  ?>
+  	  	 				<tr><td>Caval-Connect Access</td>
+  	  	 					<td>
+  	  	 				  	 <select name='access' id='access'>
+								<option value=''> Select Access Level </option>
+								<option value='global'>Global</option>
+								<option value='local'>Local</option>
+								<option value='owner'>Owner</option>
+								<option value='vet'>Vet</option>
+								<option value='farrier'>Farrier</option>
+								<option value='trainer'>Trainer</option>
+							</select>
+  	  	 				</td></tr>
+			</table>
+		<input 	id="submit_admin" type = "submit" name = "submit_admin" class= "btn btn-warning" value = "Submit New Admin Information"/>
+		</form>
+	</div> <!-- end inner accordion -->        
+        
+<!--ADD NEW VET -->	
+	<h3>Enter New Vet Data</h3>
+    <div id="insert_vet_response"><!--start inner accordion div-->   
+  	  	<form action='javascript:insert_vet()' method='post'>
+  	  	 <?
+  	  	 $vet_field_labels=GetMysqlFieldNames("vet", $dbname);
+  	  	 print "<input type='hidden' name='horse_key' id='vethorse_key' value=".$horse_key." />";
+			print "<table>";
+  	  	 		foreach($vet_field_labels as $label){
+  	  	 			if($label!="key"&&$label!="access"&&$label!="horse_key"){
+  	  	 				print "<tr>";
+  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><input type='text' id='vet".$label."'></td>";
+  	  	 				print "</tr>";
+  	  	 			}
+  	  	 		}
+  	  	 	  ?>
+  	  	 	<tr><td>Caval-Connect Access</td>
+  	  	 	<td>
+  	  	 			<select name='access' id='vetaccess'>
+								<option value=''> Select Access Level </option>
+								<option value='global'>Global</option>
+								<option value='local'>Local</option>
+								<option value='owner'>Owner</option>
+								<option value='vet'>Vet</option>
+								<option value='vetdata'>Vet Data Only</option>
+								<option value='farrier'>Farrier</option>
+								<option value='farrierdata'>Farrier Data Only</option>
+								<option value='trainer'>Trainer</option>
+					</select>
+  	  	 	</td></tr>
+  	  	 	<tr><td width='150'>email</td><td><input type='text' id='vetemail'></td></tr>
+  	  	 	<tr><td width='150'>password</td><td><input type='text' id='vetpass'></td></tr>
+			</table>
+		<input 	id="submit_vet" type = "submit" name = "submit_vet" class= "btn btn-warning" value = "Submit New Vet Information"/>
+		</form>
+  	   </div><!--end inner accordion div -->
+  	   
+<!--ADD NEW FARRIER -->	
+	<h3>Enter New Farrier Data</h3>
+    <div id="insert_farrier_response"><!--start inner accordion div-->   
+  	  	<form action='javascript:insert_farrierdata()' method='post'>
+  	  	 <?
+  	  	 $farrier_field_labels=GetMysqlFieldNames("farrierdata", $dbname);
+  	  	 print "<input type='hidden' name='horse_key' id='farrierhorse_key' value=".$horse_key." />";
+			print "<table>";
+  	  	 		foreach($farrier_field_labels as $label){
+  	  	 			if($label!="key"&&$label!="access"&&$label!="horse_key"){
+  	  	 				print "<tr>";
+  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><input type='text' id='farrier".$label."'></td>";
+  	  	 				print "</tr>";
+  	  	 			}
+  	  	 		}
+  	  	 	  ?>
+  	  	 	<tr><td>Caval-Connect Access</td>
+  	  	 	<td>
+  	  	 			<select name='access' id='farrieraccess'>
+								<option value=''> Select Access Level </option>
+								<option value='global'>Global</option>
+								<option value='local'>Local</option>
+								<option value='owner'>Owner</option>
+								<option value='vet'>Vet</option>
+								<option value='vetdata'>Vet Data Only</option>
+								<option value='farrier'>Farrier</option>
+								<option value='farrierdata'>Farrier Data Only</option>
+								<option value='trainer'>Trainer</option>
+					</select>
+  	  	 	</td></tr>
+  	  	 	<tr><td width='150'>email</td><td><input type='text' id='farrieremail'></td></tr>
+  	  	 	<tr><td width='150'>password</td><td><input type='text' id='farrierpass'></td></tr>
+			</table>
+		<input 	id="submit_farrier" type = "submit" name = "submit_farrier" class= "btn btn-warning" value = "Submit New Farrier Information"/>
+		</form>
+  	   </div><!--end inner accordion div -->  	   
+  	   <?
+  	  }else{
+		print"Sorry, your access does not allow adding new Administrators";
+	}   
+ ?>
+</div> <!--end accordion-->  		
+</div> <!--end fragment-10-->

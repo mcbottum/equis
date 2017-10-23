@@ -1,0 +1,13 @@
+ infection,alf_pellet_(piperazide),antelcide_(oxibendazole),benzelmin_(oxfendazole),combo_care_(moxidectin-praxiquantel),equell_(ivermectin),equie_aid_cw_(pyrantel-tartrate),equimax_(ivermectin-praxiquantel),equine_wormer_(pyrantel-tartrate),equimectrin_(ivermectin),horse_health_(ivermectin),ivercare_(ivermectin),quest_plus_(moxidectin-praziquantel),panacure_paste_(fenbendazole),panacure_powerpac_(fenbendazole),rotectin_1_(ivermectin),rotectin_2_(ivermectin),safe_guard_92_grams_(fenbendazole),safe_guard_eq_(fenbendazole),safe_guard_granules_(fenbendazole),strongid_c_(pyrantel_tartrate),strongid_2x_(pyrantel_tartrate),strongid_paste_(pyrantel_tartrate),zimectrin_(ivermectin),zimectrin_gold_(moxidectin-praxiquantel)
+frequency,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6
+large_strongyles-bloodworms,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+large_roundworms-ascarides,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1
+small_strongyles,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+pin_worms,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+threadworm_(strongyloides_westeri),0,1,0,0,1,0,1,0,1,1,1,1,0,0,1,0,0,0,0,0,0,0,1,1
+bots,0,0,0,1,1,0,1,0,1,1,1,1,0,0,1,0,0,0,0,0,0,0,1,1
+small_stomach_worm-hairworm,0,0,0,0,1,0,1,0,1,1,1,1,0,0,1,0,0,0,0,0,0,0,1,1
+large_mouth_stomach_worms,0,0,0,0,1,0,1,0,1,1,1,1,0,0,1,0,0,0,0,0,0,0,1,1
+encysted_cythadostomes_(strongyles),0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+lungworms,0,0,0,0,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,1,0
+tapeworms,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1

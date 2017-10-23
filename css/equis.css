@@ -1,0 +1,243 @@
+
+body{
+	padding:5px;
+}
+#north_container {
+    width: 100%;
+	border-radius:.7ex;
+  	-webkit-border-radius:.7ex;
+	border:1px solid grey;
+	-webkit-box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    box-shadow:2px 2px 8px rgba(0, 0, 0, 0.5);
+    font-size:300%;
+    overflow:hidden;
+    //background:#FFCC00;
+   //	background:url(../img/north_bgnd.png) repeat-x top;
+}
+
+#title{
+	text-align: center; 
+	width:80%;
+	z-index:-1;
+	font-weight:strong;
+	width: 100%;
+	position:absolute;
+	left:0px; top:30%;
+}
+#north_spacer {
+    float: left;
+    width: 100%;
+    height: 7px;
+   // border:1px solid grey;
+    //border-radius:2ex;
+    //background:light grey;
+}
+#west_container {
+    float: left;
+    width: 30%;
+    border:1px solid grey;
+    border-radius:1ex;
+    background: grey;
+    height:600px;
+    font-size:200%;
+}
+
+#west_data td {
+	text-align:center;
+	font-size:100%;
+}
+#west_data2 td {
+	text-align:center;
+	font-size:100%;
+}
+#west_spacer {
+    float: left;
+    width: 5px;
+    //border:1px solid grey;
+    //border-radius:2ex;
+    //background:light grey;
+    height:600px;
+}
+#main_container {
+    float: right;
+    width: 69%;
+    border:1px solid grey;
+    border-radius:2ex;
+    //height:auto;
+}
+	/* remove padding and scrolling from elements that contain an Accordion OR a content-div */
+	.ui-layout-center ,	/* has content-div */
+	.ui-layout-west ,	/* has Accordion */
+	.ui-layout-east ,	/* has content-div ... */
+	.ui-layout-east .ui-layout-content { /* content-div has Accordion */
+		padding: 0;
+		overflow: hidden;
+	}
+#home_image{
+	z-index:1;
+}
+#logo{
+	margin-top:0px;
+	z-index:-1;
+}
+
+#greyline{
+	border-bottom:#999999  1px solid;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+    width:90%;
+}
+#tabs{
+	height:98.5%;
+	width:99%;
+    overflow-y:auto;
+    border:none;
+    padding:2px 2px 2px 2px;
+    margin:3px 3px 3px 3px;
+}
+#accordion-resizer {
+        padding: 10px;
+        width: 300px;
+        overflow: auto;
+    }
+#submit1{
+	float:right;
+	margin-top:-300px;
+	margin-right:200px;
+}
+.red{
+	color:red;
+}
+#insert_response{
+	color:#66FF99;
+	font-size:1.0em
+}
+#login{
+	float:right;
+}
+#logout{
+	float:right;
+}
+#horse_info{
+	font-size:small;
+}
+#field{
+	font-weight:bold;
+}
+#remind{
+	font-size:small;
+	text-align:center;
+}
+.DivWithScroll{
+    height:150;
+    overflow:scroll;
+    overflow-x:hidden;
+    //visibility:hidden;
+    background: #A8A8A8;
+}
+.bold{
+	font-weight:bold;
+}
+#xray{float:left;
+list-style-type: none;
+paddin:0;
+margin:0;
+}
+#delete_physical{
+	float:left;
+}
+.delete_record{
+		float:right;
+	margin-top:-35px;
+}
+#delete_vaccination{
+		float:right;
+	margin-top:-35px;
+}
+
+.other{
+	font-weight:bold;
+	color:red;
+}
+.delete_record{
+		float:right;
+	margin-top:-35px;
+}
+.delete_admin{
+		float:right;
+}
+.records td{
+	padding:5px;
+}	
+#iFramePdf{
+	margin-top:-1000px;
+	padding-top:0px;
+}
+#iFramePdf_lineage{
+	margin-top:-1000px;
+	padding-top:0px;
+}
+#coggins_table{
+	margin-top:0px;
+	padding-top:0px;
+}
+#lineage_table{
+	margin-top:0px;
+	padding-top:0px;
+}
+#myCarousel{
+	float:right;
+}
+.physical{
+	float:left;
+	width:40%;
+	table-layout: fixed;
+}
+.physical_right{
+	float:right;
+}
+.new_line{
+	clear:both;
+}
+.bottom_borderh{
+	border-bottom: solid 1px black;
+}
+.bottom_borderr{
+	border-bottom: solid 1px lightgrey;
+}
+.bold{
+	font-style:strong;
+}
+.fixed_table{
+	table-layout: fixed;
+}
+.fixed_td{
+	word-wrap:break-word;
+	max-width:200px;
+}
+.colspan_2{
+	column-span:all;
+}
+.filter{
+	margin-left:auto;
+	margin-right:auto;
+}
+.footer { 
+	//height: 80px; 
+	text-align: center; 
+	font-size:10px; 
+	color:#999999; 
+	font-family:Verdana; 
+	padding-top: 10px; 
+	width: 100%;
+	position:absolute;
+	left:0px; bottom:0; 
+	font-weight:normal;
+	font-style:normal;
+	//margin-bottom:0;
+	}	
+	
+.inner_accordion{
+	overflow:scroll;
+}

@@ -1,0 +1,21 @@
+
+          $xrays=explode('-',$xray);
+          $captions=expload('-',$row['caption']);
+          $i=0;
+              print "<div id='myCarousel' class='carousel slide'>";
+                print "<div class='carousel-inner'>";
+                foreach($xrays as $image){
+                  print "<div class='item'>";
+                    print "<img src='".$image."' alt=''>";
+                    print "<div class='carousel-caption'>";
+                      //print "<h4>First Thumbnail label</h4>";
+                      print "<p>".$caption[$i]."</p>";
+                    print "</div>";//end carousel-caption 
+                  print "</div>";//end class item 
+                  $i++
+                }//end foreach
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+              print "</div>";//end carousel-inner
+             print "</div>";//end myCarousel
+      
