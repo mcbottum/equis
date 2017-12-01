@@ -12,15 +12,15 @@ include("function_file.php");
 <link rel="stylesheet" type="text/css" href="css/jquery.weekcalendar.css"/>
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="css/layout-default-latest.css"/>
-<!-- <script src="ajax_functions_save.php" language="javascript"></script> -->
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+  <!--<script src="ajax_functions_save.php" language="javascript"></script>-->
+  <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
   <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
   <script src="http://layout.jquery-dev.net/lib/js/jquery.layout-latest.js"></script>
   
-  <!--have the above code on-site here -->
-<!--   <script src="js/jquery-1.8.2.js"></script>
+  <!--have the above code on-site here 
+  <script src="js/jquery-1.8.2.js"></script>
   <script src="js/1.9.1/jquery-ui.js"></script>
-  <script src="js/jquery.layout-latest.js"></script> -->
+  <script src="js/jquery.layout-latest.js"></script>-->
   
   <script src="js/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
   <link rel = "stylesheet" type = "text/css" href = "css/equis.css">
@@ -220,7 +220,7 @@ var attempt=<?php echo json_encode($_SESSION['attempt']); ?>;
   	$('#myModal_horse').on('shown', function () {
     $('#nhorse_name').focus();
 });	
- }else if(value == "Login"&& attempt<7){
+ }else if(value == "Login"&& attempt<4){
  	$('#myModal_login').modal();
  	$('#myModal_login').on('shown', function () {
     $('#passcheck').focus();
@@ -1090,7 +1090,8 @@ alert(response);
 </head>
 <?	 
 $dbname = get_db();
-$conn=get_conn($dbname);
+$conn=get_conn();
+mysql_select_db(get_db());
 
 if(isset($_REQUEST['horse_choice'])){
 	$horse_key=$_REQUEST['horse_choice'];
@@ -1120,13 +1121,11 @@ if(isset($_REQUEST['filter'])){
 	$_SESSION['role_key']=$role_key;
 }
 
-if(isset($_SESSION['role_key'])){
-	$role_key=$_SESSION['role_key'];//key of the user selected
-	$role=$_SESSION['role'];//role of the user selected
-	$role_mode=$_SESSION['role_mode'];//role mode 0=horse, 1=user
-	$horse_key=$_SESSION['horse_key'];
-	$appt=$_SESSION['appt'];
-}
+$role_key=$_SESSION['role_key'];//key of the user selected
+$role=$_SESSION['role'];//role of the user selected
+$role_mode=$_SESSION['role_mode'];//role mode 0=horse, 1=user
+$horse_key=$_SESSION['horse_key'];
+$appt=$_SESSION['appt'];
 
 if($_SESSION['passwordcheck']=='pass'){
 //set and get initial values for site
@@ -1139,51 +1138,51 @@ if($_SESSION['passwordcheck']=='pass'){
 		}
 	//$sql2="SELECT `key`,`first_name`,`last_name`,`role` FROM $dbTable2 WHERE `facility_key`='$_SESSION[facility]' AND (`role`='owner' OR `role`='vet' OR `role`='farrier' OR `role`='manager')  ORDER BY role, last_name";
 	$filter_sql="SELECT * FROM filter_options ";
-	$horse_result = mysqli_query($conn, $sql_horse) or die(mysqli_error());
-	$filters=mysqli_query($conn, $filter_sql) or die(mysqli_error());
+	$horse_result = mysql_query($sql_horse,$conn) or die(mysql_error());
+	$filters=mysql_query($filter_sql,$conn) or die(mysql_error());
 	//$horse_result = getTableData("key","ALL", "information", $dbname);
 	//$role_result = mysql_query($sql2,$conn) or die(mysql_error());	
 	$info_field_labels=GetMysqlFieldNames("information", $dbname);
 	$owner_field_labels=GetMysqlFieldNames("owner", $dbname);
 	$login_field_labels=GetMysqlFieldNames("login", $dbname);
 
-	$login_data=GetTableDataFacility("key","ALL", "login", $dbname ,$_SESSION['facility']);
-	$owner_data=GetTableDataFacility("owner","owner_key", "login", $dbname ,$_SESSION['facility']);
-	$vet_data=GetTableDataFacility("vet","vet_key", "login", $dbname ,$_SESSION['facility']);
-	$farrier_data=GetTableDataFacility("farrier","farrier_key", "login", $dbname ,$_SESSION['facility']);
+	$login_data=GetTableDataFacility("key","ALL", "login", $dbname ,$_SESSION[facility]);
+	$owner_data=GetTableDataFacility("owner","owner_key", "login", $dbname ,$_SESSION[facility]);
+	$vet_data=GetTableDataFacility("vet","vet_key", "login", $dbname ,$_SESSION[facility]);
+	$farrier_data=GetTableDataFacility("farrier","farrier_key", "login", $dbname ,$_SESSION[facility]);
 	$vacc_products=GetMysqlFieldNames("vacc_products", $dbname);
 	$deworm_products=GetMysqlFieldNames("dewormer_products", $dbname);
 	$vacc_product_data=GetProductTableData("key","ALL", "vacc_products", $dbname);
 	$deworm_product_data=GetProductTableData("key","ALL", "dewormer_products", $dbname);
 	$vacc_product_expiration=GetProductTableData("infection","frequency", "vacc_products", $dbname);
 	$vacc_product_labels=GetMysqlFieldNames("vacc_products", $dbname);
-	$vacc_data=GetTableDataFacility("key","ALL", "vaccination", $dbname ,$_SESSION['facility']);//delete this when done
+	$vacc_data=GetTableDataFacility("key","ALL", "vaccination", $dbname ,$_SESSION[facility]);//delete this when done
 
-	$horse_data=GetTableDataFacility("key","ALL", "information", $dbname ,$_SESSION['facility']);
-	$physicals=getReminders("physical",1, $dbname ,$_SESSION['facility']);
-	//$vaccinations=getReminders("vaccination",1,$dbname ,$_SESSION[facility]);
-	$dental=getReminders("dental",1,$dbname ,$_SESSION['facility']);
-	$farrier=getReminders("farrier",1,$dbname ,$_SESSION['facility']);
-	$role_results=getRoles($_SESSION['facility'], $dbname);
+	$horse_data=GetTableDataFacility("key","ALL", "information", $dbname ,$_SESSION[facility]);
+	$physicals=getReminders("physical",1,"equis" ,$_SESSION[facility]);
+	//$vaccinations=getReminders("vaccination",1,"equis" ,$_SESSION[facility]);
+	$dental=getReminders("dental",1,"equis" ,$_SESSION[facility]);
+	$farrier=getReminders("farrier",1,"equis" ,$_SESSION[facility]);
+	$role_results=getRoles($_SESSION['facility']);
 
 }
-if (isset($horse_key)&&$horse_key){// use this to load horse data for page
-		$infoResult=GetTableDataFacility("key",$horse_key,"information", $dbname ,$_SESSION['facility']);
+if ($horse_key){// use this to load horse data for page
+		$infoResult=GetTableDataFacility("key",$horse_key,"information", $dbname ,$_SESSION[facility]);
 		$vet_key=$infoResult[0]['vet_key'];
 		$owner_key=$infoResult[0]['owner_key'];
-		$vet=GetTableDataFacility("vet_key",$vet_key, "login", $dbname ,$_SESSION['facility']);
-		$owner=GetTableDataFacility("horse_key",$owner_key, "owner", $dbname ,$_SESSION['facility']);
+		$vet=GetTableDataFacility("vet_key",$vet_key, "login", $dbname ,$_SESSION[facility]);
+		$owner=GetTableDataFacility("horse_key",$owner_key, "owner", $dbname ,$_SESSION[facility]);
 		$owner_name=$owner[0]['first_name']." ".$owner[0]['last_name'];
 		$vet_name=$vet[0]['first_name']." ".$vet[0]['last_name'];
 		$horse_name=$infoResult[0]['horse_name'];
 
 	}
-if (isset($owner_key)&&$owner_key&&!$horse_key){// use this to load horse data for page if owner selected
-	$owner_horse=GetTableDataFacility("horse_key",$owner_key, "information", $dbname ,$_SESSION['facility']);
+if ($owner_key&&!$horse_key){// use this to load horse data for page if owner selected
+	$owner_horse=GetTableDataFacility("horse_key",$owner_key, "information", $dbname ,$_SESSION[facility]);
 	$horse_key=$owner_horse[0]['horse_key'];
-	$infoResult=GetTableDataFacility("horse_key",$owner_key, "information", $dbname ,$_SESSION['facility']);
+	$infoResult=GetTableDataFacility("horse_key",$owner_key, "information", $dbname ,$_SESSION[facility]);
 	$vet_key=$infoResult[0]['vet_key'];
-	$owner=GetTableDataFacility("horse_key",$owner_key, "owner", $dbname ,$_SESSION['facility']);
+	$owner=GetTableDataFacility("horse_key",$owner_key, "owner", $dbname ,$_SESSION[facility]);
 	$owner_name=$owner[0]['first_name']." ".$owner[0]['last_name'];
 }
 
@@ -1197,7 +1196,7 @@ if($_SESSION['passwordcheck']!='pass'){
 	print "<span id='title'>Caval-Connect </span><span><input id='login' type = 'submit' name = 'login' class= 'btn btn-success' value = 'Login' onclick='check(this.value)'></span>";
 }elseif($_SESSION['passwordcheck']=='pass'){
 	
-	if(isset($horse_name)&&$horse_name&&$role_mode==0){
+	if($horse_name&&$role_mode==0){
 		print "<span id='title'>".$horse_name." Caval-Connected </span><span><input id='logout' type ='submit' name ='logout' class= 'btn btn-danger' value = 'Logout $_SESSION[first]' onclick='parent.location=&quot;logout.php&quot;'></span>";
 	}elseif($role_mode==1){
 		print "<span id='title'>".$role_name." Caval-Connected </span><span><input id='logout' type ='submit' name ='logout' class= 'btn btn-danger' value = 'Logout $_SESSION[first]' onclick='parent.location=&quot;logout.php&quot;'></span>";
@@ -1229,8 +1228,8 @@ if($_SESSION['passwordcheck']!='pass'){
 					<option value=""> Select Horse </option>
 					<?
 						if($_SESSION['passwordcheck']=='pass'){
-							while($row = mysqli_fetch_assoc($horse_result)){
-								print"<option value=$row[key]>$row[horse_name]</option>";
+							while($row = mysql_fetch_array($horse_result)){
+							print"<option value=$row[key]>$row[horse_name]</option>";
 							}//end while
 						if($_SESSION['access']=='1'){//allow to update information
 						?>
@@ -1263,8 +1262,9 @@ if($_SESSION['passwordcheck']!='pass'){
 				print " <select name='filter' class='filter' id='filter' onchange='showSelectFilter(&quot;filter&quot;, &quot;filter3&quot;, this.value);'>";
 					print "<option value=''> Group Horses by Filter </option>";
 						
-						while($filter = mysqli_fetch_assoc($filters)){
-							print "<option value='".str_replace(' ','_',$filter['name'])."'>".$filter['name']."</option>";
+						while($filter = mysql_fetch_array($filters)){
+						
+							print "<option value='".str_replace(' ','_',$filter[name])."'>".$filter[name]."</option>";
 						}
 				print "</select>";
 						
@@ -1272,8 +1272,8 @@ if($_SESSION['passwordcheck']!='pass'){
 				print "<select  class='filter' style='width: 150; display:none;' id='ownerfilter' name='ownerfilter'>";
 						print "<option value='none'>Select Owner</option>";
 								foreach($role_results as $role){
-									if($role['role']=="owner"){
-										print "<option value='".$role['key']."'>".$role['first_name']." ".$role['last_name']."</option>";
+									if($role[role]=="owner"){
+										print "<option value='".$role[key]."'>".$role[first_name]." ".$role[last_name]."</option>";
 									}
 								}
 								reset($role_result);
@@ -1282,8 +1282,8 @@ if($_SESSION['passwordcheck']!='pass'){
 				print "<select  class='filter' style='width: 150; display:none;' id='vetfilter' name='vetfilter'>";
 						print "<option value='none'>Select Vet</option>";
 								foreach($role_results as $role){
-									if($role['role']=="vet"){
-										print "<option value='".$role['key']."'>".$role['first_name']." ".$role['last_name']."</option>";
+									if($role[role]=="vet"){
+										print "<option value='".$role[key]."'>".$role[first_name]." ".$role[last_name]."</option>";
 									}
 								}
 								reset($role_result);
@@ -1292,8 +1292,8 @@ if($_SESSION['passwordcheck']!='pass'){
 				print "<select  class='filter' style='width: 150; display:none;' id='farrierfilter' name='farrierfilter'>";
 						print "<option value='none'>Select Farrier</option>";
 								foreach($role_results as $role){
-									if($role['role']=="farrier"){
-										print "<option value='".$role['key']."'>".$role['first_name']." ".$role['last_name']."</option>";
+									if($role[role]=="farrier"){
+										print "<option value='".$role[key]."'>".$role[first_name]." ".$role[last_name]."</option>";
 									}
 								}
 								reset($role_result);
@@ -1394,98 +1394,98 @@ if($dental){
         <li><a href="#fragment-9"><span>Nutrition</span></a></li>
         <li><a href="#fragment-10"><span>Admin</span></a></li>
     </ul>
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 <div id="fragment-A" class="active"><!--tab for horse information-->       
 <?
-if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
-	print "<div class='accordion'>";
-    if($_SESSION['access'] < 4){
-
-    	if(isset($infoResult)){
+if($horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
+print "<div class='accordion'>";
+      if($_SESSION['access'] < 4){
+        	if(isset($infoResult)){
         	foreach($infoResult as $row){
   	  	 		print "<h3 id='insert_image_response'>".$row['horse_name']."'s information</h3>";
   	  	 		
   	  	 		print "<div id='delete_info".$row[key]."'>";
   	  	 		print "<table>";//big table
   	  	 			print "<tr><td width='260'><IMG STYLE='border:2px solid black; border-radius:5px; width:250px;' SRC='".str_replace('_',' ',$row[horse_image])."' ALT='Home'></td>";
-						print "<td><table id='horse_info'>";//small table
+				print "<td><table id='horse_info'>";//small table
 
-		  	  	 		foreach($info_field_labels as $label){
-		  	  	 			if($label!="key"&&$label!="horse_key"&&$label!="horse_image"&&$label!="facility_key"){
-		  	  	 				print "<tr>";
-		  	  	 					if($label=="owner_key"){
-		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>owner</td><td class='bottom_borderr'>".getName($row[owner_key],'login')."</td>";
-		  	  	 						}elseif($label=="vet_key"){
-		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>vet</td><td class='bottom_borderr'>".getName($row[vet_key],'login')."</td>";
-		  	  	 						}elseif($label=="farrier_key"){
-		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>farrier</td><td class='bottom_borderr'>".getName($row[farrier_key],'login')."</td>";
-		  	  	 						}elseif($label=="facility_key"){
-		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>facility</td><td class='bottom_borderr'>".getName($row[facility_key], 'facility')."</td>";
-		  	  	 						}
-		  	  	 						else{  	  	 				
-		  	  	 					print "<td class='bottom_borderr' id='field' width='200'>".str_replace('_',' ',$label)."</td><td class='bottom_borderr'>".$row[$label]."</td>";
-		  	  	 							}
-		  	  	 				print "</tr>";
-		  	  	 			}
-		  	  	 		}//end foreach
+  	  	 		foreach($info_field_labels as $label){
+  	  	 			if($label!="key"&&$label!="horse_key"&&$label!="horse_image"&&$label!="facility_key"){
+  	  	 				print "<tr>";
+  	  	 					if($label=="owner_key"){
+  	  	 							print "<td class='bottom_borderr' id='field' width='200'>owner</td><td class='bottom_borderr'>".getName($row[owner_key],'login')."</td>";
+  	  	 						}elseif($label=="vet_key"){
+  	  	 							print "<td class='bottom_borderr' id='field' width='200'>vet</td><td class='bottom_borderr'>".getName($row[vet_key],'login')."</td>";
+  	  	 						}elseif($label=="farrier_key"){
+  	  	 							print "<td class='bottom_borderr' id='field' width='200'>farrier</td><td class='bottom_borderr'>".getName($row[farrier_key],'login')."</td>";
+  	  	 						}elseif($label=="facility_key"){
+  	  	 							print "<td class='bottom_borderr' id='field' width='200'>facility</td><td class='bottom_borderr'>".getName($row[facility_key], 'facility')."</td>";
+  	  	 						}
+  	  	 						else{  	  	 				
+  	  	 					print "<td class='bottom_borderr' id='field' width='200'>".str_replace('_',' ',$label)."</td><td class='bottom_borderr'>".$row[$label]."</td>";
+  	  	 							}
+  	  	 				print "</tr>";
+  	  	 			}
+  	  	 		}//end foreach
 
-  	  	 				print "</table>";
-  	  	 			print "</td></tr>";
-  	  	 		print "<tr><td><br></td></tr>";
-  				print "</table>";//end big table
+  	  	 		print "</table>";
+  	  	 	print "</td></tr>";
+  	  	 	//print "<tr><td><br></td></tr>";
+  	  	 	print "<tr><td><br></td></tr>";
+  		print "</table>";//end big table
   	  	 		?><div id='insert_image_response'>
-
-	 				<form action="image_upload.php" method="post" enctype="multipart/form-data">
-						<label for="file">Choose New Image:</label>
-						<? print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";?>
-						<input type="file" name="file" id="file" value=><br>
-						<input type='hidden' name='table' id='table' value="information" />
-						<input type='hidden' name='image_type' id='image_type' value="horse_image" />
-						<!--<input type="submit" name="submit" value="Submit Image" class= "btn btn-warning">-->
-						<input 	id="submit_image" type = "submit" name = "submit_image" class= "btn btn-warning" value = "Submit-Image"/>
-					</form>
+  	  	 		<!--<form action='imageupload.php' enctype="multipart/form-data" method='get'>-->
+ <form action="image_upload.php" method="post" enctype="multipart/form-data">
+				<label for="file">Choose New Image:</label>
+				<? print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";?>
+				<input type="file" name="file" id="file" value=><br>
+				<input type='hidden' name='table' id='table' value="information" />
+				<input type='hidden' name='image_type' id='image_type' value="horse_image" />
+				<!--<input type="submit" name="submit" value="Submit Image" class= "btn btn-warning">-->
+				<input 	id="submit_image" type = "submit" name = "submit_image" class= "btn btn-warning" value = "Submit-Image"/>
+</form>
 				</div><!--image response div-->
 				<?
-	  	     		print "<table><tr>";
-	   	  			if($_SESSION['access']<2){//script for deleting record
-	  	  				$element='delete_info'.$row[key];
-	  	  				$name=$row['horse_name'];
-	  	  				$delete_table='information';
-	  	  				print "<form action='javascript:delete_record(".$row[key].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
-	  	  	 			print "<input type='hidden' id='info_delete' value='info".$row[key]."'>";
-	  	     			print "<td ><input id='delete_info".$row[key]."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$name."' /></td>";
-	  	     			print "</form>";
-	  	     			
-	  	  	 			} 	     		
-	  	     		print "</tr></table>";
+  	     		print "<table><tr>";
+   	  			if($_SESSION['access']<2){//script for deleting record
+  	  				$element='delete_info'.$row[key];
+  	  				$name=$row['horse_name'];
+  	  				$delete_table='information';
+  	  				print "<form action='javascript:delete_record(".$row[key].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
+  	  	 			print "<input type='hidden' id='info_delete' value='info".$row[key]."'>";
+  	     			print "<td ><input id='delete_info".$row[key]."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$name."' /></td>";
+  	     			print "</form>";
+  	     			
+  	  	 			} 	     		
+  	     		print "</tr></table>";
   	     		print "</div>";
 
- 			}//end for each info result as row
-    	}else{
-		 	print "No Information has been recorded for". $horse;
-		}//end result info if
-    }//end access if
-    if($_SESSION['access'] < 5){//allow to update information
-    	print "<h3>Update ".$horse_name." Information Data</h3>";
-    	print "<div id='horseUpdateResponse'>";
+ 			 }//end for each info result as row
+        }else{
+ 		 	print "No Information has been recorded for". $horse;
+ 		 }//end result info if
+        }//end access if
+        if($_SESSION['access'] < 5){//allow to update information
+        print "<h3>Update ".$horse_name." Information Data</h3>";
+     	print "<div id='horseUpdateResponse'>";
+     	
      	if($infoResult){
         	foreach($infoResult as $row){
-				print "<form  action='javascript:update_horse()' method='post'>";//update horse form
-				print "<input type='hidden' name='nhorse_key' id='uhorse_key' value=".$horse_key." />";
-				print "<input type='hidden' name='nhorse_image' id='uhorse_image' value=".$row['horse_image']." />";
-				print "<input type='hidden' name='nhorse_record' id='uhorse_record' value='update' />";
-				print "<table>";
+print "<form  action='javascript:update_horse()' method='post'>";//update horse form
+	print "<input type='hidden' name='nhorse_key' id='uhorse_key' value=".$horse_key." />";
+	print "<input type='hidden' name='nhorse_image' id='uhorse_image' value=".$row['horse_image']." />";
+	print "<input type='hidden' name='nhorse_record' id='uhorse_record' value='update' />";
+		print "<table>";
   	  	 		foreach($info_field_labels as $label){
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="owner_key"&&$label!="vet_key"&&$label!="farrier_key"&&$label!="horse_image"&&$label!="facility_key"){
   	  	 				print "<tr>";
@@ -1522,62 +1522,63 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 								//end date selections
   	  	 					}elseif($label=="height"){
   	  	 						//slect for height
-	  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
-									print "<option value='".$row[$label]."'>".$row[$label]."  hands </option>";
-										for($i = 130; $i <= 180; $i++){
-											$j=$i/10;
-											print"<option value=$j>$j</option>";
-										}//end while
-								print "</select></td>";
+  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
+								print "<option value='".$row[$label]."'>".$row[$label]."  hands </option>";
+									for($i = 130; $i <= 180; $i++){
+										$j=$i/10;
+										print"<option value=$j>$j</option>";
+									}//end while
+							print "</select></td>";
   	  	 					
   	  	 					}elseif($label=="weight"){
   	  	 						//slect for weight
-  	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
-									print "<option value='".$row[$label]."'>".$row[$label]."  pounds </option>";
+  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
+								print "<option value='".$row[$label]."'>".$row[$label]."  pounds </option>";
 									for($i = 600; $i <= 1450; $i+=5){
 										print"<option value=$i>$i</option>";
 									}//end while
-								print "</select></td>";
+							print "</select></td>";
   	  	 					
   	  	 					}
    	  	 					elseif($label=="temperature"){
   	  	 						//slect for weight
-	  	  	 					print "<td width='150'>".str_replace('_',' ',$label)." (F)</td><td><select name='u".$label."' id='u".$label."'>";
-									print "<option value='".$row[$label]."'>".$row[$label]."</option>";
-										for($i = 95; $i <= 106; $i+=.1){
-											print"<option value=$i>$i</option>";
-										}//end while
-								print "</select></td>";
+  	  	 					print "<td width='150'>".str_replace('_',' ',$label)." (F)</td><td><select name='u".$label."' id='u".$label."'>";
+								print "<option value='".$row[$label]."'>".$row[$label]."</option>";
+									for($i = 95; $i <= 106; $i+=.1){
+										print"<option value=$i>$i</option>";
+									}//end while
+							print "</select></td>";
   	  	 					
   	  	 					}
   	  	 					elseif($label=="pulse"){
   	  	 						//slect for weight
-	  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
-									print "<option value='".$row[$label]."'>".$row[$label]." per minute </option>";
-										for($i = 20; $i <= 50; $i++){
-											print"<option value=$i>$i</option>";
-										}//end while
-								print "</select></td>";
+  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
+								print "<option value='".$row[$label]."'>".$row[$label]." per minute </option>";
+									for($i = 20; $i <= 50; $i++){
+										print"<option value=$i>$i</option>";
+									}//end while
+							print "</select></td>";
   	  	 					
   	  	 					}
   	  	 					elseif($label=="respiration"){
   	  	 						//slect for weight
-	  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
-									print "<option value='".$row[$label]."'>".$row[$label]." per minute </option>";
-										for($i = 10; $i <= 60; $i++){
-											print"<option value=$i>$i</option>";
-										}//end while
-								print "</select></td>";
+  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
+								print "<option value='".$row[$label]."'>".$row[$label]." per minute </option>";
+									for($i = 10; $i <= 60; $i++){
+										print"<option value=$i>$i</option>";
+									}//end while
+							print "</select></td>";
   	  	 					
   	  	 					}
   	  	 					elseif($label=="sex"){
   	  	 						//slect for weight
-	  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
-									print "<option value='".$row[$label]."'>".$row[$label]."</option>";
-									print "<option value='stallion'>Stallion</option>";
-									print "<option value='gelding'>Gelding</option>";
-									print "<option value='mare'>Mare</option>";
-								print "</select></td>";
+  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
+								print "<option value='".$row[$label]."'>".$row[$label]."</option>";
+								print "<option value='stallion'>Stallion</option>";
+								print "<option value='gelding'>Gelding</option>";
+								print "<option value='mare'>Mare</option>";
+							print "</select></td>";
+  	  	 					
   	  	 					}
   	  	 					else{
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td><td><input type='text' value='".$row[$label]."' id='u".$label."'></td>";
@@ -1644,13 +1645,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 				<?
   	  	 }//end if for entering new data
         
-		}else{//if horse key if
-			print	"Please select a horse.";
-		}		
-		print "</div>";
-    }
+	}else{//if horse key if
+	print	"Please select a horse.";
+	}		
+print "</div>";
+     	}
 print "</div>";// <!--end accordion-->	
-}					//end horse mode
+}					//end horse mode	
 elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$access<3){//put caval-connect in data entry mode only
 	print "<div class='roleaccordion'>";
 	//$horses=GetRoleTableData($role,$role_key,'information',$_SESSION['facility'],$db);
@@ -1841,37 +1842,47 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
 		
     }
         	 
-?>		  
+ 		 ?>		  
 </div> <!--end fragment-A-->
 
-<?if(isset($horse_key)&&$horse_key){
-	print "<script type='text/javascript'>";
-    print "$('#myCarousel').carousel();";
-    print "$('#mydCarousel').carousel();";
-    print "</script>";
+
+
+
+
+
+
+<?if($horse_key){
+	        		print "<script type='text/javascript'>";
+        		print "$('#myCarousel').carousel();";
+        		print "$('#mydCarousel').carousel();";
+        		print "</script>";
 }
+?>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+<div id="fragment-1"><!--PHYSICAL TAB !!!!!!!!!!!!!!!!-->
+<?if($role_mode==0){
+     print "<div class='accordion'>";//call collapsed accordion or not
+}elseif($role_mode==1){
+	 print "<div class='roleaccordion'>";
+}
+        $physical_field_labels=GetMysqlFieldNames("physical", $dbname);
+        $image_field_labels=GetMysqlFieldNames("image", $dbname);
 
-	
-	
-	
-	
-	
-	
-?>	
-<div id="fragment-1"><!-- ################################ PHYSICAL TAB ##########################!!!!!!!!!!!!!!!!-->
-<?
-	if(isset($role_mode)&&$role_mode==0){
-	     print "<div class='accordion'>";//call collapsed accordion or not
-	}elseif(isset($role_mode)&&$role_mode==1){
-		 print "<div class='roleaccordion'>";
-	}
-    $physical_field_labels=GetMysqlFieldNames("physical", $dbname);
-    $image_field_labels=GetMysqlFieldNames("image", $dbname);
+        if($horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
 
-    if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
-
-		if($_SESSION['access'] < 4){//allow to view information
-			$physicalResult=GetTableDataFacility("horse_key",$horse_key, "physical", $dbname ,$_SESSION[facility]);
+        	if($_SESSION['access'] < 4){//allow to view information
+        	$physicalResult=GetTableDataFacility("horse_key",$horse_key, "physical", $dbname ,$_SESSION[facility]);
         	if($physicalResult){
         		$ele_counter=0;
         	foreach($physicalResult as $row){
@@ -1936,89 +1947,90 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
  					<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 				</span>
 <?				}// end if $imageResult	
-	  	  	 	print "<div class='new_line'></div>";
-		  	  	 	if($imageResult){
-		   	  	 		foreach($imageResult as $image_row){
-		  	  	 			if($image_row['type']=='blood_panel'){
-		  	  	 				print "<div class='physical_right' style='width:50%;'><IMG STYLE='border:2px solid black; border-radius:5px;' SRC='".$image_row[location]."' ALT='Blood Values not found'></div>";
-		  	  	 			}
-		  	  	 		}
-		  	  	 	} 	  	 	
-		  	  	 		?>
-		  	  	 	
-		  	  	<div class='physical'>
-		  	  	 	<?
-		  	  	 	if ($row['fecal_sampled']==2){
-		  	  	 		print "<form  action='insert.php' method='get' enctype='multipart/form-data'>";
-		  	  	 			print "<input type='hidden' name='pfecal_key' id='pfecal_key' value='".$row[key]."' />";
-		  	  	 			print "<input type='hidden'  name='phorse_key' id='phorse_key' value='".$horse_key."' />";
-	 						print "<select onchange='this.form.submit()' name='fecal_count' id='fecal_count'>";
-	 							print "<option value = ''>Update Fecal Count</option>";
+  	  	 	print "<div class='new_line'></div>";
+  	  	 	if($imageResult){
+   	  	 		foreach($imageResult as $image_row){
+  	  	 			if($image_row['type']=='blood_panel'){
+  	  	 				print "<div class='physical_right' style='width:50%;'><IMG STYLE='border:2px solid black; border-radius:5px;' SRC='".$image_row[location]."' ALT='Blood Values not found'></div>";
+  	  	 			}
+  	  	 		}
+  	  	 	} 	  	 	
+  	  	 		?>
+  	  	 	
+  	  	 	<div class='physical'>
+  	  	 	<?
+  	  	 	if ($row['fecal_sampled']==2){
+  	  	 		print "<form  action='insert.php' method='get' enctype='multipart/form-data'>";
+  	  	 		print "<input type='hidden' name='pfecal_key' id='pfecal_key' value='".$row[key]."' />";
+  	  	 		print "<input type='hidden'  name='phorse_key' id='phorse_key' value='".$horse_key."' />";
+  	  	 						print "<select onchange='this.form.submit()' name='fecal_count' id='fecal_count'>";
+  	  	 							print "<option value = ''>Update Fecal Count</option>";
 									print "<option value = '0-200 EPG'>0-200 EPG</option>";
 									print "<option value = '200-500 EPG'>200-500 EPG</option>";
 									print "<option value = '500-1000 EPG'>500-1000EPG</option>";
-							print "</select>";
-						print "</form>";
-		  	  	 	}
+								print "</select>";
+							print "</form>";
+  	  	 	}
 								?>
-	 				<form action="image_upload.php" method="post" enctype="multipart/form-data">	
-						<label for="file">Choose New Radiograph:</label>
-						<? print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";?>
-						<? print "<input type='hidden' name='image_key' id='image_key' value=".$row[key]." />";?>
-						<input type='hidden' name='data_type' id='data_type' value="xray" />
-						<input type='hidden' name='table' id='table' value="physical" />
-						<input type='hidden' name='image_type' id='image_type' value="xray" />
-						<input type='file' name='file' id='file' onchange="showTextArea('<? echo $ele_counter;?>',&quot;xdescription&quot;);" value=><br>
-						<textarea rows="3" placeholder="Image description. . ." name="xdescription" style='display:none;' id="xdescription"></textarea>
-						<!--<input type="submit" name="submit" value="Submit Image" class= "btn btn-warning">-->
-						<input 	id="submit_xray" type = "submit" name = "submit_image" class= "btn btn-warning" value = "Submit-Xray"/>
-					</form>
-	 				<form action="image_upload.php" method="post" enctype="multipart/form-data">	
-						<label for="file">Upload Blood Panel PDF:</label>
-						<? print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";?>
-						<? print "<input type='hidden' name='image_key' id='image_key' value=".$row[key]." />";?>
-						<input type='hidden' name='data_type' id='data_type' value="blood_panel" />
-						<input type='hidden' name='table' id='table' value="physical" />
-						<input type='hidden' name='image_type' id='image_type' value="blood_panel" />
-						<input type="file" name="file" id="file" value=><br>
-						<!--<input type="submit" name="submit" value="Submit Image" class= "btn btn-warning">-->
-						<input 	id="submit_xray" type = "submit" name = "submit_image" class= "btn btn-warning" value = "Submit Blood Values"/>
-					</form>
+ 				<form action="image_upload.php" method="post" enctype="multipart/form-data">	
+					<label for="file">Choose New Radiograph:</label>
+					<? print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";?>
+					<? print "<input type='hidden' name='image_key' id='image_key' value=".$row[key]." />";?>
+					<input type='hidden' name='data_type' id='data_type' value="xray" />
+					<input type='hidden' name='table' id='table' value="physical" />
+					<input type='hidden' name='image_type' id='image_type' value="xray" />
+					<input type='file' name='file' id='file' onchange="showTextArea('<? echo $ele_counter;?>',&quot;xdescription&quot;);" value=><br>
+					<textarea rows="3" placeholder="Image description. . ." name="xdescription" style='display:none;' id="xdescription"></textarea>
+					<!--<input type="submit" name="submit" value="Submit Image" class= "btn btn-warning">-->
+					<input 	id="submit_xray" type = "submit" name = "submit_image" class= "btn btn-warning" value = "Submit-Xray"/>
+				</form>
+ 				<form action="image_upload.php" method="post" enctype="multipart/form-data">	
+					<label for="file">Upload Blood Panel PDF:</label>
+					<? print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";?>
+					<? print "<input type='hidden' name='image_key' id='image_key' value=".$row[key]." />";?>
+					<input type='hidden' name='data_type' id='data_type' value="blood_panel" />
+					<input type='hidden' name='table' id='table' value="physical" />
+					<input type='hidden' name='image_type' id='image_type' value="blood_panel" />
+					<input type="file" name="file" id="file" value=><br>
+					<!--<input type="submit" name="submit" value="Submit Image" class= "btn btn-warning">-->
+					<input 	id="submit_xray" type = "submit" name = "submit_image" class= "btn btn-warning" value = "Submit Blood Values"/>
+				</form>
 			
-					<?
-	  	     		if($_SESSION[access] <2){//only manager can delete
-	  	     		print "<table><tr>";
-	   	  			if($_SESSION['access']<2){//script for deleting record
-	  	  				$element='physical'.$row['key'];
-	  	  				$name=$row['horse_name'];
-	  	  				$delete_table='physical';
-	  	  				print "<form action='javascript:delete_record(".$row['key'].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
-	  	  	 			//print "<input type='hidden' id='physical_delete' value='info".$row[key]."'>";
-	  	     			print "<td id='delete_physical".$row['key']."'><input id='delete_physical".$row['key']."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row['date']." Physical' /></td>";
-	  	     			print "</form>";
-	  	     			
-	  	  	 			} 	     		
-	  	     		print "</tr></table>";
-	  	     		}
+				<?
+  	     		if($_SESSION[access] <2){//only manager can delete
+  	     		print "<table><tr>";
+   	  			if($_SESSION['access']<2){//script for deleting record
+  	  				$element='physical'.$row[key];
+  	  				$name=$row['horse_name'];
+  	  				$delete_table='physical';
+  	  				print "<form action='javascript:delete_record(".$row[key].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
+  	  	 			//print "<input type='hidden' id='physical_delete' value='info".$row[key]."'>";
+  	     			print "<td id='delete_physical".$row[key]."'><input id='delete_physical".$row[key]."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row[date]." Physical' /></td>";
+  	     			print "</form>";
+  	     			
+  	  	 			} 	     		
+  	     		print "</tr></table>";
+  	     		}
 
-	  	     		print "</div>";//end float left physical div
+  	     		print "</div>";//end float left physical div
   	     		print "</div>";
   	     		$ele_counter++;
- 			}//end foreach loop
+ 			 }//end foreach loop
         }else{
  		 	print "No Physical Information has been recorded for". $horse;
  		 }
         
         }//end if for viewing physical data
         if($_SESSION['access'] < 5){//allow to update information
-        	print "<h3>Enter New Physical Data</h3>";
-  	  	 	print "<div id='physical_response'>";
-  	  	 	?>
-  	  	 	<!-- Show Message for AJAX response -->
+        print "<h3>Enter New Physical Data</h3>";
+  	  	 print "<div id='physical_response'>";
+  	  	 ?>
+  	  	 <!-- Show Message for AJAX response -->
 			
-  	  	 	<form  action='javascript:insert_physical()' method='post' enctype="multipart/form-data">
-  	  	 	<?
-  	  	 	print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";
+  	  	 <form  action='javascript:insert_physical()' method='post' enctype="multipart/form-data">
+  	  	 <?
+  	  	 print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";
+  	  	 //print "<input type='hidden' name='pxray' id='pxray' value='none' />";
 			print "<table>";
   	  	 		foreach($physical_field_labels as $label){
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="facility_key"){
@@ -2199,8 +2211,8 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
 				</form>
 				<?
 
-   			print "</div>";	
-  	  	}//end if for entering new data
+   print "</div>";	
+  	  	 }//end if for entering new data
   	  	 
 	}//if horse key if
 	elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$access<3){//put caval-connect in data entry mode only
@@ -2400,7 +2412,7 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
 
 	</div> <!--end accordion-->  
 	
-</div> <!--end fragment-1-->
+	</div> <!--end fragment-1-->
 	
 	
 	
@@ -2416,17 +2428,14 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
 	
 	
 	
-<div id="fragment-2"><!-- ############################### VACCINATION TAB  #################################!!!!!!!! -->
+    <div id="fragment-2"><!--VACCINATION TAB !!!!!!!! -->
 
-<?
-if(isset($role_mode)&&$role_mode==0){
-	print "<div class='accordion'>";//call collapsed accordion or not
-}else{
-	print "<div class='roleaccordion'>";
+<?if($role_mode==0){
+     print "<div class='accordion'>";//call collapsed accordion or not
+}elseif($role_mode==1){
+	 print "<div class='roleaccordion'>";
 }
-
-
-if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
+if($horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
         $vaccination_field_labels=GetMysqlFieldNames("vaccination", $dbname);
         if($horse_key){
         	if($_SESSION['access'] < 4){//allow to view information
@@ -2479,12 +2488,12 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 		
   	     		if($_SESSION[access] <2){//only manager can delete
   	     		print "<tr><td><br></td></tr><tr>";
-  	  				$element='vaccination'.$row['key'];
+  	  				$element='vaccination'.$row[key];
   	  				$name=$row['horse_name'];
   	  				$delete_table='vaccination';
-  	  				print "<form action='javascript:delete_record(".$row['key'].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
+  	  				print "<form action='javascript:delete_record(".$row[key].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
   	  	 			//print "<input type='hidden' id='physical_delete' value='info".$row[key]."'>";
-  	     			print "<td id='delete_vaccination".$row['key']."'><input id='delete_vacc".$row['key']."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row['date']." Vaccination' /></td>";
+  	     			print "<td id='delete_vaccination".$row[key]."'><input id='delete_vacc".$row[key]."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row[date]." Vaccination' /></td>";
   	     			print "</form>";     		
   	     		print "</tr>";
   	     		}  	  
@@ -2643,7 +2652,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 	}else{//if horse key if
 	print	"Please select a horse.";
 	}		
-	print "</div>";	//end div vaccination response
+print "</div>";	
 }					//end horse mode
 	elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$access<3){//put caval-connect in data entry mode only
 		//$horses=GetRoleTableData($role,$role_key,'information',$_SESSION['facility'],$db);
@@ -2774,7 +2783,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 				?>
 				<input 	id="submit_vaccination" type = "submit" name = "submit_vaccination" class= "btn btn-warning" value = "Submit Vaccination Information"/></form>
 				<?	
- 	    			print "</div>";//end div vaccination response
+ 	    			print "</div>";//
 					//}//right before H3
 				}
 			}else{
@@ -2798,17 +2807,23 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 
 
 
+
+
+
+
+
+
 <div id="fragment-3"> <!--DENTAL ACCORDION-->
 
-<?
-if(isset($role_mode)&&$role_mode==0){
-	print "<div class='accordion'>";//call collapsed accordion or not
-}else{
-	print "<div class='roleaccordion'>";
+<?if($role_mode==0){
+     print "<div class='accordion'>";//call collapsed accordion or not
+}elseif($role_mode==1){
+	 print "<div class='roleaccordion'>";
 }
-if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
+
+if($horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
 $dental_field_labels=GetMysqlFieldNames("dental", $dbname);
-	if(isset($horse_key)&&$horse_key){
+	if($horse_key){
         	if($_SESSION['access'] < 4){//allow to view information
         	$dentalResult=GetTableDataFacility("horse_key",$horse_key, "dental", $dbname ,$_SESSION[facility]);
         	if($dentalResult){
@@ -2886,12 +2901,12 @@ $dental_field_labels=GetMysqlFieldNames("dental", $dbname);
   	  	 			$delete_table=1;
   	     		print "<table style='float:left;'><tr>";
    	  			if($_SESSION['access']<2){//script for deleting record
-  	  				$element='dental'.$row['key'];
+  	  				$element='dental'.$row[key];
   	  				$name=$row['horse_name'];
   	  				$delete_table='dental';
-  	  				print "<form action='javascript:delete_record(".$row['key'].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
+  	  				print "<form action='javascript:delete_record(".$row[key].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
   	  	 			//print "<input type='hidden' id='physical_delete' value='info".$row[key]."'>";
-  	     			print "<td id='delete_dental".$row['key']."'><input id='delete_dental".$row['key']."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row['date']." Dental Record' /></td>";
+  	     			print "<td id='delete_dental".$row[key]."'><input id='delete_dental".$row[key]."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row[date]." Dental Record' /></td>";
   	     			print "</form>";
   	     			
   	  	 			} 	     		
@@ -3163,13 +3178,12 @@ $dental_field_labels=GetMysqlFieldNames("dental", $dbname);
 	
 	
     <div id="fragment-4"><!--FARRIER ACCORDION -->
-<?
-if(isset($role_mode)&&$role_mode==0){
-	print "<div class='accordion'>";//call collapsed accordion or not
-}else{
-	print "<div class='roleaccordion'>";
+<?if($role_mode==0){
+     print "<div class='accordion'>";//call collapsed accordion or not
+}elseif($role_mode==1){
+	 print "<div class='roleaccordion'>";
 }
-if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
+if($horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
       $farrier_field_labels=GetMysqlFieldNames("farrier", $dbname);
          if($horse_key){
          	if($_SESSION['access'] < 4){//allow to view information
@@ -3177,7 +3191,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
         	if($farrierResult){
         	foreach($farrierResult as $row){
   	  	 		print "<h3>".$row['date']."</h3>";
-  	  	 		print "<div id='farrier".$row['key']."'>";
+  	  	 		print "<div id='farrier".$row[key]."'>";
  			 	
   	  	 		print "<table>";
   	  	 		foreach($farrier_field_labels as $label){
@@ -3196,12 +3210,12 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 		
   	     		if($_SESSION[access] <2){//only manager can delete
   	     		print "<tr><td><br></td></tr><tr>";
-  	  				$element='farrier'.$row['key'];
+  	  				$element='farrier'.$row[key];
   	  				$name=$row['horse_name'];
   	  				$delete_table='farrier';
-  	  				print "<form action='javascript:delete_record(".$row['key'].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
+  	  				print "<form action='javascript:delete_record(".$row[key].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
   	  	 			//print "<input type='hidden' id='physical_delete' value='info".$row[key]."'>";
-  	     			print "<td id='delete_farrier".$row['key']."'><input id='delete_farr".$row['key']."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row['date']." Farrier Appointment' /></td>";
+  	     			print "<td id='delete_farrier".$row[key]."'><input id='delete_farr".$row[key]."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row[date]." Farrier Appointment' /></td>";
   	     			print "</form>";     		
   	     		print "</tr>";
   	     		}  	  	 		
@@ -3230,7 +3244,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						print "<td>";						
   	  	 						print "<select style='width: auto;' id ='fmonth' name = 'fmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -3244,12 +3258,12 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='fday' name='fday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='fday' name='fday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='fyear' name='fyear'><option value='".date('Y')."'>".date('Y')."</option>";
+								print "<select style='width: auto;' id='fyear' name='fyear'><option value='".date(Y)."'>".date(Y)."</option>";
 								for ($i=date(Y)-3;$i<=date(Y)+1;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
@@ -3259,7 +3273,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						  	  	 						print "<td>";						
   	  	 						print "<select style='width: auto;' id ='fnmonth' name = 'fnmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -3273,7 +3287,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='fnday' name='fnday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='fnday' name='fnday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
@@ -3335,9 +3349,9 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 			if($horses){
 				foreach($horses as $horse){
 					//if($horse[owner_key]==$role_key||$horse[vet_key]==$role_key||$horse[farrier_key]){
-					print "<h3><strong>".$horse['horse_name']."</strong>  ".$message."</h3>";
-     				print "<div id='farrier_response".$horse['key']."'>";//place content here
-   				 	$element='farrier_response'.$horse['key'];
+					print "<h3><strong>".$horse[horse_name]."</strong>  ".$message."</h3>";
+     				print "<div id='farrier_response".$horse[key]."'>";//place content here
+   				 	$element='farrier_response'.$horse[key];
 	print "<form  action='javascript:insert_role_farrier(&quot;$element&quot;,".$horse[key].")' method='post'>";//update horse form
   
 			print "<table>";
@@ -3348,35 +3362,6 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						print "<td>";						
   	  	 						print "<select style='width: auto;' id ='fmonth".$horse[key]."' name = 'fmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='fday".$horse[key]."' name='fday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='fyear".$horse['key']."' name='fyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "</td>";
-  	  	 					}elseif($label=="next_date"){
-  	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='fnmonth".$horse['key']."' name = 'fnmonth' >";
 									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
@@ -3391,20 +3376,49 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='fnday".$horse['key']."' name='fnday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='fday".$horse[key]."' name='fday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='fnyear".$horse['key']."' name='fnyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
+								print "<select style='width: auto;' id='fyear".$horse[key]."' name='fyear'><option value='".date(Y)."'>".date(Y)."</option>";
+								for ($i=date(Y)-3;$i<=date(Y)+1;$i++){
+									print "<option value='$i'>".$i."</option>";
+								}
+								print "</select>";
+								print "</td>";
+  	  	 					}elseif($label=="next_date"){
+  	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
+  	  	 						  	  	 						print "<td>";						
+  	  	 						print "<select style='width: auto;' id ='fnmonth".$horse[key]."' name = 'fnmonth' >";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
+									print "<option value = '01'>January</option>";
+									print "<option value = '02'>February</option>";
+									print "<option value = '03'>March</option>";
+									print "<option value = '04'>April</option>";
+									print "<option value = '05'>May</option>";
+									print "<option value = '06'>June</option>";
+									print "<option value = '07'>July</option>";
+									print "<option value = '08'>August</option>";
+									print "<option value = '09'>September</option>";
+									print "<option value = '10'>October</option>";
+									print "<option value = '11'>November</option>";
+									print "<option value = '12'>December</option>";
+								print "</select>";
+								print "<select style='width: auto;' id='fnday".$horse[key]."' name='fnday'><option value='".date(d)."'>".date(d)."</option>";
+								for ($i=1;$i<=31;$i++){
+									print "<option value='$i'>".$i."</option>";
+								}
+								print "</select>";
+								print "<select style='width: auto;' id='fnyear".$horse[key]."' name='fnyear'><option value='".(date(Y)+1)."'>".(date(Y)+1)."</option>";
+								for ($i=date(Y)-1;$i<=date(Y)+2;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
 								print "</td>";
   	  	 					}elseif($label=="procedure"){
   	  								print "<td width='150'>".$label."</td>";
-  	  								print "<td><select id ='fprocedure".$horse['key']."' name = 'fprocedure' onchange='showOtherText(this.value,&quot;fprocedure_other".$horse['key']."&quot;); showOtherText(this.value,&quot;fprocedureother".$horse['key']."&quot;);'>";
+  	  								print "<td><select id ='fprocedure".$horse[key]."' name = 'fprocedure' onchange='showOtherText(this.value,&quot;fprocedure_other".$horse[key]."&quot;); showOtherText(this.value,&quot;fprocedureother".$horse[key]."&quot;);'>";
   	  								?>
 									 <option value = ''>Select Procedure</option>
 									 <option value = 'Trim'>Trim Front</option>
@@ -3417,8 +3431,8 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									 <option value = 'other'>Other</option>
 								</select></td></tr>
 								<?
-								print "<tr class='other'><td  id='fprocedure_other".$horse['key']."' width='150' class='hide_text_box' style='display:none;'>Other Procedure</td>";
-								print "<td><input type='text' id='fprocedureother".$horse['key']."' class='hide_text_box' style='display:none;'></td>";
+								print "<tr class='other'><td  id='fprocedure_other".$horse[key]."' width='150' class='hide_text_box' style='display:none;'>Other Procedure</td>";
+								print "<td><input type='text' id='fprocedureother".$horse[key]."' class='hide_text_box' style='display:none;'></td>";
 								?>
 								</tr></div>
 								<?
@@ -3428,7 +3442,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 		}
   	  	 					print "<tr><td width='150'>Veterinarian</td>";
   	  	 					print "<td>";
-  	  	 						print "<select name='fvet_key' id='fvet_key".$horse['key']."'>";
+  	  	 						print "<select name='fvet_key' id='fvet_key".$horse[key]."'>";
 									print "<option value=''> Select Farrier </option>";
 										foreach($vet_data as $data){
 											print"<option value=$data[key]>$data[first_name] $data[last_name]</option>";
@@ -3454,14 +3468,29 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 </div> <!--end fragment-4-->
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div id="fragment-5"><!--PARASITE TAB !!!!!!!! -->
-<?
-if(isset($role_mode)&&$role_mode==0){
-	print "<div class='accordion'>";//call collapsed accordion or not
-}else{
-	print "<div class='roleaccordion'>";
+<?if($role_mode==0){
+     print "<div class='accordion'>";//call collapsed accordion or not
+}elseif($role_mode==1){
+	 print "<div class='roleaccordion'>";
 }
-if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
+if($horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
         $parasite_field_labels=GetMysqlFieldNames("parasite", $dbname);
         if($horse_key){
         	if($_SESSION['access'] < 4){//allow to view information
@@ -3495,7 +3524,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 			}//end inner foreach
     		
   	  	 		print "<h3>".$row['date']." Parasite</h3>";
-  	  	 		print "<div id='parasite".$row['key']."'>"; 	  	 		
+  	  	 		print "<div id='parasite".$row[key]."'>"; 	  	 		
   	  	 		print "<table>";
   	  	 		foreach($parasite_field_labels as $label){
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="vet_key"&&$label!="facility_key"&&$label!="date"&&$label!="next_date"){
@@ -3513,11 +3542,12 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 		
   	     		if($_SESSION[access] <2){//only manager can delete
   	     		print "<tr><td><br></td></tr><tr>";
-  	  				$element='parasite'.$row['key'];
+  	  				$element='parasite'.$row[key];
   	  				$name=$row['horse_name'];
   	  				$delete_table='parasite';
-  	  				print "<form action='javascript:delete_record(".$row['key'].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
-  	     			print "<td id='delete_parasite".$row['key']."'><input id='delete_par".$row['key']."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row['date']." Deworm' /></td>";
+  	  				print "<form action='javascript:delete_record(".$row[key].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
+  	  	 			//print "<input type='hidden' id='physical_delete' value='info".$row[key]."'>";
+  	     			print "<td id='delete_parasite".$row[key]."'><input id='delete_par".$row[key]."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row[date]." Deworm' /></td>";
   	     			print "</form>";     		
   	     		print "</tr>";
   	     		}
@@ -3567,7 +3597,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						  	  	 						print "<td>";						
   	  	 						print "<select style='width: auto;' id ='pamonth' name = 'pamonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -3581,13 +3611,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='paday' name='paday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='paday' name='paday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='payear' name='payear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
+								print "<select style='width: auto;' id='payear' name='payear'><option value='".date(Y)."'>".date(Y)."</option>";
+								for ($i=date(Y)-3;$i<=date(Y)+1;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
@@ -3596,7 +3626,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						  	  	 						print "<td>";						
   	  	 						print "<select style='width: auto;' id ='panmonth' name = 'panmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -3610,13 +3640,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='panday' name='panday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='panday' name='panday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='panyear' name='panyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
+								print "<select style='width: auto;' id='panyear' name='panyear'><option value='".(date(Y)+1)."'>".(date(Y)+1)."</option>";
+								for ($i=date(Y)-1;$i<=date(Y)+2;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
@@ -3664,11 +3694,11 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 			if($horses){
 				foreach($horses as $horse){
 					//if($horse[owner_key]==$role_key||$horse[vet_key]==$role_key||$horse[farrier_key]){
-					print "<h3><strong>".$horse['horse_name']."</strong>  ".$message."</h3>";
-     				print "<div id='parasite_role_response".$horse['key']."'>";//place content here
+					print "<h3><strong>".$horse[horse_name]."</strong>  ".$message."</h3>";
+     				print "<div id='parasite_role_response".$horse[key]."'>";//place content here
      		
-    				$element='parasite_role_response'.$horse['key'];
-					print "<form  action='javascript:insert_role_parasite(&quot;$element&quot;,".$horse['key'].")' method='post'>";//update horse form
+    				$element='parasite_role_response'.$horse[key];
+					print "<form  action='javascript:insert_role_parasite(&quot;$element&quot;,".$horse[key].")' method='post'>";//update horse form
 			print "<table>";
   	  	 		foreach($parasite_field_labels as $label){
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="facility_key"){
@@ -3676,8 +3706,8 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 					if($label=="date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='pamonth".$horse['key']."' name = 'pamonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+  	  	 						print "<select style='width: auto;' id ='pamonth".$horse[key]."' name = 'pamonth' >";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -3691,13 +3721,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='paday".$horse['key']."' name='paday".$horse['key']."'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='paday".$horse[key]."' name='paday".$horse[key]."'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='payear".$horse['key']."' name='payear".$horse['key']."'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
+								print "<select style='width: auto;' id='payear".$horse[key]."' name='payear".$horse[key]."'><option value='".date(Y)."'>".date(Y)."</option>";
+								for ($i=date(Y)-3;$i<=date(Y)+1;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
@@ -3705,8 +3735,8 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 					}elseif($label=="next_date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='panmonth".$horse['key']."' name = 'panmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+  	  	 						print "<select style='width: auto;' id ='panmonth".$horse[key]."' name = 'panmonth' >";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -3720,12 +3750,12 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='panday".$horse['key']."' name='panday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='panday".$horse[key]."' name='panday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='panyear".$horse[key]."' name='panyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
+								print "<select style='width: auto;' id='panyear".$horse[key]."' name='panyear'><option value='".(date(Y)+1)."'>".(date(Y)+1)."</option>";
 								for ($i=date(Y)-1;$i<=date(Y)+2;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
@@ -3734,7 +3764,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 					}elseif($label=="type"){// PARASITE Product
 								print "<tr><td width='150'>Parasite Product</td>";
 								print "<td td width='150'>";
-								print "<select style='width: 150;' id='patype".$horse['key']."' name='patype'>";
+								print "<select style='width: 150;' id='patype".$horse[key]."' name='patype'>";
 								print "<option value=''>Select Product</option>";
 								foreach($deworm_products as $product){
 									if($product!="infection"){
@@ -3748,7 +3778,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 		}
   	  	 					print "<tr><td width='150'>Veterinarian</td>";
   	  	 					print "<td>";
-  	  	 						print "<select name='pavet_key' id='pavet_key".$horse['key']."'>";
+  	  	 						print "<select name='pavet_key' id='pavet_key".$horse[key]."'>";
 									print "<option value=''> Select Vet </option>";
 										foreach($vet_data as $data){
 											print"<option value=$data[key]>$data[first_name] $data[last_name]</option>";
@@ -3777,14 +3807,23 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 
 
 
+
+
+
+
+
+
+
+
+
+
 <div id="fragment-6"><!--LINEAGE TAB !!!!!!!!!!!!!!!!-->
-<?
-if(isset($role_mode)&&$role_mode==0){
-	print "<div class='accordion'>";//call collapsed accordion or not
-}else{
-	print "<div class='roleaccordion'>";
+<?if($role_mode==0){
+     print "<div class='accordion'>";//call collapsed accordion or not
+}elseif($role_mode==1){
+	 print "<div class='roleaccordion'>";
 }
-if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
+if($horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
         $lineage_field_labels=GetMysqlFieldNames("lineage", $dbname);
         if($horse_key){
         	if($_SESSION['access'] < 4){//allow to view information
@@ -3849,7 +3888,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 						print "<td>".str_replace('_',' ',$label)."</td></tr>";
   	  	 						print "<tr><td>";						
   	  	 						print "<select style='width: auto;' id ='lmonth' name = 'lmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -3863,13 +3902,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='lday' name='lday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='lday' name='lday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='lyear' name='lyear'><option value='".date(Y)."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
+								print "<select style='width: auto;' id='lyear' name='lyear'><option value='".date(Y)."'>".date(Y)."</option>";
+								for ($i=date(Y)-3;$i<=date(Y)+1;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
@@ -3925,7 +3964,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 						print "<td>".str_replace('_',' ',$label)."</td></tr>";
   	  	 						print "<tr><td>";						
   	  	 						print "<select style='width: auto;' id ='lmonth' name = 'lmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -3939,13 +3978,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='lday' name='lday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='lday' name='lday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='lyear' name='lyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date(Y)+1;$i++){
+								print "<select style='width: auto;' id='lyear' name='lyear'><option value='".date(Y)."'>".date(Y)."</option>";
+								for ($i=date(Y)-3;$i<=date(Y)+1;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
@@ -3955,7 +3994,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 		}//foreach
   	  	 		?>
 					<tr><td><label for="file">Choose New LINEAGE File:</label></td></tr>
-		<?print "<input type='hidden' name='horse_key' id='horse_key' value='".$horse['key']."'/>";
+		<?print "<input type='hidden' name='horse_key' id='horse_key' value='".$horse[key]."'/>";
 		print "<input type='hidden' name='limage_key' id='limage_key' value='".$limage_key."'/>";
 		print "<tr><td><input type='hidden' name='table' id='table' value='lineage' />";?>
 					<input type='hidden' name='image_type' id='image_type' value="lineage" />
@@ -3978,14 +4017,21 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 
 
 
+
+
+
+
+
+
+
+
 <div id="fragment-7"><!--MEDICAL HISTORY TAB !!!!!!!!!!!!!!!!-->
-<?
-if(isset($role_mode)&&$role_mode==0){
-	print "<div class='accordion'>";//call collapsed accordion or not
-}else{
-	print "<div class='roleaccordion'>";
+<?if($role_mode==0){
+     print "<div class='accordion'>";//call collapsed accordion or not
+}elseif($role_mode==1){
+	 print "<div class='roleaccordion'>";
 }
-if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
+if($horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
         $history_field_labels=GetMysqlFieldNames("medical_history", $dbname);
         if($horse_key){
         	if($_SESSION['access'] < 4){//allow to view information
@@ -3998,7 +4044,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
         	print "<table>";
         	foreach($historyResult as $row){		
   	  	 		$delete_table=7;
- 			 	print "<form action='javascript:delete_record(".$row['key'].",".$delete_table.")' method='post' enctype='multipart/form-data'>"; 
+ 			 	print "<form action='javascript:delete_record(".$row[key].",".$delete_table.")' method='post' enctype='multipart/form-data'>"; 
   	  	 			
   	  	 				foreach($history_field_labels as $label){
   	  	 					if($label!="key"&&$label!="horse_key"&&$label!="facility_key"&&$label!="date"&&$label!="next_date"){
@@ -4011,7 +4057,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 				}
   	  	 				
   	  	 			if($_SESSION[access]=="1"){
-  	  	 				print "<input type='hidden' id='admin_delete' value='".$row['key']."'>";
+  	  	 				print "<input type='hidden' id='admin_delete' value='".$row[key]."'>";
   	     				print "<tr><td><input 	id='delete_history' type = 'submit' name = 'delete_history' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete Record' /></td></tr>";
   	  	 			}//end session global if
   	  	 		
@@ -4040,7 +4086,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 						
   	  	 						print "<tr><td>";						
   	  	 						print "<select style='width: auto;' id ='hmonth' name = 'hmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -4054,12 +4100,12 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='hday' name='hday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='hday' name='hday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='hyear' name='hyear'><option value='".date('Y')."'>".date('Y')."</option>";
+								print "<select style='width: auto;' id='hyear' name='hyear'><option value='".date(Y)."'>".date(Y)."</option>";
 								for ($i=date(Y)-3;$i<=date(Y)+1;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
@@ -4093,14 +4139,14 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
      				print "<div id='history_response".$horse[key]."'>";//place content here
    				 	$element='history_response'.$horse[key];
  
-	print "<form  action='javascript:insert_role_history(&quot;$element&quot;,".$horse['key'].")' method='post'>";//update horse form
+	print "<form  action='javascript:insert_role_history(&quot;$element&quot;,".$horse[key].")' method='post'>";//update horse form
   	 			print "<table>";
   	  	 		foreach($history_field_labels as $label){
   	  	 			  	  if($label=="date"){
   	  	 						
   	  	 						print "<tr><td>";						
   	  	 						print "<select style='width: auto;' id ='hmonth".$horse[key]."' name = 'hmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -4114,13 +4160,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='hday".$horse['key']."' name='hday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='hday".$horse[key]."' name='hday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='hyear".$horse['key']."' name='hyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
+								print "<select style='width: auto;' id='hyear".$horse[key]."' name='hyear'><option value='".date(Y)."'>".date(Y)."</option>";
+								for ($i=date(Y)-3;$i<=date(Y)+1;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
@@ -4128,7 +4174,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 					}//end date if  	  	 			
   	  	 					elseif($label!="key"&&$label!="horse_key"&&$label!="facility_key"){
   	  	 						print "<tr>";
-  	  	 						print "<td width='350'><textarea rows='5' placeholder='Enter Medical Record or Health Event Here...' id='h".$label.$horse['key']."'></textarea></td>";
+  	  	 						print "<td width='350'><textarea rows='5' placeholder='Enter Medical Record or Health Event Here...' id='h".$label.$horse[key]."'></textarea></td>";
   	  	 						print "</tr>";
   	  	 			}
   	  	 		}
@@ -4151,20 +4197,28 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 
 
 
+
+
+
+
+
+
+
+
+
 <div id="fragment-8"><!--COGGINS TAB !!!!!!!!!!!!!!!!-->
-<?
-if(isset($role_mode)&&$role_mode==0){
-	print "<div class='accordion'>";//call collapsed accordion or not
-}else{
-	print "<div class='roleaccordion'>";
+<?if($role_mode==0){
+     print "<div class='accordion'>";//call collapsed accordion or not
+}elseif($role_mode==1){
+	 print "<div class='roleaccordion'>";
 }
-if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
-    $coggins_field_labels=GetMysqlFieldNames("coggins", $dbname);
-    if($horse_key){
+if($horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
+        $coggins_field_labels=GetMysqlFieldNames("coggins", $dbname);
+        if($horse_key){
        	if($_SESSION['access'] < 4){//allow to view information
         	$cogginsResult=GetTableData("horse_key",$horse_key, "coggins", $dbname);
         	if($cogginsResult){
-        	 foreach($cogginsResult as $row){
+        	foreach($cogginsResult as $row){
   	  	 		print "<h3>".$row['date']."</h3>";
   	  	 		print "<div id='coggins'>";
   	  	 		$coggins=str_replace('_',' ',$row['image']);
@@ -4224,7 +4278,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 						print "<td>".str_replace('_',' ',$label)."</td>";
   	  	 						  	  	 						print "<td>";						
   	  	 						print "<select style='width: auto;' id ='cmonth' name = 'cmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -4238,13 +4292,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='cday' name='cday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='cday' name='cday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='cyear' name='cyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
+								print "<select style='width: auto;' id='cyear' name='cyear'><option value='".date(Y)."'>".date(Y)."</option>";
+								for ($i=date(Y)-3;$i<=date(Y)+1;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
@@ -4300,7 +4354,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 						print "<td>".str_replace('_',' ',$label)."</td></tr>";
   	  	 						print "<tr><td>";						
   	  	 						print "<select style='width: auto;' id ='cmonth' name = 'cmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
+									print "<option value = '".date(m)."'>".date(M)."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -4314,13 +4368,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='cday' name='cday'><option value='".date('d')."'>".date('d')."</option>";
+								print "<select style='width: auto;' id='cday' name='cday'><option value='".date(d)."'>".date(d)."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='cyear' name='cyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
+								print "<select style='width: auto;' id='cyear' name='cyear'><option value='".date(Y)."'>".date(Y)."</option>";
+								for ($i=date(Y)-3;$i<=date(Y)+1;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
@@ -4355,22 +4409,19 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 
 
 
-<!-- ########################## ADMIN TAB !!!!! ################################-->
 
-<div id="fragment-10">
+
+
+
+<div id="fragment-10"><!--ADMIN TAB !!!!!-->
+<?if($_SESSION['access']<3){//dont see this tab if vet or farrier
+?>
+<div class='accordion'>
 <?
-if(isset($role_mode)&&$role_mode==0){
-	print "<div class='accordion'>";//call collapsed accordion or not
-}else{
-	print "<div class='roleaccordion'>";
-}
-if($_SESSION['access']<3){//dont see this tab if vet or farrier
-
 	if($_SESSION['passwordcheck']=='pass'){
-        // if($login_data){
-		if($login_field_labels&&$login_data){
+        if($login_data){
         	print "<h3>Access Levels for Current Users</h3>";
-
+        	print "<div id='admini'>";//inner accordion
         	print "<table>";
         	  	 print "<tr>";
   	  	 			foreach($login_field_labels as $label){
@@ -4379,7 +4430,7 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
   	  	 				}
   	  				}
   	 			print "</tr>";
-  	 			print "<form>";
+  	 			//print "<form>";
         	foreach($login_data as $row){		
   	  	 		$delete_table='login';
   	  	 		
@@ -4404,119 +4455,109 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
   	  	 			
         	}
  			 print "</table>";
-
+ 	 print "</div>";//inner accordion div
         }//end if login data
   	    	
     
         ?>		 
 <!--ADD NEW ADMIN -->
 
-    <h3>Enter New Administrator, Vet, Farrier, or Trainer Information</h3>
+	<h3>Enter New Administrator, Vet, Farrier, or Trainer Information</h3>
     <div id="insert_admin_response"><!--start inner accordion div-->
 <?if($_SESSION['access']<2 && $_SESSION['passwordcheck']=='pass'){//allow to update information
 ?>
-        <form action='javascript:insert_admin()' method='post'>
-         <?
-         print "<input type='hidden' name='horse_key' id='horse_key' value='".$horse_key."' />";
-            print "<table>";
-                foreach($login_field_labels as $label){
-                    if($label!="key"&&$label!="facility_key"){
-                        if($label=="access"){
-                            ?>              
-                    <tr><td>Caval-Connect Access</td>
-                    <td>
-                            <select name='access' id='login_access'>
-                                    <option value=''> Select Access Level </option>
-                                    <option value='1'>Entire Facility</option>
-                                    <option value='2'>Owner</option>
-                                    <option value='3'>Vet</option>
-                                    <option value='4'>Vet Data Only</option>
-                                    <option value='3'>Farrier</option>
-                                    <option value='4'>Farrier Data Only</option>
-                                    <option value='5'>Trainer</option>
-                            </select>
-                    </td></tr>
-                        <?
-                        }elseif($label=="role"){
-                            ?>              
-                             <tr><td>Caval-Connect Role</td>
-                                <td>
-                                <select name='role' id='login_role'>
-                                    <option value=''>Role</option>
-                                    <option value='manager'>Barn Manager</option>
-                                    <option value='owner'>Owner</option>
-                                    <option value='vet'>Vet</option>
-                                    <option value='farrier'>Farrier</option>
-                                    <option value='trainer'>Trainer</option>
-                                    <option value='student'>Student</option>
-                                </select>
-                    </td></tr>
-                        <?
-                        }else{
-                            print "<tr>";
-                                print "<td width='150'>".str_replace('_',' ',$label)."</td><td><input type='text' id='login_".$label."'></td>";
-                            print "</tr>";
-                        }
-                    }
-                }
-              ?>
+  	  	<form action='javascript:insert_admin()' method='post'>
+  	  	 <?
+  	  	 print "<input type='hidden' name='horse_key' id='horse_key' value='".$horse_key."' />";
+			print "<table>";
+  	  	 		foreach($login_field_labels as $label){
+  	  	 			if($label!="key"&&$label!="facility_key"){
+  	  	 				if($label=="access"){
+  	  	 					?> 				
+  	  	 			<tr><td>Caval-Connect Access</td>
+  	  	 			<td>
+  	  	 					<select name='access' id='login_access'>
+									<option value=''> Select Access Level </option>
+									<option value='1'>Entire Facility</option>
+									<option value='2'>Owner</option>
+									<option value='3'>Vet</option>
+									<option value='4'>Vet Data Only</option>
+									<option value='3'>Farrier</option>
+									<option value='4'>Farrier Data Only</option>
+									<option value='5'>Trainer</option>
+							</select>
+  	  	 			</td></tr>
+  	  	 				<?
+  	  	 				}elseif($label=="role"){
+  	  	 					?> 				
+  	  	 					 <tr><td>Caval-Connect Role</td>
+  	  	 						<td>
+  	  	 					  	<select name='role' id='login_role'>
+									<option value=''>Role</option>
+									<option value='manager'>Barn Manager</option>
+									<option value='owner'>Owner</option>
+									<option value='vet'>Vet</option>
+									<option value='farrier'>Farrier</option>
+									<option value='trainer'>Trainer</option>
+									<option value='student'>Student</option>
+								</select>
+  	  	 			</td></tr>
+  	  	 				<?
+  	  	 				}else{
+  	  	 					print "<tr>";
+  	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td><td><input type='text' id='login_".$label."'></td>";
+  	  	 					print "</tr>";
+  	  	 				}
+  	  	 			}
+  	  	 		}
+  	  	 	  ?>
 
-            </table>
-        <input  id="submit_admin" type = "submit" name = "submit_admin" class= "btn btn-warning" value = "Submit New Admin Information"/>
-        </form>
+			</table>
+		<input 	id="submit_admin" type = "submit" name = "submit_admin" class= "btn btn-warning" value = "Submit New Admin Information"/>
+		</form>
 <?
-    }else{
-        print"Sorry, your access does not allow adding new Administrators";
-    } 
+  	}else{
+		print"Sorry, your access does not allow adding new Administrators";
+	} 
 ?>
-    </div> <!-- end inner accordion --> 
+	</div> <!-- end inner accordion --> 
 
 
-<!--ADD NEW FACILITY -->    
-    <h3>Enter New Facility Data</h3>
+<!--ADD NEW FACILITY -->	
+	<h3>Enter New Facility Data</h3>
     <div id="facility_response"><!--start inner accordion div--> 
 <?if($_SESSION['access']<2 && $_SESSION['passwordcheck']=='pass'){//allow to update information
 ?>  
-        <form action='javascript:insert_facility()' method='post'>
-         <?
-         $facility_field_labels=GetMysqlFieldNames("facility", $dbname);
-         //print "<input type='hidden' name='horse_key' id='farrierhorse_key' value=".$horse_key." />";
-            print "<table>";
-                foreach($facility_field_labels as $label){
-                    if($label!="key"&&$label!="access"&&$label!="horse_key"){
-                        print "<tr>";
-                            print "<td width='150'>".str_replace('_',' ',$label)."</td><td><input type='text' id='facility".$label."'></td>";
-                        print "</tr>";
-                    }
-                }
-              ?>
-            </table>
-        <input  id="submit_facility" type = "submit" name = "submit_facility" class= "btn btn-warning" value = "Submit New Facility Information"/>
-        </form>
+  	  	<form action='javascript:insert_facility()' method='post'>
+  	  	 <?
+  	  	 $facility_field_labels=GetMysqlFieldNames("facility", $dbname);
+  	  	 //print "<input type='hidden' name='horse_key' id='farrierhorse_key' value=".$horse_key." />";
+			print "<table>";
+  	  	 		foreach($facility_field_labels as $label){
+  	  	 			if($label!="key"&&$label!="access"&&$label!="horse_key"){
+  	  	 				print "<tr>";
+  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><input type='text' id='facility".$label."'></td>";
+  	  	 				print "</tr>";
+  	  	 			}
+  	  	 		}
+  	  	 	  ?>
+			</table>
+		<input 	id="submit_facility" type = "submit" name = "submit_facility" class= "btn btn-warning" value = "Submit New Facility Information"/>
+		</form>
 <?
-    }else{
-        print"Sorry, your access does not allow adding new Facilities";
-    } 
+  	}else{
+		print"Sorry, your access does not allow adding new Facilities";
+	} 
 ?>
-       </div><!--end inner accordion div -->  
+  	   </div><!--end inner accordion div -->  
 <!--END ADD NEW FACILITY -->
-		<? 
-	}//end if pass check
-}//end if for admin access
+<? }//end if pass check
 ?> 
 </div> <!--end accordion--> 
 		
-</div> <!-- ################################# end fragment-10 #################################-->
-
-
-
-
-
-
-
-
-
-
+</div> <!--end fragment-10-->
+<?}//end if for admin access
+?>
 </div><!--end tabs div-->
 </div><!--end main_container div-->
 <!-- Modals -->
@@ -4540,7 +4581,7 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						print "<td>";						
   	  	 						print "<select style='width: auto;' id ='nmonth' name = 'nmonth' >";
-									print "<option value = '".date(m,$row[$label])."'>".date('M',$row[$label])."</option>";
+									print "<option value = '".date(m,$row[$label])."'>".date(M,$row[$label])."</option>";
 									print "<option value = '01'>January</option>";
 									print "<option value = '02'>February</option>";
 									print "<option value = '03'>March</option>";
@@ -4554,13 +4595,13 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
 									print "<option value = '11'>November</option>";
 									print "<option value = '12'>December</option>";
 								print "</select>";
-								print "<select style='width: auto;' id='nday' name='nday'><option value='".date('d',$row[$label])."'>".date('d',$row[$label])."</option>";
+								print "<select style='width: auto;' id='nday' name='nday'><option value='".date(d,$row[$label])."'>".date(d,$row[$label])."</option>";
 								for ($i=1;$i<=31;$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";
-								print "<select style='width: auto;' id='nyear' name='nyear'><option value='".date('Y',$row[$label])."'>".date('Y',$row[$label])."</option>";
-								for ($i=1990;$i<=date('Y');$i++){
+								print "<select style='width: auto;' id='nyear' name='nyear'><option value='".date(Y,$row[$label])."'>".date(Y,$row[$label])."</option>";
+								for ($i=1990;$i<=date(Y);$i++){
 									print "<option value='$i'>".$i."</option>";
 								}
 								print "</select>";

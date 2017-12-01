@@ -6,9 +6,9 @@ $date = date('Y-m-d', $timestamp);
 return $date;
 }
 
-$db = get_db();
-$conn=get_conn();
-mysql_select_db(get_db(), get_conn());
+$dbname = get_db();
+$conn=get_conn($dbname);
+// mysql_select_db(get_db(), get_conn());
 //check for new physical info
 if(isset($_GET['blood'])&&isset($_GET['horse_key'])){
 	$horse_key= $_GET['horse_key'];
@@ -221,7 +221,7 @@ elseif(isset($_GET['dental'])){//enter dental data
 	$phone= $_GET['phone'];
 	if($first_name!=''&&$last_name!=''&&$street_address!=''&&$city!=''&&$state!=''&&$zip!=''&&$phone!=''){
 		$insert_sql = ("INSERT INTO owner VALUES (NULL,'$first_name','$last_name','$street_address','$city','$state','$zip','$phone','$horse_key','$vet_key','$_SESSION[facility]')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());
 		print "     New Owner Information Entered  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}else{
 		print "Please fill in all owner fields!";
@@ -317,5 +317,5 @@ elseif(isset($_GET['dental'])){//enter dental data
 	}	
 }
 
-mysql_close($conn);
+mysqli_close($conn);
 ?>
