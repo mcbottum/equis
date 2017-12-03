@@ -8,8 +8,16 @@ function get_db(){
 
 //mysqli
 function get_conn($db){
-    $conn=mysqli_connect("localhost","root","",$db);//home
-    //$conn=mysql_connect("localhost","abaits5_mcbottum","annakai1") or die(mysql_error());//server
+    // ##### local #####
+    $user='root';
+    $pwd='';
+    $host='localhost';
+    // ##### Dreamnost #####
+    // $user='equis';
+    // $pwd='equis_user_1!';
+    // $host='mysql.cavalconnect.com';
+    $conn=mysqli_connect($host,$user,$pwd,$db); //home
+    //$conn=mysql_connect("localhost","abaits5_mcbottum","annakai1") or die(mysql_error());server
     return $conn;
 }
 
@@ -250,30 +258,12 @@ function getHorseName($horse_key,$horse_data){
     return $horse;
 }
 
-//old
-// function getName($key, $table){
-//  $conn=get_conn();
-//  mysql_select_db($db);
-//  $sql="SELECT * FROM `$table` WHERE `key`='$key'";
-    
-//  $result = mysql_query($sql, $conn);
-//  while($row = mysql_fetch_array($result)){
-//      $results[]=$row;
-//  }
-//  if($results[0]['first_name']){
-//      $name=$results[0]['first_name']." ".$results[0]['last_name'];
-//  }elseif($results[0]['name']){
-//      $name=$results[0]['name'];
-//  }
-//  return $name;
-//  mysql_close($conn);
-// }
 
 //mysqli
-function getName($key, $table){
+function getName($key, $table, $db){
     $conn=get_conn($db);
 
-    $sql="SELECT * FROM `$table` WHERE `key`='$key'";
+    $sql="SELECT * FROM $table WHERE `key`='$key'";
     
     $result = mysqli_query($conn, $sql);
     while($row = mysqli_fetch_assoc($result)){
@@ -284,6 +274,7 @@ function getName($key, $table){
     }elseif($results[0]['name']){
         $name=$results[0]['name'];
     }
+
     mysqli_free_result($result);
     mysqli_close($conn);
     return $name;

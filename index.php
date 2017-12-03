@@ -876,6 +876,7 @@ http.onreadystatechange = insertVetReply;
 http.send(null);
 }
 
+//insert new admin
 function insert_admin() {	
 var first_name= encodeURI(document.getElementById('login_first_name').value);
 var last_name= encodeURI(document.getElementById('login_last_name').value);
@@ -1104,9 +1105,9 @@ if(isset($_REQUEST['filter'])){
 	if($filter=='vet'||$filter=='owner'||$filter=='farrier'){
 		$filter_key=$filter.'filter';
 		$role_key=$_REQUEST[$filter_key];
-		$role_name=getName($role_key,'login');
+		$role_name=getName($role_key,'login',$dbname);
 		$_SESSION['role']=$filter;
-		$message="  Selected as ".$filter." for <em>".$role_name."</em>";
+		$message="  Selected, filtered by ".$filter.": <em>".$role_name."</em>";
 		$horses=GetRoleTableData($role,$role_key,'information',$_SESSION['facility'],$dbname);
 	}else{
 		$role_key=10;//set to appt mode
@@ -1200,7 +1201,7 @@ if($_SESSION['passwordcheck']!='pass'){
 	if(isset($horse_name)&&$horse_name&&$role_mode==0){
 		print "<span id='title'>".$horse_name." Caval-Connected </span><span><input id='logout' type ='submit' name ='logout' class= 'btn btn-danger' value = 'Logout $_SESSION[first]' onclick='parent.location=&quot;logout.php&quot;'></span>";
 	}elseif($role_mode==1){
-		print "<span id='title'>".$role_name." Caval-Connected </span><span><input id='logout' type ='submit' name ='logout' class= 'btn btn-danger' value = 'Logout $_SESSION[first]' onclick='parent.location=&quot;logout.php&quot;'></span>";
+		print "<span id='title'> Caval-Connected as ".$filter.": ".$role_name." </span><span><input id='logout' type ='submit' name ='logout' class= 'btn btn-danger' value = 'Logout $_SESSION[first]' onclick='parent.location=&quot;logout.php&quot;'></span>";
 	}
 	else{
 	print "<span id='title'>Caval-Connect </span><span><input id='logout' type ='submit' name ='logout' class= 'btn btn-danger' value = 'Logout $_SESSION[first]' onclick='parent.location=&quot;logout.php&quot;'></span>";
@@ -1222,44 +1223,47 @@ if($_SESSION['passwordcheck']!='pass'){
 		<tr>
 
 		</tr>
-		<tr><td><br>
-		</td></tr>
-			<td>
-				<select name="horse_choice" id="horse_choice" onchange="check(this.value);">
-					<option value=""> Select Horse </option>
-					<?
+		<?
+
+foreach ($yearArray as $year)
+		print "<tr><td><br>";
+		print "</td></tr>";
+			print "<td>";
+				print "<select name='horse_choice' id='horse_choice' onchange='check(this.value);'>";
+					print "<option value=''> Select Horse </option>";
+					
 						if($_SESSION['passwordcheck']=='pass'){
 							while($row = mysqli_fetch_assoc($horse_result)){
-								print"<option value=$row[key]>$row[horse_name]</option>";
+								$selected = ((isset($_POST['horse_choice']) && $_POST['horse_choice'] == $row[key]) || ($row[key] == 'Select Horse')) ? 'selected' : '';
+								echo '<option name="year" '.$selected.'  value="'.$row[key].'">'.$row[horse_name].'</option>';
 							}//end while
 						if($_SESSION['access']=='1'){//allow to update information
-						?>
-					<option value="new_horse"><span class="red">New Horse</span></option>
-						<?}//end global check
+							print "<option value='new_horse'><span class='red'>New Horse</span></option>"; //Only allow if appropriate access level
+						}//end global check
 					}//end passcheck
-					?>		
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<input 	id="submit_horse" type = "submit" name = "submit_horse" class= "btn btn-warning" value = "Submit Horse Selection"/>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<br>
-			</td>
-		</tr>
-		</form><!--end horse form-->
-		<form
-		name='owner'
-		id='owner'
-		action='index.php'
-		method = "post">
-		<tr>
-			<td>
-			<?
+						
+				print "</select>";
+			print "</td>";
+		print "</tr>";
+		print "<tr>";
+			print "<td>";
+				print "<input 	id='submit_horse' type = 'submit' name = 'submit_horse' class= 'btn btn-warning' value = 'Submit Horse Selection'/>";
+			print "</td>";
+		print "</tr>";
+		print "<tr>";
+			print "<td>";
+				print "<br>";
+			print "</td>";
+		print "</tr>";
+		print "</form>"; //<!--end horse form-->
+		print "<form 
+				name='owner'
+				id='owner' 
+				action='index.php' 
+				method = 'post'>";
+		print "<tr>";
+			print "<td>";
+			
 				print " <select name='filter' class='filter' id='filter' onchange='showSelectFilter(&quot;filter&quot;, &quot;filter3&quot;, this.value);'>";
 					print "<option value=''> Group Horses by Filter </option>";
 						
@@ -1403,11 +1407,11 @@ if($dental){
 
 
 
-
-
-
-<div id="fragment-A" class="active"><!--tab for horse information-->       
 <?
+// ########################## fragment - A ################################## //
+
+print "<div id='fragment-A' class='active'>"; //<!--tab for horse information-->       
+
 if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode==0){//horse_key mode
 	print "<div class='accordion'>";
     if($_SESSION['access'] < 4){
@@ -1425,13 +1429,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 		  	  	 			if($label!="key"&&$label!="horse_key"&&$label!="horse_image"&&$label!="facility_key"){
 		  	  	 				print "<tr>";
 		  	  	 					if($label=="owner_key"){
-		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>owner</td><td class='bottom_borderr'>".getName($row[owner_key],'login')."</td>";
+		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>owner</td><td class='bottom_borderr'>".getName($row[owner_key],'login',$dbname)."</td>";
 		  	  	 						}elseif($label=="vet_key"){
-		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>vet</td><td class='bottom_borderr'>".getName($row[vet_key],'login')."</td>";
+		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>vet</td><td class='bottom_borderr'>".getName($row[vet_key],'login',$dbname)."</td>";
 		  	  	 						}elseif($label=="farrier_key"){
-		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>farrier</td><td class='bottom_borderr'>".getName($row[farrier_key],'login')."</td>";
+		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>farrier</td><td class='bottom_borderr'>".getName($row[farrier_key],'login',$dbname)."</td>";
 		  	  	 						}elseif($label=="facility_key"){
-		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>facility</td><td class='bottom_borderr'>".getName($row[facility_key], 'facility')."</td>";
+		  	  	 							print "<td class='bottom_borderr' id='field' width='200'>facility</td><td class='bottom_borderr'>".getName($row[facility_key], 'facility',$dbname)."</td>";
 		  	  	 						}
 		  	  	 						else{  	  	 				
 		  	  	 					print "<td class='bottom_borderr' id='field' width='200'>".str_replace('_',' ',$label)."</td><td class='bottom_borderr'>".$row[$label]."</td>";
@@ -1893,7 +1897,7 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
   	  	 						}
   	  	 				print "</tr>";
   	  	 			}elseif($label=="vet_key"){
-  	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='110'>vet</td><td>".getName($row[$label],'login')."</td></tr>";
+  	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='110'>vet</td><td>".getName($row[$label],'login',$dbname)."</td></tr>";
   	  	 			}elseif($label=="date"){
   	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='110'>physical date</td><td>".date('F j Y',strtotime($row[$label]))."</td></tr>";
   	  	 			}elseif($label=="next_date"){
@@ -2469,7 +2473,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 					print "<td class='bold' width='150'>".str_replace('_',' ',$label)."</td><td>".str_replace('_',' ',$row[$label])."</td>";
   	  	 				print "</tr>";
   	  	 			}elseif($label=="vet_key"){
-  	  	 					print "<tr class='bottom_borderr'><td class='bold' width='150'>vet</td><td>".getName($row[$label],'login')."</td></tr>";
+  	  	 					print "<tr class='bottom_borderr'><td class='bold' width='150'>vet</td><td>".getName($row[$label],'login',$dbname)."</td></tr>";
   	  	 			}elseif($label=="date"){
   	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='150'>vaccination date</td><td>".date('F j Y',strtotime($row[$label]))."</td></tr>";
   	  	 			}elseif($label=="next_date"){
@@ -2825,7 +2829,7 @@ $dental_field_labels=GetMysqlFieldNames("dental", $dbname);
   	  	 					print "<td class='bold' width='110'>".str_replace('_',' ',$label)."</td><td>".str_replace('_',' ',$row[$label])."</td>";
   	  	 				print "</tr>";
   	  	 			}elseif($label=="vet_key"){
-  	  	 					print "<tr class='bottom_borderr'><td class='bold' width='110'>vet</td><td>".getName($row[$label],'login')."</td></tr>";
+  	  	 					print "<tr class='bottom_borderr'><td class='bold' width='110'>vet</td><td>".getName($row[$label],'login',$dbname)."</td></tr>";
   	  	 			}elseif($label=="date"){
   	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='110'>dental date</td><td>".date('F j Y',strtotime($row[$label]))."</td></tr>";
   	  	 			}elseif($label=="next_date"){
@@ -3162,7 +3166,7 @@ $dental_field_labels=GetMysqlFieldNames("dental", $dbname);
 	
 	
 	
-    <div id="fragment-4"><!--FARRIER ACCORDION -->
+<div id="fragment-4"><!--FARRIER ACCORDION -->
 <?
 if(isset($role_mode)&&$role_mode==0){
 	print "<div class='accordion'>";//call collapsed accordion or not
@@ -3173,55 +3177,56 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
       $farrier_field_labels=GetMysqlFieldNames("farrier", $dbname);
          if($horse_key){
          	if($_SESSION['access'] < 4){//allow to view information
-        	$farrierResult=GetTableDataFacility("horse_key",$horse_key, "farrier", $dbname, $_SESSION['facility']);
-        	if($farrierResult){
-        	foreach($farrierResult as $row){
-  	  	 		print "<h3>".$row['date']."</h3>";
-  	  	 		print "<div id='farrier".$row['key']."'>";
- 			 	
-  	  	 		print "<table>";
-  	  	 		foreach($farrier_field_labels as $label){
-  	  	 			if($label!="key"&&$label!="horse_key"&&$label!="vet_key"&&$label!="facility_key"&&$label!="date"&&$label!="next_date"){
-  	  	 				print "<tr class='bottom_borderr'>";
-  	  	 					print "<td class='bold' width='110'>".str_replace('_',' ',$label)."</td><td>".str_replace('_',' ',$row[$label])."</td>";
-  	  	 				print "</tr>";
-  	  	 			}elseif($label=="vet_key"){
-  	  	 					print "<tr class='bottom_borderr'><td class='bold' width='110'>vet</td><td>".getName($row[$label],'login')."</td></tr>";
-  	  	 			}elseif($label=="date"){
-  	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='110'>farrier date</td><td>".date('F j Y',strtotime($row[$label]))."</td></tr>";
-  	  	 			}elseif($label=="next_date"){
-  	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='110'>next farrier</td><td>".date('F j Y',strtotime($row[$label]))."</td></tr>";
-  	  	 			}
-  	  	 		}
-  	  	 		
-  	     		if($_SESSION[access] <2){//only manager can delete
-  	     		print "<tr><td><br></td></tr><tr>";
-  	  				$element='farrier'.$row['key'];
-  	  				$name=$row['horse_name'];
-  	  				$delete_table='farrier';
-  	  				print "<form action='javascript:delete_record(".$row['key'].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
-  	  	 			//print "<input type='hidden' id='physical_delete' value='info".$row[key]."'>";
-  	     			print "<td id='delete_farrier".$row['key']."'><input id='delete_farr".$row['key']."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row['date']." Farrier Appointment' /></td>";
-  	     			print "</form>";     		
-  	     		print "</tr>";
-  	     		}  	  	 		
-  	  	 		
-  	  	 		print "</table>";
-  	     		
-  	     		print "</div>";
-        	}
- 		}else{
- 		 	print "No Farier Information has been recorded for ". $horse_name;//end if result
- 		}//end if table result
-   }//end if access <3
-   if($_SESSION['access'] < 5){//allow to view information
-         print "<h3>Enter New Farrier Data</h3>";
-  	  	 print "<div id='farrier_response'>";
-  	  	 ?>
-  	  	 <!-- Show Message for AJAX response -->
-  	  <form action='javascript:insert_farrier()' method='post'>
-  	  	 <?
-  	  	 print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";
+        		$farrierResult=GetTableDataFacility("horse_key",$horse_key, "farrier", $dbname, $_SESSION['facility']);
+		        	if($farrierResult){
+			        	foreach($farrierResult as $row){
+			  	  	 		print "<h3>".$row['date']."</h3>";
+			  	  	 		print "<div id='farrier".$row['key']."'>";
+			 			 	
+			  	  	 		print "<table>";
+			  	  	 		foreach($farrier_field_labels as $label){
+			  	  	 			if($label!="key"&&$label!="horse_key"&&$label!="vet_key"&&$label!="facility_key"&&$label!="date"&&$label!="next_date"){
+			  	  	 				print "<tr class='bottom_borderr'>";
+			  	  	 					print "<td class='bold' width='110'>".str_replace('_',' ',$label)."</td><td>".str_replace('_',' ',$row[$label])."</td>";
+			  	  	 				print "</tr>";
+			  	  	 			}elseif($label=="vet_key"){
+			  	  	 					print "<tr class='bottom_borderr'><td class='bold' width='110'>vet</td><td>".getName($row[$label],'login',$dbname)."</td></tr>";
+			  	  	 			}elseif($label=="date"){
+			  	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='110'>farrier date</td><td>".date('F j Y',strtotime($row[$label]))."</td></tr>";
+			  	  	 			}elseif($label=="next_date"){
+			  	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='110'>next farrier</td><td>".date('F j Y',strtotime($row[$label]))."</td></tr>";
+			  	  	 			}
+			  	  	 		}
+			  	  	 		
+			  	     		if($_SESSION[access] <2){//only manager can delete
+				  	     		print "<tr><td><br></td></tr><tr>";
+				  	  				$element='farrier'.$row['key'];
+				  	  				$name=$row['horse_name'];
+				  	  				$delete_table='farrier';
+				  	  				print "<form action='javascript:delete_record(".$row['key'].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
+				  	  	 			//print "<input type='hidden' id='physical_delete' value='info".$row[key]."'>";
+				  	     			print "<td id='delete_farrier".$row['key']."'><input id='delete_farr".$row['key']."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row['date']." Farrier Appointment' /></td>";
+				  	     			print "</form>";     		
+				  	     		print "</tr>";
+			  	     		}  	  	 		
+			  	  	 		
+			  	  	 		print "</table>";
+			  	     		
+			  	     		print "</div>";
+			        	}
+		 			}else{
+		 		 		print "No Farier Information has been recorded for ". $horse_name;//end if result
+		 			}//end if table result
+   			}//end if access <3
+
+	if($_SESSION['access'] < 5){//allow to view information
+        print "<h3>Enter New Farrier Data</h3>";
+  	  	print "<div id='farrier_response'>";
+  	  	?>
+  	  	<!-- Show Message for AJAX response -->
+		<form action='javascript:insert_farrier()' method='post'>
+  	  	<?
+  	  	print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";
 			print "<table>";
   	  	 		foreach($farrier_field_labels as $label){
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="facility_key"){
@@ -3308,28 +3313,28 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 
   	  	 			}
   	  	 		}
-  	  	 					print "<tr><td width='150'>Veterinarian</td>";
-  	  	 					print "<td>";
-  	  	 						print "<select name='fvet_key' id='fvet_key'>";
-									print "<option value=''> Select Farrier </option>";
-										foreach($vet_data as $data){
-											print"<option value=$data[key]>$data[first_name] $data[last_name]</option>";
-										}//end foreach
-									print "<option value='0'>New Vet</select>";
-								print "</select>";
-  	  	 					print "</td>";
-  	  	 				print "</tr>";
+  	 				print "<tr><td width='150'>Farrier</td>";
+  	 					print "<td>";
+  	 						print "<select name='fvet_key' id='fvet_key'>";
+							print "<option value=''> Select Farrier </option>";
+								foreach($farrier_data as $data){
+									print"<option value=$data[key]>$data[first_name] $data[last_name]</option>";
+								}//end foreach
+							print "<option value='0'>New Vet</select>";
+						print "</select>";
+  	 					print "</td>";
+  	 				print "</tr>";
 			print "</table>";
 				?>
-				<input 	id="submit_farrier" type = "submit" name = "submit_farrier" class= "btn btn-warning" value = "Submit Farrier Information"/></form>
+					<input 	id="submit_farrier" type = "submit" name = "submit_farrier" class= "btn btn-warning" value = "Submit Farrier Information"/></form>
 				<?
   	     print "</div>";
   	  	 }//end if for entering new data
 	}else{//if horse key if
-	print	"Please select a horse.";
+		print	"Please select a horse.";
 	}
 }//end horse mode if
-		elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$access<3){//put caval-connect in data entry mode only
+elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$access<3){//put caval-connect in data entry mode only
 		//$horses=GetRoleTableData($role,$role_key,'information',$_SESSION['facility'],$db);
 		$farrier_field_labels=GetMysqlFieldNames("farrier", $dbname);
 			if($horses){
@@ -3338,7 +3343,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 					print "<h3><strong>".$horse['horse_name']."</strong>  ".$message."</h3>";
      				print "<div id='farrier_response".$horse['key']."'>";//place content here
    				 	$element='farrier_response'.$horse['key'];
-	print "<form  action='javascript:insert_role_farrier(&quot;$element&quot;,".$horse[key].")' method='post'>";//update horse form
+					print "<form  action='javascript:insert_role_farrier(&quot;$element&quot;,".$horse[key].")' method='post'>";//update horse form
   
 			print "<table>";
   	  	 		foreach($farrier_field_labels as $label){
@@ -3402,6 +3407,8 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 								}
 								print "</select>";
 								print "</td>";
+  	  	 					}elseif($label=="comments"){
+  	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td><td><textarea rows='3' placeholder='Enter general comments or recommendations. . .' id='f".$label."'></textarea></td>";
   	  	 					}elseif($label=="procedure"){
   	  								print "<td width='150'>".$label."</td>";
   	  								print "<td><select id ='fprocedure".$horse['key']."' name = 'fprocedure' onchange='showOtherText(this.value,&quot;fprocedure_other".$horse['key']."&quot;); showOtherText(this.value,&quot;fprocedureother".$horse['key']."&quot;);'>";
@@ -3426,11 +3433,11 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 
   	  	 			}
   	  	 		}
-  	  	 					print "<tr><td width='150'>Veterinarian</td>";
+  	  	 					print "<tr><td width='150'>Farrier</td>";
   	  	 					print "<td>";
   	  	 						print "<select name='fvet_key' id='fvet_key".$horse['key']."'>";
 									print "<option value=''> Select Farrier </option>";
-										foreach($vet_data as $data){
+										foreach($farrier_data as $data){
 											print"<option value=$data[key]>$data[first_name] $data[last_name]</option>";
 										}//end foreach
 									print "<option value='0'>New Vet</select>";
@@ -3439,7 +3446,8 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 				print "</tr>";
 			print "</table>";
 				?>
-				<input 	id="submit_farrier" type = "submit" name = "submit_farrier" class= "btn btn-warning" value = "Submit Farrier Information"/></form>
+					<input 	id="submit_farrier" type = "submit" name = "submit_farrier" class= "btn btn-warning" value = "Submit Farrier Information"/>
+				 	</form>
 				<?     		
      		
  	    			print "</div>";//
@@ -3503,7 +3511,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 					print "<td class='bold' width='150'>".str_replace('_',' ',$label)."</td><td>".str_replace('_',' ',$row[$label])."</td>";
   	  	 				print "</tr>";
   	  	 			}elseif($label=="vet_key"){
-  	  	 					print "<tr class='bottom_borderr'><td class='bold' width='150'>vet</td><td>".getName($row[$label],'login')."</td></tr>";
+  	  	 					print "<tr class='bottom_borderr'><td class='bold' width='150'>vet</td><td>".getName($row[$label],'login',$dbname)."</td></tr>";
   	  	 			}elseif($label=="date"){
   	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='150'>deworm date</td><td>".date('F j Y',strtotime($row[$label]))."</td></tr>";
   	  	 			}elseif($label=="next_date"){
@@ -3802,7 +3810,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 					print "<td class='bold' width='110'>".str_replace('_',' ',$label)."</td><td>".$row[$label]."</td>";
   	  	 				print "</tr>";
   	  	 			}elseif($label=="vet_key"){
-  	  	 					print "<tr class='bottom_borderr'><td class='bold' width='110'>vet</td><td>".getName($row[$label],'login')."</td></tr>";
+  	  	 					print "<tr class='bottom_borderr'><td class='bold' width='110'>vet</td><td>".getName($row[$label],'login',$dbname)."</td></tr>";
   	  	 			}elseif($label=="date"){
   	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='110'>lineage date</td><td>".date('F j Y',strtotime($row[$label]))."</td></tr>";
   	  	 			}elseif($label=="next_date"){
@@ -4176,7 +4184,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 					print "<td class='bold' width='50'>".str_replace('_',' ',$label)."</td><td>".$row[$label]."</td>";
   	  	 				print "</tr>";
   	  	 			}elseif($label=="vet_key"){
-  	  	 					print "<tr class='bottom_borderr'><td width='50'>vet</td><td>".getName($row[$label],'login')."</td></tr>";
+  	  	 					print "<tr class='bottom_borderr'><td width='50'>vet</td><td>".getName($row[$label],'login',$dbname)."</td></tr>";
   	  	 			}elseif($label=="date"){
   	  	 					print "<tr class='bottom_borderr' ><td class='bold' width='110'>coggins date</td><td>".date('F j Y',strtotime($row[$label]))."</td></tr>";
   	  	 			}elseif($label=="next_date"){
@@ -4388,7 +4396,7 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
   	  	 				if($label!="key"&&$label!="password"&&$label!="facility_key"){
   	  	 					print "<td class='bottom_borderr'>".$row[$label]."</td>";
   	  	 				}elseif($label=="facility_key"){
-  	  	 					print "<td class='bottom_borderr'>".getName($row[$label],'facility')."</td>";
+  	  	 					print "<td class='bottom_borderr'>".getName($row[$label],'facility',$dbname)."</td>";
   	  	 				}
   	  				}
   	  			if($_SESSION['access']<2){//script for deleting record

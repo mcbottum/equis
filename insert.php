@@ -52,12 +52,12 @@ if(isset($_GET['blood'])&&isset($_GET['horse_key'])){
 
 	if($horse_key!=''&&$date!=''&&$vet_key!=''&&$next_date!=''){
 		$insert_sql = ("INSERT INTO physical VALUES (NULL,'$horse_key','$date','$next_date','$vet_key','$blood','$fecal','$sheath','$teeth','$vaccination','$radiograph','$temperature','$pulse','$respiration','$right_eye','$left_eye','$fitness','$coat','$gait','$comments','$_SESSION[facility]')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());
 		print "Physical information entered   <input type='hidden' name='active_div' id='active_div' value='1' /><input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Page' onclick='parent.location=&quot;index.php&quot;'>";
 	}else{
 		print "Please fill in at least Vet and Dates!!!  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}
-//check for horse information
+//check for horse information or UPDATE horse info
 }elseif(isset($_GET['horse_record'])){
 	$horse_record= $_GET['horse_record'];
 	$horse_key= $_GET['horse_key'];
@@ -85,7 +85,7 @@ if(isset($_GET['blood'])&&isset($_GET['horse_key'])){
 	$vet_key= $_GET['vet_key'];
 	if($horse_record=="new"){
 		$insert_sql = ("INSERT INTO information VALUES (NULL,'$horse_name','$owner_key','$contact','$vet_key','$farrier_key','$horse_image','$breed','$birth','$height','$weight','$temp','$heart','$resp','$vices','$considerations','$brand','$markings','$color','$sex','$stall','$_SESSION[facility]')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());
 		print "Information for ".$horse_name." uploaded <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}elseif($horse_record=="update"||$horse_record=="role"){
 		$insert_sql = ("UPDATE  `information` SET  `horse_name` =  '$horse_name',
@@ -108,7 +108,7 @@ if(isset($_GET['blood'])&&isset($_GET['horse_key'])){
 `color` =  '$color',
 `sex` =  '$sex',
 `stall` =  '$stall' WHERE `key` ='$horse_key' LIMIT 1");
-$insert= mysql_query($insert_sql) or die(mysql_error());
+$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());
 print " information updated! <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}	
 }elseif(isset($_GET['vac_type'])){//enter vaccination data
@@ -121,33 +121,33 @@ print " information updated! <input id='reload_physical' type ='submit' name ='r
 	$next_date=convertDate($_GET['next_date']);
 	if($horse_key!=''&&$type!=''&&$date!=''&&$next_date!=''){
 		$insert_sql = ("INSERT INTO vaccination VALUES (NULL,'$horse_key','$date','$vet_key','$next_date','$type')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());
 		if($type2!='none'){
 			$insert_sql2 = ("INSERT INTO vaccination VALUES (NULL,'$horse_key','$date','$vet_key','$next_date','$type2')");
-			$insert2= mysql_query($insert_sql2) or die(mysql_error());
+			$insert2= mysqli_query($conn, $insert_sql2) or die(mysqli_error());
 		}
 		if($type3!='none'){
 			$insert_sql3 = ("INSERT INTO vaccination VALUES (NULL,'$horse_key','$date','$vet_key','$next_date','$type3')");
-			$insert3= mysql_query($insert_sql3) or die(mysql_error());
+			$insert3= mysqli_query($conn, $insert_sql3) or die(mysqli_error());
 		}
 		print "     New Vaccination Information Entered  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}else{
 		print "Please fill in all vac. fields!";
 	}
 }
-elseif(isset($_GET['fecal'])){//enter vaccination data
+elseif(isset($_GET['fecal'])){//enter FECAL data
 	$horse_key= $_GET['horse_key'];
 	$key= $_GET['keu'];
 	$fecal= $_GET['fecal'];
 
 	if($horse_key!=''&&$type!=''&&$date!=''&&$next_date!=''){
 		$insert_sql = ("UPDATE  `physical` SET  `fecal_sampled` =  '$fecal' WHERE `key` ='$key' LIMIT 1");
-		$insert= mysql_query($insert_sql) or die(mysql_error());	
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());	
 		print "     New Fecal Information Entered  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}else{
 		print "Please fill in all vac. fields!";
 	}
-}elseif(isset($_GET['parasite'])){//enter vaccination data
+}elseif(isset($_GET['parasite'])){//enter PARASITE data
 	$horse_key= $_GET['horse_key'];
 	$vet_key= $_GET['vet_key'];
 	$type= $_GET['type'];
@@ -156,7 +156,7 @@ elseif(isset($_GET['fecal'])){//enter vaccination data
 	$comments= $_GET['comment'];
 	if($horse_key!=''&&$type!=''&&$date!=''&&$next_date!=''){
 		$insert_sql = ("INSERT INTO parasite VALUES (NULL,'$horse_key','$date','$vet_key','$next_date','$type','$comments')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());	
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());	
 		print "     New Parasite Information Entered  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}else{
 		print "Please fill in all vac. fields!";
@@ -171,7 +171,7 @@ elseif(isset($_GET['dental'])){//enter dental data
 	$comments= $_GET['comment'];
 	if($horse_key!=''&&$procedure!=''&&$date!=''&&$next_date!=''){
 		$insert_sql = ("INSERT INTO dental VALUES (NULL,'$horse_key','$date','$vet_key','$procedure','$next_date','$_SESSION[facility]','$comments')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());	
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());	
 		print "     New Dental Information Entered  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Page' onclick='parent.location=&quot;index.php&quot;'>";
 	}else{
 		print "Please fill in all vac. fields!";
@@ -185,7 +185,7 @@ elseif(isset($_GET['dental'])){//enter dental data
 	$vet_key= $_GET['vet_key'];
 	if($horse_key!=''&&$procedure!=''&&$date!=''&&$next_date!=''){
 		$insert_sql = ("INSERT INTO farrier VALUES (NULL,'$horse_key','$date','$next_date','$vet_key','$procedure','$comments','$_SESSION[facility]')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());	
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());	
 		print "     New Farrier Information Entered  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Page' onclick='parent.location=&quot;index.php&quot;'>";
 	}else{
 		print "Please fill in all farrier. fields!";
@@ -195,7 +195,7 @@ elseif(isset($_GET['dental'])){//enter dental data
 	$key= $_GET['pfecal_key'];
 	$count=$_GET['fecal_count'];
 		$update_sql= ("UPDATE `physical` SET  `fecal_sampled` =  '$count' WHERE  `key` ='$key' LIMIT 1") ;
-		$update= mysql_query($update_sql) or die(mysql_error());
+		$update= mysqli_query($conn, $update_sql) or die(mysqli_error());
 	header("Location:index.php");	
 
 }elseif(isset($_GET['history'])){//enter new medical history  data
@@ -204,7 +204,7 @@ elseif(isset($_GET['dental'])){//enter dental data
 	$date=convertDate($_GET['date']);
 	if($comment!=''){
 		$insert_sql = ("INSERT INTO medical_history VALUES (NULL,'$date','$comment','$horse_key')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());	
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());	
 		print "     New Medical Information Entered  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}else{
 		print "Please fill in event description!";
@@ -240,7 +240,7 @@ elseif(isset($_GET['dental'])){//enter dental data
 	$password= $_GET['pass'];
 	if($first_name!=''&&$last_name!=''&&$street_address!=''&&$city!=''&&$state!=''&&$zip!=''&&$phone!=''){
 		$insert_sql = ("INSERT INTO vet VALUES (NULL,'$first_name','$last_name','$street_address','$city','$state','$zip','$phone','$horse_key','$_SESSION[facility]')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());
 		$insert_sql1 = ("INSERT INTO login VALUES (NULL,'$password','$first_name','$last_name','$access','$email','$_SESSION[facility]')");
 		$insert1= mysql_query($insert_sql1) or die(mysql_error());
 		print "     New Vet Information Entered  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
@@ -261,9 +261,9 @@ elseif(isset($_GET['dental'])){//enter dental data
 	$password= $_GET['pass'];
 	if($first_name!=''&&$last_name!=''&&$street_address!=''&&$city!=''&&$state!=''&&$zip!=''&&$phone!=''){
 		$insert_sql = ("INSERT INTO farrierdata VALUES (NULL,'$first_name','$last_name','$street_address','$city','$state','$zip','$phone','$horse_key','$_SESSION[facility]')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());
 		$insert_sql1 = ("INSERT INTO login VALUES (NULL,'$password','$first_name','$last_name','$access','$email','$_SESSION[facility]')");
-		$insert1= mysql_query($insert_sql1) or die(mysql_error());
+		$insert1= mysqli_query($conn, $insert_sql1) or die(mysqli_error());
 		print "     New Farrier Information Entered  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}else{
 		print "Please fill in all owner fields!";
@@ -271,7 +271,7 @@ elseif(isset($_GET['dental'])){//enter dental data
 }elseif(isset($_GET['access'])){//enter new admin data
 	$password= $_GET['password'];
 	$sql1="SELECT password FROM login ";
-	$checksql=mysql_query($sql1) or die (mysql_error());
+	$checksql=mysqli_query($conn, $sql1) or die (mysqli_error());
 	$taken=0;
 	while($row = mysql_fetch_array($checksql)){
 		if($row[password]==$password){
@@ -296,7 +296,7 @@ elseif(isset($_GET['dental'])){//enter dental data
 	$role=$_GET['role'];
 	if($first_name!=''&&$last_name!=''&&$access!=''&&$password!=''){
 		$insert_sql = ("INSERT INTO login VALUES (NULL,'$password','$first_name','$last_name','$address','$city','$state','$zip','$phone','$email','$access','$role','$_SESSION[facility]')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());
 		print "     New Admin Information Entered  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}else{
 		print "Please fill in all admin fields!";
@@ -310,7 +310,7 @@ elseif(isset($_GET['dental'])){//enter dental data
 	print "hi";
 	if($name!=''&&$phone!=''){
 		$insert_sql = ("INSERT INTO facility VALUES (NULL,'$name','$owner','$address','$phone')");
-		$insert= mysql_query($insert_sql) or die(mysql_error());
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());
 		print "     New Facility Information Entered  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}else{
 		print "Please fill in all admin fields!";
