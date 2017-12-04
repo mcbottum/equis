@@ -296,89 +296,89 @@ http.send(null);
 
 
 function insert_physical() {
-var horse_key= encodeURI(document.getElementById('horse_key').value);
-var day= encodeURI(document.getElementById('pday').value);
-var month= encodeURI(document.getElementById('pmonth').value);
-var year= encodeURI(document.getElementById('pyear').value);
-var date= year+"-"+month+"-"+day;
-var day= encodeURI(document.getElementById('pnday').value);
-var month= encodeURI(document.getElementById('pnmonth').value);
-var year= encodeURI(document.getElementById('pnyear').value);
-var next_date= year+"-"+month+"-"+day;
+	var horse_key= encodeURI(document.getElementById('horse_key').value);
+	var day= encodeURI(document.getElementById('pday').value);
+	var month= encodeURI(document.getElementById('pmonth').value);
+	var year= encodeURI(document.getElementById('pyear').value);
+	var date= year+"-"+month+"-"+day;
+	var day= encodeURI(document.getElementById('pnday').value);
+	var month= encodeURI(document.getElementById('pnmonth').value);
+	var year= encodeURI(document.getElementById('pnyear').value);
+	var next_date= year+"-"+month+"-"+day;
 
-var radios = document.getElementsByName('pblood_drawn');
-for (var i = 0; i < radios.length; i++) {
-    if (radios[i].checked) {
-        var blood=radios[i].value;
-    }
-}
-var radios = document.getElementsByName('pfecal_sampled');
-for (var i = 0; i < radios.length; i++) {
-    if (radios[i].checked) {
-        var fecal=radios[i].value;
-    }
-}
+	var radios = document.getElementsByName('pblood_drawn');
+	for (var i = 0; i < radios.length; i++) {
+	    if (radios[i].checked) {
+	        var blood=radios[i].value;
+	    }
+	}
+	var radios = document.getElementsByName('pfecal_sampled');
+	for (var i = 0; i < radios.length; i++) {
+	    if (radios[i].checked) {
+	        var fecal=radios[i].value;
+	    }
+	}
 
-var radios = document.getElementsByName('psheath_cleaned');
-for (var i = 0; i < radios.length; i++) {
-    if (radios[i].checked) {
-        var sheath=radios[i].value;
-    }
-}
+	var radios = document.getElementsByName('psheath_cleaned');
+	for (var i = 0; i < radios.length; i++) {
+	    if (radios[i].checked) {
+	        var sheath=radios[i].value;
+	    }
+	}
 
-var radios = document.getElementsByName('pteeth_floated');
-for (var i = 0; i < radios.length; i++) {
-    if (radios[i].checked) {
-        var teeth=radios[i].value;
-    }
-}
+	var radios = document.getElementsByName('pteeth_floated');
+	for (var i = 0; i < radios.length; i++) {
+	    if (radios[i].checked) {
+	        var teeth=radios[i].value;
+	    }
+	}
 
-var radios = document.getElementsByName('pvaccination_given');
-for (var i = 0; i < radios.length; i++) {
-    if (radios[i].checked) {
-        var vaccination=radios[i].value;
-    }
-}
+	var radios = document.getElementsByName('pvaccination_given');
+	for (var i = 0; i < radios.length; i++) {
+	    if (radios[i].checked) {
+	        var vaccination=radios[i].value;
+	    }
+	}
 
-var radios = document.getElementsByName('pradiograph_taken');
-for (var i = 0; i < radios.length; i++) {
-    if (radios[i].checked) {
-        var radiograph=radios[i].value;
-    }
-}
+	var radios = document.getElementsByName('pradiograph_taken');
+	for (var i = 0; i < radios.length; i++) {
+	    if (radios[i].checked) {
+	        var radiograph=radios[i].value;
+	    }
+	}
 
-var temperature= encodeURI(document.getElementById('ptemperature').value);
-var pulse= encodeURI(document.getElementById('ppulse').value);
-var respiration= encodeURI(document.getElementById('prespiration').value);
-var right_eye= encodeURI(document.getElementById('pright_eye_exam').value);
-if (right_eye=="other"){
-	var right_eye= encodeURI(document.getElementById('pright_eye_exam_other').value);
-}
-var left_eye= encodeURI(document.getElementById('pleft_eye_exam').value);
-if (left_eye=="other"){
-	var left_eye= encodeURI(document.getElementById('pleft_eye_exam_other').value);
-}
-var fitness= encodeURI(document.getElementById('pfitness_evaluation').value);
-if (fitness=="other"){
-	var fitness= encodeURI(document.getElementById('pfitness_evaluation_other').value);
-}
-var coat= encodeURI(document.getElementById('pcoat_appearance').value);
-if (coat=="other"){
-	var coat= encodeURI(document.getElementById('pcoat_appearance_other').value);
-}
-var gait= encodeURI(document.getElementById('pgait_symmetry').value);
-if (gait=="other"){
-	var gait= encodeURI(document.getElementById('pgait_symmetry_other').value);
-}
-var comments= encodeURI(document.getElementById('pcomments').value);
-var vet_key= encodeURI(document.getElementById('pvet_key').value);
-// Set te random number to add to URL request
-nocache = Math.random();
-// Pass the login variables like URL variable
-http.open('get','insert.php?horse_key='+horse_key+'&date='+date+'&vet_key='+vet_key+'&next_date='+next_date+'&blood='+blood+'&fecal='+fecal+'&sheath='+sheath+'&teeth='+teeth+'&vaccination='+vaccination+'&radiograph='+radiograph+'&temperature='+temperature+'&pulse='+pulse+'&respiration='+respiration+'&right_eye='+right_eye+'&left_eye='+left_eye+'&fitness='+fitness+'&coat='+coat+'&gait='+gait+'&comments='+comments+'&nocache='+nocache);
-http.onreadystatechange = insertPhysicalReply;
+	var temperature= encodeURI(document.getElementById('ptemperature').value);
+	var pulse= encodeURI(document.getElementById('ppulse').value);
+	var respiration= encodeURI(document.getElementById('prespiration').value);
+	var right_eye= encodeURI(document.getElementById('pright_eye_exam').value);
+	if (right_eye=="other"){
+		var right_eye= encodeURI(document.getElementById('pright_eye_exam_other').value);
+	}
+	var left_eye= encodeURI(document.getElementById('pleft_eye_exam').value);
+	if (left_eye=="other"){
+		var left_eye= encodeURI(document.getElementById('pleft_eye_exam_other').value);
+	}
+	var fitness= encodeURI(document.getElementById('pfitness_evaluation').value);
+	if (fitness=="other"){
+		var fitness= encodeURI(document.getElementById('pfitness_evaluation_other').value);
+	}
+	var coat= encodeURI(document.getElementById('pcoat_appearance').value);
+	if (coat=="other"){
+		var coat= encodeURI(document.getElementById('pcoat_appearance_other').value);
+	}
+	var gait= encodeURI(document.getElementById('pgait_symmetry').value);
+	if (gait=="other"){
+		var gait= encodeURI(document.getElementById('pgait_symmetry_other').value);
+	}
+	var comments= encodeURI(document.getElementById('pcomments').value);
+	var vet_key= encodeURI(document.getElementById('pvet_key').value);
+	// Set te random number to add to URL request
+	nocache = Math.random();
+	// Pass the login variables like URL variable
+	http.open('get','insert.php?horse_key='+horse_key+'&date='+date+'&vet_key='+vet_key+'&next_date='+next_date+'&blood='+blood+'&fecal='+fecal+'&sheath='+sheath+'&teeth='+teeth+'&vaccination='+vaccination+'&radiograph='+radiograph+'&temperature='+temperature+'&pulse='+pulse+'&respiration='+respiration+'&right_eye='+right_eye+'&left_eye='+left_eye+'&fitness='+fitness+'&coat='+coat+'&gait='+gait+'&comments='+comments+'&nocache='+nocache);
+	http.onreadystatechange = insertPhysicalReply;
 
-http.send(null);
+	http.send(null);
 }
 
 function insert_role_physical(ele,horse) {
@@ -1116,7 +1116,7 @@ if(isset($_REQUEST['filter'])){
 		$filter=$filtera[0];
 		$message="Scheduled for <em>".$filter."</em> appt";
 		$_SESSION['appt']=$appt;		
-		$horses=GetHorsesFromAppt($filter,2,$_SESSION['facility'],$dbname);	
+		$horses=GetHorsesFromAppt($filter,2,facility,$dbname);	
 	}
 	$_SESSION['role_key']=$role_key;
 }
@@ -1396,7 +1396,9 @@ if($dental){
         <li><a href="#fragment-7"><span>Medical History</span></a></li>
         <li><a href="#fragment-8"><span>Coggins</span></a></li>
         <li><a href="#fragment-9"><span>Nutrition</span></a></li>
-        <li><a href="#fragment-10"><span>Admin</span></a></li>
+		<li><a href="#fragment-10"><span>Training</span></a></li>
+        <li><a href="#fragment-11"><span>Admin</span></a></li>
+
     </ul>
 
 
@@ -1644,7 +1646,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
   	  	 				print "</td></tr>";			
 			print "</table>";
 				?>
-				<input 	id="submit_vaccination" type = "submit" name = "submit_vaccination" class= "btn btn-warning" value = "Update Information"/></form>
+				<input 	id="update_information" type = "submit" name = "update_information" class= "btn btn-warning" value = "Update Information"/></form>
 				<?
   	  	 }//end if for entering new data
         
@@ -1667,10 +1669,11 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
     $element='role_response'.$horse[key];
 	print "<form  action='javascript:role_update_horse(&quot;$element&quot;,".$horse[key].")' method='post'>";//update horse form
 	
-	print "<input type='hidden' name='nhorse_key' id='uhorse_key".$horse[key]."' value=".$horse[key]." />";
-	print "<input type='hidden' name='nhorse_image' id='uhorse_image".$horse[key]."' value=".$horse['horse_image']." />";
-	print "<input type='hidden' name='nhorse_record' id='uhorse_record".$horse[key]."' value='role_update' />";
-	print "<input type='hidden' name='nhorse_record' id='urole_horse_key".$horse[key]."' value='".$horse[key]."' />";
+	print "<input type='hidden' name='uhorse_key' id='uhorse_key".$horse[key]."' value=".$horse[key]." />";
+	print "<input type='hidden' name='uhorse_image' id='uhorse_image".$horse[key]."' value=".$horse['horse_image']." />";
+	print "<input type='hidden' name='uhorse_record' id='uhorse_record".$horse[key]."' value='role_update' />";
+	print "<input type='hidden' name='urole_horse_key' id='urole_horse_key".$horse[key]."' value='".$horse[key]."' />";
+	print "<input type='hidden' name='uowner_key' id='uowner_key".$horse[key]."' value='".$horse[owner_key]."' />";
 		print "<table>";
   	  	 		foreach($info_field_labels as $label){
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="owner_key"&&$label!="vet_key"&&$label!="farrier_key"&&$label!="horse_image"&&$label!="facility_key"){
@@ -1827,7 +1830,7 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
   	  	 				print "</td></tr>";			
 			print "</table>";
 				?>
-				<input 	id="submit_vaccination" type = "submit" name = "submit_vaccination" class= "btn btn-warning" value = "Submit Vaccination Information"/></form>
+				<input 	id="update_information" type = "submit" name = "update_information" class= "btn btn-warning" value = "Update Information"/></form>
 				<?	
  	    			print "</div>";//
 					//}//right before h3
@@ -1836,7 +1839,7 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
 				print $role_name. " is not registered with any horses at this facility";
 			}//end if horses exists
 			print "</div>";// <!--end accordion-->
-    }else{//if no horse is selected
+    }else{//if no horse or filter is selected
 		
 		print "<h2 style='text-align:center'>Welcome to Caval-Connect</h2>";
 		print "<br></br>";
@@ -1866,7 +1869,7 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
 <?
 	if(isset($role_mode)&&$role_mode==0){
 	     print "<div class='accordion'>";//call collapsed accordion or not
-	}elseif(isset($role_mode)&&$role_mode==1){
+	}else{
 		 print "<div class='roleaccordion'>";
 	}
     $physical_field_labels=GetMysqlFieldNames("physical", $dbname);
@@ -2087,39 +2090,34 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
 								print "</td>";
   	  	 					}elseif($label=="blood_drawn"||$label=="fecal_sampled"||$label=="sheath_cleaned"||$label=="teeth_floated"||$label=="vaccination_given"||$label=="fecal_sampled"||$label=="radiograph_taken"){
   	  	 						print "<tr height='30'><td width='150'>".str_replace('_',' ',$label)."</td><td><input type='radio' id='p".$label."' name='p".$label."' value='2'> Yes <input type='radio' id='p".$label."' name='p".$label."' value='1' checked> No </td></tr>";
-  	  	 					}
-  	  	 					
-  	  	 					   	  	 					elseif($label=="temperature"){
+  	  	 					}elseif($label=="temperature"){
   	  	 						//slect for weight
-  	  	 					print "<td width='150'>".str_replace('_',' ',$label)." (F)</td><td><select name='p".$label."' id='p".$label."'>";
+  	  	 						print "<td width='150'>".str_replace('_',' ',$label)." (F)</td><td><select name='p".$label."' id='p".$label."'>";
 								print "<option value=''>Degrees</option>";
 									for($i = 95; $i <= 106; $i+=.1){
 										print"<option value=$i>$i</option>";
 									}//end while
-							print "</select></td>";
+								print "</select></td>";
   	  	 					
-  	  	 					}
-  	  	 					elseif($label=="pulse"){
+  	  	 					}elseif($label=="pulse"){
   	  	 						//slect for weight
-  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='p".$label."' id='p".$label."'>";
+  	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='p".$label."' id='p".$label."'>";
 								print "<option value=''> per minute </option>";
 									for($i = 20; $i <= 50; $i++){
 										print"<option value=$i>$i</option>";
 									}//end while
-							print "</select></td>";
+								print "</select></td>";
   	  	 					
-  	  	 					}
-  	  	 					elseif($label=="respiration"){
+  	  	 					}elseif($label=="respiration"){
   	  	 						//slect for weight
-  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='p".$label."' id='p".$label."'>";
+  	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='p".$label."' id='p".$label."'>";
 								print "<option value=''> per minute </option>";
 									for($i = 10; $i <= 60; $i++){
 										print"<option value=$i>$i</option>";
 									}//end while
-							print "</select></td>";
+								print "</select></td>";
   	  	 					
-  	  	 					}
-  	  	 					elseif($label=="right_eye_exam"||$label=="left_eye_exam"){
+  	  	 					}elseif($label=="right_eye_exam"||$label=="left_eye_exam"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  							print "<td><select id ='p".$label."' name = 'p".$label."'  onchange='showOtherText(this.value,&quot;p".$label."_label&quot;); showOtherText(this.value,&quot;p".$label."_other&quot;);'>";
 									 print "<option value = ''>Appearance</option>";
@@ -2155,9 +2153,9 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  							print "<td><select id ='p".$label."' name = 'p".$label."'  onchange='showOtherText(this.value,&quot;p".$label."_label&quot;); showOtherText(this.value,&quot;p".$label."_other&quot;);'>";
 									 print "<option value = ''>Appearance</option>";
-									 print "<option value = 'clear'>Shiny</option>";
-									 print "<option value = 'cloudy'>Dull</option>";
-									 print "<option value = 'abrasion'>Cushings-like</option>";
+									 print "<option value = 'Shiny'>Shiny</option>";
+									 print "<option value = 'Dull'>Dull</option>";
+									 print "<option value = 'Cushings-like'>Cushings-like</option>";
 									 print "<option value = 'other'>Other</option>";
 								print "</select></td>";
 								print "<tr class='other'><td  id='p".$label."_label' width='150' class='hide_text_box' style='display:none;'>Other Condition</td>";
@@ -2167,10 +2165,12 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
   	  	 					}elseif($label=="gait_symmetry"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  							print "<td><select id ='p".$label."' name = 'p".$label."'  onchange='showOtherText(this.value,&quot;p".$label."_label&quot;); showOtherText(this.value,&quot;p".$label."_other&quot;);'>";
-									 print "<option value = ''>Appearance</option>";
-									 print "<option value = 'clear'>Even</option>";
-									 print "<option value = 'cloudy'>Off left</option>";
-									 print "<option value = 'abrasion'>Off Right</option>";
+									 print "<option value = ''>Gait Symmetry</option>";
+									 print "<option value = 'Even'>Even</option>";
+									 print "<option value = 'off front left'>Off front left</option>";
+									 print "<option value = 'off front right'>Off front right</option>";
+									 print "<option value = 'off front left'>Off rear left</option>";
+									 print "<option value = 'off front right'>Off rear right</option>";
 									 print "<option value = 'other'>Other</option>";
 								print "</select></td>";
 								print "<tr class='other'><td  id='p".$label."_label' width='150' class='hide_text_box' style='display:none;'>Other Condition</td>";
@@ -2331,10 +2331,15 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  							print "<td><select id ='p".$label.$horse[key]."' name = 'p".$label."'  onchange='showOtherText(this.value,&quot;p".$label.$horse[key]."_label&quot;); showOtherText(this.value,&quot;p".$label.$horse[key]."_other&quot;);'>";
 									 print "<option value = ''>Appearance</option>";
-									 print "<option value = 'clear'>Fat Both</option>";
-									 print "<option value = 'cloudy'>Skinny</option>";
-									 print "<option value = 'abrasion'>Just Right</option>";
-									 print "<option value = 'other'>Other</option>";
+									 print "<option value = '1 (poor)'>1 (poor)</option>";
+									 print "<option value = '2 (very thin)'>2 (very thin)</option>";
+									 print "<option value = '3 (thin)'>3 (thin)</option>";
+									 print "<option value = '4 (moderately thin)'>4 (moderately thin)</option>";
+									 print "<option value = '5 (moderate)'>5 (moderate)</option>";
+									 print "<option value = '6 (moderately fleshy)'>6 (moderately fleshy)</option>";
+									 print "<option value = '7 (fleshy)'>7 (fleshy)</option>";
+									 print "<option value = '8 (fat)'>8 (fat)</option>";
+									 print "<option value = '9 (extremely fat)'>9 (extremely fat)</option>";
 								print "</select></td>";
 								print "<tr class='other'><td  id='p".$label.$horse[key]."_label' width='150' class='hide_text_box' style='display:none;'>Other Condition</td>";
 								print "<td><input type='text' id='p".$label.$horse[key]."_other' class='hide_text_box' style='display:none;'></td></tr>";
@@ -2344,9 +2349,9 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  							print "<td><select id ='p".$label.$horse[key]."' name = 'p".$label."'  onchange='showOtherText(this.value,&quot;p".$label.$horse[key]."_label&quot;); showOtherText(this.value,&quot;p".$label.$horse[key]."_other&quot;);'>";
 									 print "<option value = ''>Appearance</option>";
-									 print "<option value = 'clear'>Shiny</option>";
-									 print "<option value = 'cloudy'>Dull</option>";
-									 print "<option value = 'abrasion'>Cushings-like</option>";
+									 print "<option value = 'Shiny'>Shiny</option>";
+									 print "<option value = 'Dull'>Dull</option>";
+									 print "<option value = 'Cushings-like'>Cushings-like</option>";
 									 print "<option value = 'other'>Other</option>";
 								print "</select></td>";
 								print "<tr class='other'><td  id='p".$label.$horse[key]."_label' width='150' class='hide_text_box' style='display:none;'>Other Condition</td>";
@@ -2356,11 +2361,12 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$acc
   	  	 					}elseif($label=="gait_symmetry"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  							print "<td><select id ='p".$label.$horse[key]."' name = 'p".$label."'  onchange='showOtherText(this.value,&quot;p".$label.$horse[key]."_label&quot;); showOtherText(this.value,&quot;p".$label.$horse[key]."_other&quot;);'>";
-									 print "<option value = ''>Appearance</option>";
-									 print "<option value = 'clear'>Even</option>";
-									 print "<option value = 'cloudy'>Off left</option>";
-									 print "<option value = 'abrasion'>Off Right</option>";
-									 print "<option value = 'other'>Other</option>";
+									 print "<option value = ''>Gait Symmetry</option>";
+									 print "<option value = 'Even'>Even</option>";
+									 print "<option value = 'off front left'>Off front left</option>";
+									 print "<option value = 'off front right'>Off front right</option>";
+									 print "<option value = 'off front left'>Off rear left</option>";
+									 print "<option value = 'off front right'>Off rear right</option>";
 								print "</select></td>";
 								print "<tr class='other'><td  id='p".$label.$horse[key]."_label' width='150' class='hide_text_box' style='display:none;'>Other Condition</td>";
 								print "<td><input type='text' id='p".$label.$horse[key]."_other' class='hide_text_box' style='display:none;'></td></tr>";
@@ -4362,10 +4368,67 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$role_mode
 
 
 
+<!-- ########################## Start Training TAB !!!!! ################################-->
+
+<div id="fragment-10">
+	<?
+	if(isset($role_mode)&&$role_mode==0){
+		print "<div class='accordion'>";//call collapsed accordion or not
+	}else{
+		print "<div class='roleaccordion'>";
+	}
+
+	if($_SESSION['access']<3){//dont see this tab if vet or farrier
+
+	}// end $_SESSION['access']<3
+
+		$training_field_labels=GetMysqlFieldNames('training', $dbname);
+
+		$training_data=GetTableData('student_key',$_SESSION['login_key'],'training',$dbname);
+
+		$facility_horses=GetTableDataFacility('horse_key','ALL','Information',$dbname,$_SESSION['facility']);
+
+		if(isset($facility_horses)){
+			foreach($facility_horses as $horse){	
+				print "<h3>".$horse[horse_name]." Training logs</h3>";
+				print "<div>";
+
+        			print "<form action='javascript:insert_training()' method='post'>";
+         			print "<input type='hidden' name='horse_key' id='horse_key' value='".$horse[key]."' />";
+         			print "<input type='hidden' name='facility_key' id='facility_key' value='".$_SESSION['facility']."' />";
+         			print "<input type='hidden' name='student_key' id='student_key' value='".$_SESSION['login_key']."' />";
+
+					print "<table>";//Input new training data
+
+						foreach ($training_field_labels as $label) {
+
+							if($label!="key"&&$label!="facility_key"&&$label!="horse_key"&&$label!="student_key"){
+								print "<tr>";
+
+									if($label=='comment'){
+										print "<td width='150'>".str_replace('_',' ',$label)."</td><td><textarea rows='4' cols='100' id='training".$label."' placeholder='Enter training session comments...'></textarea></td>";
+									}
+
+								print "</tr>";
+							}// end if table !=
+						} //end for each training label
+					print "</table>";
+
+				print "</div>";
+			}// end horse foreach
+		}// end horses if
+
+
+	print "</div>"; //End accordion div
+	?>
+</div>
+
+
+<!-- ########################## END Training TAB !!!!! ################################-->
 
 <!-- ########################## ADMIN TAB !!!!! ################################-->
 
-<div id="fragment-10">
+<div id="fragment-11">
 <?
 if(isset($role_mode)&&$role_mode==0){
 	print "<div class='accordion'>";//call collapsed accordion or not

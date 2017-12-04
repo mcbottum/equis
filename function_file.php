@@ -101,6 +101,8 @@ function GetTableData($field,$ID,$Table,$db){
         $sql="SELECT * FROM $Table WHERE data_key ='$ID' ";
     }elseif($field=='vet_key'){//choose image file
         $sql="SELECT * FROM login WHERE `key` ='$ID' ";
+    }elseif($field=='student_key'){
+        $sql="SELECT * FROM $Table WHERE `key` ='$ID' ";
     }
     
     $result = mysqli_query($conn, $sql);
