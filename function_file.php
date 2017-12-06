@@ -51,7 +51,7 @@ function GetProductTableData($field,$ID,$Table,$db){
 
 //mysqli
 function GetTableDataFacility($field,$ID,$Table,$db, $facility){
-
+    $tableResults=array();
     $conn=get_conn($db);
     if($ID=="ALL"){
         if($_SESSION['facility']=='ALL'){
@@ -60,21 +60,57 @@ function GetTableDataFacility($field,$ID,$Table,$db, $facility){
             $sql="SELECT * FROM $Table WHERE `facility_key`='$facility'";
         }
     }elseif($field=="key"&&$ID!='ALL'){
-        if($_SESSION[facility]=='ALL'){
+        if($_SESSION['facility']=='ALL'){
             $sql="SELECT * FROM $Table WHERE `key` ='$ID'";
         }else{
             $sql="SELECT * FROM $Table WHERE `key` ='$ID' AND `facility_key`='$facility'";
         }
-    }elseif($field=="horse_key"){
-        $sql="SELECT * FROM $Table WHERE horse_key ='$ID' AND `facility_key`='$facility'";
-    }elseif($field=='infection'){
-        $sql="SELECT * FROM $Table WHERE infection ='$ID' AND `facility_key`='$facility'";
-    }elseif($field=='data_key'){//choose image file
-        $sql="SELECT * FROM $Table WHERE data_key ='$ID' AND `facility_key`='$facility'";
-    }elseif($field=='vet_key'){//choose image file
-        $sql="SELECT * FROM login WHERE `key` ='$ID' AND `facility_key`='$facility'";
     }elseif($field=='vet'||$field=='farrier'||$field=='owner'){//choose image file
         $sql="SELECT * FROM login WHERE `role` ='$field' AND `facility_key`='$facility'";
+    }else{
+        $sql="SELECT * FROM $Table WHERE $field ='$ID' AND `facility_key`='$facility'";
+    }
+    // }elseif($field=="horse_key"){
+    //     $sql="SELECT * FROM $Table WHERE horse_key ='$ID' AND `facility_key`='$facility'";
+    // }elseif($field=='infection'){
+    //     $sql="SELECT * FROM $Table WHERE infection ='$ID' AND `facility_key`='$facility'";
+    // }elseif($field=='data_key'){//choose image file
+    //     $sql="SELECT * FROM $Table WHERE data_key ='$ID' AND `facility_key`='$facility'";
+    // }elseif($field=='vet_key'){//choose image file
+    //     $sql="SELECT * FROM login WHERE `key` ='$ID' AND `facility_key`='$facility'";
+    // }
+
+    
+    $result = mysqli_query($conn, $sql);
+    if($result){
+        while($row = mysqli_fetch_assoc($result)){
+            $tableResults[]=$row;
+        }
+        mysqli_free_result($result);
+    }
+
+    mysqli_close($conn);
+    return $tableResults;
+    
+}
+
+//mysqli
+function GetTableData($field,$ID,$Table,$db){
+    $conn=get_conn($db);
+    $tableResults=array();
+
+    if($field=="horse_key"){
+        $sql="SELECT * FROM $Table WHERE horse_key ='$ID' ";
+    }elseif($field=='infection'){
+        $sql="SELECT * FROM $Table WHERE infection ='$ID' ";
+    }elseif($field=='data_key'){//choose image file
+        $sql="SELECT * FROM $Table WHERE data_key ='$ID' ";
+    }elseif($field=='vet_key'){//choose image file
+        $sql="SELECT * FROM login WHERE `key` ='$ID' ";
+    }elseif($field=='student_key'){
+        $sql="SELECT * FROM $Table WHERE `student_key` ='$ID' ";
+    }elseif($field=='trainer_key'){
+        $sql="SELECT * FROM $Table WHERE `role`='trainer' ";
     }
     
     $result = mysqli_query($conn, $sql);
@@ -86,39 +122,11 @@ function GetTableDataFacility($field,$ID,$Table,$db, $facility){
     mysqli_free_result($result);
     mysqli_close($conn);
     return $tableResults;
-    
-}
-
-//mysqli
-function GetTableData($field,$ID,$Table,$db){
-    $conn=get_conn($db);
-
-    if($field=="horse_key"){
-        $sql="SELECT * FROM $Table WHERE horse_key ='$ID' ";
-    }elseif($field=='infection'){
-        $sql="SELECT * FROM $Table WHERE infection ='$ID' ";
-    }elseif($field=='data_key'){//choose image file
-        $sql="SELECT * FROM $Table WHERE data_key ='$ID' ";
-    }elseif($field=='vet_key'){//choose image file
-        $sql="SELECT * FROM login WHERE `key` ='$ID' ";
-    }elseif($field=='student_key'){
-        $sql="SELECT * FROM $Table WHERE `key` ='$ID' ";
-    }
-    
-    $result = mysqli_query($conn, $sql);
-    if($result){
-        while($row = mysqli_fetch_assoc($result)){
-            $tableResults[]=$row;
-        }
-    }
-    mysqli_free_result($result);
-    mysql_close($conn);
-    return $tableResults;
 }
 
 
 //mysqli
-function GetRoleTableData($field,$ID,$Table,$facillity,$db){
+function GetRoleTableData($ID,$Table,$facillity,$db){
     $conn=get_conn($db);
 
     if($ID=='ALL'){
@@ -158,6 +166,7 @@ function GetOwnerKeyData($ID,$Table,$db){
 
 //mysqli
 function GetFilterData($field,$Table,$facility,$db){
+    $tableResults=array();
     $conn=get_conn($db);
     
     $sql="SELECT * FROM $Table WHERE `facility_key`='$facility'  ORDER BY `last_name` ";        
@@ -237,6 +246,7 @@ function getRoles($facility, $db){
 
 //mysqli
 function getReminders($table,$horse,$db, $facility){//get reminders for the next 4 days
+    $p_table=array();
     $conn=get_conn($db);
 
     $today=date('Y-m-d');
@@ -246,15 +256,15 @@ function getReminders($table,$horse,$db, $facility){//get reminders for the next
     while($row = mysqli_fetch_assoc($p_result)){
         $p_table[]=$row;
     }
-    mysqli_free_result($result);
+    mysqli_free_result($p_result);
     mysqli_close($conn);
     return $p_table;
 }
 
 function getHorseName($horse_key,$horse_data){
     foreach($horse_data as $h){
-        if($h[key]==$horse_key){
-            $horse=$h[horse_name];
+        if($h['key']==$horse_key){
+            $horse=$h['horse_name'];
         }
     }
     return $horse;
@@ -271,34 +281,18 @@ function getName($key, $table, $db){
     while($row = mysqli_fetch_assoc($result)){
         $results[]=$row;
     }
-    if($results[0]['first_name']){
+    if(isset($results[0]['first_name'])){
         $name=$results[0]['first_name']." ".$results[0]['last_name'];
-    }elseif($results[0]['name']){
+    }elseif(isset($results[0]['name'])){
         $name=$results[0]['name'];
+    }else{
+        $name='';
     }
 
     mysqli_free_result($result);
     mysqli_close($conn);
     return $name;
 }
-
-//old
-// function checkRole($key, $table){
-//  $conn=get_conn();
-//  mysql_select_db($db);
-//  $sql="SELECT role FROM `$table` WHERE `key`='$key'";
-    
-//  $result = mysql_query($sql, $conn);
-//  while($row = mysql_fetch_array($result)){
-//      $results[]=$row;
-        
-//  }
-//  if($results[0]['role']){
-//      $role=$results[0]['role'];
-//  }
-//  return $role;
-//  mysql_close($conn);
-// }
 
 //mysqli
 function checkRole($key, $table){
@@ -318,16 +312,6 @@ function checkRole($key, $table){
     mysqli_close($conn);
     return $role;
 }
-
-//old
-// function deleteRecord($recordKey,$table){
-//  $conn=get_conn();
-//  mysql_select_db($db,$conn);
-//  mysql_query("DELETE * FROM $table WHERE `key` = '$recordKey'") or die(mysql_error());
-//  mysql_close($conn);
-//  return "Data Successfully Deleted";
-//  //<input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
-// }
 
 //mysqli
 function deleteRecord($recordKey,$table){

@@ -139,6 +139,11 @@ body{
 .bold{
 	font-weight:bold;
 }
+.blank_row
+{
+    height: 20px !important; /* overwrites any other rules */
+    /*background-color: #FFFFFF;*/
+}
 #xray{float:left;
 list-style-type: none;
 paddin:0;

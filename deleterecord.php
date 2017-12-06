@@ -31,7 +31,7 @@ $table= $_GET['table'];
 	}
 		
 $sql=mysqli_query($conn, $delete_sql) or die(mysqli_error());
-mysql_close($conn);
+mysqli_close($conn);
 print " deleted  <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info btn-mini' value = 'Reload Page' onclick='parent.location=&quot;index.php&quot;'>";
 //header("Location:index.php");
 ?>

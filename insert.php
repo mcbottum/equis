@@ -8,8 +8,23 @@ return $date;
 
 $dbname = get_db();
 $conn=get_conn($dbname);
-// mysql_select_db(get_db(), get_conn());
-//check for new physical info
+
+//check for training data
+if(isset($_GET['video_url'])){
+	$horse_key=$_GET['horse_key'];
+	$facility_key=$_GET['facility_key'];
+	$trainer_key=$_GET['trainer_key'];
+	$student_key=$_GET['student_key'];
+	$training_date=$_GET['training_date'];
+	$goal=$_GET['goal'];
+	$comment=$_GET['comment'];
+	$video_url=$_GET['video_url'];
+	if($training_date!=''){
+		$insert_sql = ("INSERT INTO training VALUES (NULL,'$student_key','$horse_key','$trainer_key','$facility_key','$training_date','$goal',$comment','$video_url')");
+		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());
+		print "Training Comments Logged   <input type='hidden' name='active_div' id='active_div' value='1' /><input id='reload_training' type ='submit' name ='reload_training' class= 'btn btn-info' value = 'Reload Page' onclick='parent.location=&quot;index.php&quot;'>";
+	}
+}
 if(isset($_GET['blood'])&&isset($_GET['horse_key'])){
 	$horse_key= $_GET['horse_key'];
 	$date=convertDate($_GET['date']);
