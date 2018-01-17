@@ -11,6 +11,7 @@ body{
     box-shadow:2px 2px 8px rgba(0, 0, 0, 0.5);
     font-size:300%;
     overflow:hidden;
+    display:block;
     //background:#FFCC00;
    //	background:url(../img/north_bgnd.png) repeat-x top;
 }
@@ -113,11 +114,26 @@ body{
 	color:#66FF99;
 	font-size:1.0em
 }
+#notification_center{
+	color:#66FF99;
+	font-size:0.2em !important;
+}
+.remind{
+	color:#66FF99;
+	font-size:0.2em !important;
+}
 #login{
 	float:right;
+	margin-right:10px;
+	margin-top:10px;
 }
 #logout{
 	float:right;
+	margin-right:10px;
+	margin-top:10px;
+}
+.logout{
+	margin-top:10px;
 }
 #horse_info{
 	font-size:small;
@@ -174,6 +190,9 @@ margin:0;
 }
 .records td{
 	padding:5px;
+}
+.training_table th,tr{
+	width:150px;
 }	
 #iFramePdf{
 	margin-top:-1000px;
@@ -245,4 +264,25 @@ margin:0;
 	
 .inner_accordion{
 	overflow:scroll;
+}
+a:link {
+    color: blue;
+    background-color: transparent;
+    text-decoration: underline;
+}
+a:visited {
+    color: purple;
+    background-color: transparent;
+    text-decoration: underline;
+}
+a:hover {
+    color: red;
+    background-color: transparent;
+    text-decoration: underline;
+    font-weight: bold;
+}
+a:active {
+    color: orange;
+    background-color: transparent;
+    text-decoration: underline;
 }

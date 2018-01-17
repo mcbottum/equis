@@ -8,18 +8,31 @@ include("function_file.php");
 <meta name="description" content="Web based equine data barn manager">
 <meta name="author" content="Michael Bottum">
 <link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.css"/>
-<link rel="stylesheet" type="text/css" href="css/jquery-ui.css"/>
-<link rel="stylesheet" type="text/css" href="css/jquery.weekcalendar.css"/>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
-<link rel="stylesheet" type="text/css" href="css/layout-default-latest.css"/>
+<!-- <link rel="stylesheet" type="text/css" href="css/jquery-ui.css"/> works-->
+
+<!-- <link rel="stylesheet" type="text/css" href="css/jquery.weekcalendar.css"/> -->
+<!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" /> works-->
+<!-- new -->
+<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.12.1/jquery-ui.min.css"/>
+<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.12.1/jquery-ui.theme.min.css"/>
+<!-- end new -->
 <link rel="stylesheet" type="text/css" href="datetimepicker-master/jquery.datetimepicker.css"/ >
 
 
 
 <!-- <script src="ajax_functions_save.php" language="javascript"></script> -->
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<!-- works -->
+<!-- <script src="http://code.jquery.com/jquery-1.8.2.js"></script> -->
+<!-- <script src="http://code.jquery.com/jquery-1.11.0.js"></script> -->
+
+<!-- <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script> works-->
+
+<!-- new -->
+<script src="js/jquery-ui-1.12.1/external/jquery/jquery.js"></script>
+<script src="js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<!-- end new -->
 <script src="http://layout.jquery-dev.net/lib/js/jquery.layout-latest.js"></script>
+<script src="js/jquery.layout-latest.min.js"></script>
 
 <script type='text/javascript' src="datetimepicker-master/jquery.datetimepicker.js"></script>
   
@@ -91,14 +104,12 @@ function printTrigger(elementId) {
         };
     $( ".accordion" ).accordion({heightStyle: "content",icons: icons, collapsible: "true"});
     $(".roleaccordion").accordion({heightStyle: "content",icons: icons, active: false, collapsible: true });
-    
     myLayout = $('body').layout({
 			west__size:230, east__size:300, north__size:55
 			// RESIZE Accordion widget when panes resize
 		,	west__onresize:		$.layout.callbacks.resizePaneAccordions
 		,	east__onresize:		$.layout.callbacks.resizePaneAccordions
 		});
-
 		// ACCORDION - in the West pane
 	$("#accordion1").accordion({ 
 			heightStyle: "content",
@@ -107,7 +118,6 @@ function printTrigger(elementId) {
 			active:		1
 	
 	 });
-		
 		// ACCORDION - in the East pane - in a 'content-div'
 	$("#accordion2").accordion({
 			heightStyle: "content",
@@ -115,20 +125,6 @@ function printTrigger(elementId) {
 			fillSpace:	true,
 			active:		1
 		});	
-	/*$('#calendar').weekCalendar({
-    events:[{"id":10182,
-      "start":"2009-05-03T12:15:00.000+10:00",
-      "end":"2009-05-03T13:15:00.000+10:00",
-      "title":"Lunch with Mike"
-    }, {
-      "id":10182,
-      "start":"2009-05-03T14:00:00.000+10:00",
-      "end":"2009-05-03T15:00:00.000+10:00",
-      "title":"Dev Meeting"
-    }]
-  });*/
-
-  
   });
 //all of this garbage from the ajax function file since it would (*&&%^&^% work 
 
@@ -148,7 +144,6 @@ var obj = document.getElementById("fprocedureother");
 		obj.style.display = "block";
 	}
 }
-
 function showOtherText(value, ID) {
 var obj1 = document.getElementById(ID);
 	if (value=="other") {
@@ -158,17 +153,17 @@ var obj1 = document.getElementById(ID);
 		}
 	}
 }
- 
-function showTextArea(counter,ID) {
-var obj1 = document.getElementsByName(ID);
-		obj1[counter].style.display = "block";
-		if(obj1[counter].style.display =="block"){
-			obj1[counter].focus();
-		}
-} 
 
+function showTextArea(row,ID) {
+	var obj1 = document.getElementById(row+ID+'description');
+	var obj2 = document.getElementById(row+ID+'content');
+	obj1.style.display = "block";
+	if(obj1.style.display =="block"){
+		obj1.focus();
+	}
+	obj2.style.display = "block";
+	}  
 function showSelect(IDtd,IDselect,value) {
-	//alert(value);
 var obj1 = document.getElementById(IDtd);
 var obj2 = document.getElementById(IDselect);
 		obj1.style.display = "block";
@@ -179,9 +174,7 @@ var obj2 = document.getElementById(IDselect);
 			obj2.focus();
 		}
 }
-
 function showSelectFilter(IDtd,IDselect,value) {
-	//alert(value);
 if (value=='vet'||value=='owner'||value=='farrier'){
 	var obj1 = document.getElementById(value+IDtd);
 	obj1.style.display = "block";
@@ -193,7 +186,6 @@ var obj2 = document.getElementById(IDselect);
 			obj1.focus();
 		}
 }
-
 function createObject() {
 var request_type;
 var browser = navigator.appName;
@@ -204,19 +196,15 @@ request_type = new XMLHttpRequest();
 }
 return request_type;
 }
-
 var http = createObject();
-
 //var for reloading elements from innerHTML
 //var markupCache = {};
 //function restoreElement(id) {
-
   // Only restore markup if have cached some for this element
   //if (id in markupCache) {
    // document.getElementById(id).innerHTML = markupCache[id];
   //}
 //}
-
 //check for new horse or new owner
 function check(value){
 var attempt=<?php echo json_encode($_SESSION['attempt']); ?>;
@@ -255,8 +243,6 @@ function getCarousel(){
 function getCarousel(){
 	$('#mydCarousel').carousel();
 }
-
-
 //reload div
 function reloadDiv(){
 	//var frame = document.getElementById("physical_response");
@@ -267,8 +253,6 @@ function reloadDiv(){
     alert("Portion of page loaded");
 });
 }
-
-	
 //end check function
 
 /* -------------------------- */
@@ -276,13 +260,11 @@ function reloadDiv(){
 /* -------------------------- */
 /* Required: var nocache is a random number to add to request. This value solve an Internet Explorer cache issue */
 var nocache = 0;
-
 function sendemail() {
 	//hide modal on submit
 $("#myModal_sendemail").modal("hide");	
 var sendemailfirst= encodeURI(document.getElementById('sendemailfirst').value);
 var sendemaillast= encodeURI(document.getElementById('sendemaillast').value);
-
 nocache = Math.random();
 http.open('get','sendemail.php?sendemailfirst='+sendemailfirst+'&sendemaillast='+sendemaillast+'&nocache='+nocache);
 http.onreadystatechange=function () {
@@ -290,28 +272,27 @@ http.onreadystatechange=function () {
  };
 http.send(null);
 }
-
 function logout() {	
-
 var logout= encodeURI(document.getElementById('logout').value);
-
 nocache = Math.random();
 http.open('get','logout.php?nocache='+nocache);
 http.send(null);
 }
-
+function upload_file(horse_key,image_key,file,table,image_type,date,description){
+	nocache = Math.random();
+	http.open('post','image_upload.php?horse_key='+horse_key+'&date='+date+'&image_key='+image_key+'&file='+file+'&table='+table+'&image_type='+image_type+'&description='+description+'&nocache='+nocache);
+	var name="";
+	var ele=table+"_insert_image_response";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
+}
 
 function insert_physical() {
-	var horse_key= encodeURI(document.getElementById('horse_key').value);
-	var day= encodeURI(document.getElementById('pday').value);
-	var month= encodeURI(document.getElementById('pmonth').value);
-	var year= encodeURI(document.getElementById('pyear').value);
-	var date= year+"-"+month+"-"+day;
-	var day= encodeURI(document.getElementById('pnday').value);
-	var month= encodeURI(document.getElementById('pnmonth').value);
-	var year= encodeURI(document.getElementById('pnyear').value);
-	var next_date= year+"-"+month+"-"+day;
-
+	var horse_key= encodeURI(document.getElementById('phorse_key').value);
+	var date= encodeURI(document.getElementById('pdatetimepicker5').value);
+	var next_date= encodeURI(document.getElementById('pndatetimepicker5').value);
 	var radios = document.getElementsByName('pblood_drawn');
 	for (var i = 0; i < radios.length; i++) {
 	    if (radios[i].checked) {
@@ -324,35 +305,30 @@ function insert_physical() {
 	        var fecal=radios[i].value;
 	    }
 	}
-
 	var radios = document.getElementsByName('psheath_cleaned');
 	for (var i = 0; i < radios.length; i++) {
 	    if (radios[i].checked) {
 	        var sheath=radios[i].value;
 	    }
 	}
-
 	var radios = document.getElementsByName('pteeth_floated');
 	for (var i = 0; i < radios.length; i++) {
 	    if (radios[i].checked) {
 	        var teeth=radios[i].value;
 	    }
 	}
-
 	var radios = document.getElementsByName('pvaccination_given');
 	for (var i = 0; i < radios.length; i++) {
 	    if (radios[i].checked) {
 	        var vaccination=radios[i].value;
 	    }
 	}
-
 	var radios = document.getElementsByName('pradiograph_taken');
 	for (var i = 0; i < radios.length; i++) {
 	    if (radios[i].checked) {
 	        var radiograph=radios[i].value;
 	    }
 	}
-
 	var temperature= encodeURI(document.getElementById('ptemperature').value);
 	var pulse= encodeURI(document.getElementById('ppulse').value);
 	var respiration= encodeURI(document.getElementById('prespiration').value);
@@ -378,28 +354,20 @@ function insert_physical() {
 	}
 	var comments= encodeURI(document.getElementById('pcomments').value);
 	var vet_key= encodeURI(document.getElementById('pvet_key').value);
-	// Set te random number to add to URL request
 	nocache = Math.random();
-	// Pass the login variables like URL variable
 	http.open('get','insert.php?horse_key='+horse_key+'&date='+date+'&vet_key='+vet_key+'&next_date='+next_date+'&blood='+blood+'&fecal='+fecal+'&sheath='+sheath+'&teeth='+teeth+'&vaccination='+vaccination+'&radiograph='+radiograph+'&temperature='+temperature+'&pulse='+pulse+'&respiration='+respiration+'&right_eye='+right_eye+'&left_eye='+left_eye+'&fitness='+fitness+'&coat='+coat+'&gait='+gait+'&comments='+comments+'&nocache='+nocache);
-	http.onreadystatechange = insertPhysicalReply;
-
-	http.send(null);
+	var name="";
+	var ele="physical_response";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
 }
-
 function insert_role_physical(ele,horse) {
 var horse_key=horse;
-	
 var horse_key= encodeURI(document.getElementById('phorse_key'+horse).value);
-
-var day= encodeURI(document.getElementById('pday'+horse).value);
-var month= encodeURI(document.getElementById('pmonth'+horse).value);
-var year= encodeURI(document.getElementById('pyear'+horse).value);
-var date= year+"-"+month+"-"+day;
-var day= encodeURI(document.getElementById('pnday'+horse).value);
-var month= encodeURI(document.getElementById('pnmonth'+horse).value);
-var year= encodeURI(document.getElementById('pnyear'+horse).value);
-var next_date= year+"-"+month+"-"+day;
+var date= encodeURI(document.getElementById('pdatetimepicker5'+horse).value);
+var next_date= encodeURI(document.getElementById('pndatetimepicker5'+horse).value);
 
 var radios = document.getElementsByName('pblood_drawn'+horse);
 for (var i = 0; i < radios.length; i++) {
@@ -413,35 +381,30 @@ for (var i = 0; i < radios.length; i++) {
         var fecal=radios[i].value;
     }
 }
-
 var radios = document.getElementsByName('psheath_cleaned'+horse);
 for (var i = 0; i < radios.length; i++) {
     if (radios[i].checked) {
         var sheath=radios[i].value;
     }
 }
-
 var radios = document.getElementsByName('pteeth_floated'+horse);
 for (var i = 0; i < radios.length; i++) {
     if (radios[i].checked) {
         var teeth=radios[i].value;
     }
 }
-
 var radios = document.getElementsByName('pvaccination_given'+horse);
 for (var i = 0; i < radios.length; i++) {
     if (radios[i].checked) {
         var vaccination=radios[i].value;
     }
 }
-
 var radios = document.getElementsByName('pradiograph_taken'+horse);
 for (var i = 0; i < radios.length; i++) {
     if (radios[i].checked) {
         var radiograph=radios[i].value;
     }
 }
-
 var temperature= encodeURI(document.getElementById('ptemperature'+horse).value);
 var pulse= encodeURI(document.getElementById('ppulse'+horse).value);
 var respiration= encodeURI(document.getElementById('prespiration'+horse).value);
@@ -467,57 +430,39 @@ if (gait=="other"){
 }
 var comments= encodeURI(document.getElementById('pcomments'+horse).value);
 var vet_key= encodeURI(document.getElementById('pvet_key'+horse).value);
-
 nocache = Math.random();
 http.open('get','insert.php?horse_key='+horse_key+'&date='+date+'&vet_key='+vet_key+'&next_date='+next_date+'&blood='+blood+'&fecal='+fecal+'&sheath='+sheath+'&teeth='+teeth+'&vaccination='+vaccination+'&radiograph='+radiograph+'&temperature='+temperature+'&pulse='+pulse+'&respiration='+respiration+'&right_eye='+right_eye+'&left_eye='+left_eye+'&fitness='+fitness+'&coat='+coat+'&gait='+gait+'&comments='+comments+'&nocache='+nocache);
  http.onreadystatechange=function () {
         callResponse(ele, horse);
  }; 	
-
 http.send(null);
 }
-
 function insert_vaccination() {	
-var horse_key= encodeURI(document.getElementById('horse_key').value);
-var day= encodeURI(document.getElementById('vday').value);
-var month= encodeURI(document.getElementById('vmonth').value);
-var year= encodeURI(document.getElementById('vyear').value);
-var date= year+"-"+month+"-"+day;
-var day= encodeURI(document.getElementById('vnday').value);
-var month= encodeURI(document.getElementById('vnmonth').value);
-var year= encodeURI(document.getElementById('vnyear').value);
-var next_date= year+"-"+month+"-"+day;
-var vac_type= encodeURI(document.getElementById('vtype').value);
-var vac_type2= encodeURI(document.getElementById('vtype2').value);
-var vac_type3= encodeURI(document.getElementById('vtype3').value);
-var vet_key= encodeURI(document.getElementById('vvet_key').value);
-// Set te random number to add to URL request
-nocache = Math.random();
-// Pass the login variables like URL variable
-http.open('get','insert.php?horse_key='+horse_key+'&date='+date+'&next_date='+next_date+'&vac_type='+vac_type+'&vac_type2='+vac_type2+'&vac_type3='+vac_type3+'&vet_key='+vet_key+'&nocache='+nocache);
-var responseDiv='vaccination_response';
-http.onreadystatechange = insertVaccinationReply;
-http.send(null);
+	var horse_key= encodeURI(document.getElementById('horse_key').value);
+	var date= encodeURI(document.getElementById('vdatetimepicker5').value);
+	var next_date= encodeURI(document.getElementById('vndatetimepicker5').value);
+	var vac_type= encodeURI(document.getElementById('vtype').value);
+	var vac_type2= encodeURI(document.getElementById('vtype2').value);
+	var vac_type3= encodeURI(document.getElementById('vtype3').value);
+	var vet_key= encodeURI(document.getElementById('vvet_key').value);
+	nocache = Math.random();
+	http.open('get','insert.php?horse_key='+horse_key+'&date='+date+'&next_date='+next_date+'&vac_type='+vac_type+'&vac_type2='+vac_type2+'&vac_type3='+vac_type3+'&vet_key='+vet_key+'&nocache='+nocache);
+	var name="";
+	var ele="vaccination_response";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
 }
-
 function insert_role_vaccination(ele,horse) {
-
 var horse_key= horse;
-
-var day= encodeURI(document.getElementById('vday'+horse).value);
-var month= encodeURI(document.getElementById('vmonth'+horse).value);
-var year= encodeURI(document.getElementById('vyear'+horse).value);
-var date= year+"-"+month+"-"+day;
-var day= encodeURI(document.getElementById('vnday'+horse).value);
-var month= encodeURI(document.getElementById('vnmonth'+horse).value);
-var year= encodeURI(document.getElementById('vnyear'+horse).value);
-var next_date= year+"-"+month+"-"+day;
+var date= encodeURI(document.getElementById('vdatetimepicker5'+horse).value);
+var next_date= encodeURI(document.getElementById('vndatetimepicker5'+horse).value);
 var vac_type= encodeURI(document.getElementById('vtype'+horse).value);
 var vac_type2= encodeURI(document.getElementById('vtype2'+horse).value);
 var vac_type3= encodeURI(document.getElementById('vtype3'+horse).value);
 var vet_key= encodeURI(document.getElementById('vvet_key'+horse).value);
 nocache = Math.random();
-
 http.open('get','insert.php?horse_key='+horse_key+'&date='+date+'&next_date='+next_date+'&vac_type='+vac_type+'&vac_type2='+vac_type2+'&vac_type3='+vac_type3+'&vet_key='+vet_key+'&nocache='+nocache);
 
  http.onreadystatechange=function () {
@@ -525,45 +470,31 @@ http.open('get','insert.php?horse_key='+horse_key+'&date='+date+'&next_date='+ne
  }; 
 http.send(null);
 }
-
 function insert_parasite() {	
-var horse_key= encodeURI(document.getElementById('horse_key').value);
-var day= encodeURI(document.getElementById('paday').value);
-var month= encodeURI(document.getElementById('pamonth').value);
-var year= encodeURI(document.getElementById('payear').value);
-var date= year+"-"+month+"-"+day;
-var day= encodeURI(document.getElementById('panday').value);
-var month= encodeURI(document.getElementById('panmonth').value);
-var year= encodeURI(document.getElementById('panyear').value);
-var next_date= year+"-"+month+"-"+day;
-var type= encodeURI(document.getElementById('patype').value);
-var vet_key= encodeURI(document.getElementById('pavet_key').value);
-var parasite=1;
+	var horse_key= encodeURI(document.getElementById('horse_key').value);
+	var date= encodeURI(document.getElementById('padatetimepicker5').value);
+	var next_date= encodeURI(document.getElementById('pandatetimepicker5').value);
+	var type= encodeURI(document.getElementById('patype').value);
+	var vet_key= encodeURI(document.getElementById('pavet_key').value);
+	var parasite=1;
 
-nocache = Math.random();
-http.open('get','insert.php?horse_key='+horse_key+'&parasite='+parasite+'&date='+date+'&next_date='+next_date+'&type='+type+'&vet_key='+vet_key+'&nocache='+nocache);
-var responseDiv='parasite_response';
-http.onreadystatechange = insertParasiteReply;
-http.send(null);
+	nocache = Math.random();
+	http.open('get','insert.php?horse_key='+horse_key+'&parasite='+parasite+'&date='+date+'&next_date='+next_date+'&type='+type+'&vet_key='+vet_key+'&nocache='+nocache);
+	var name="";
+	var ele="parasite_response";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
 }
-
 function insert_role_parasite(ele,horse) {	
-
 var horse_key= horse;
-var day= encodeURI(document.getElementById('paday'+horse).value);
-var month= encodeURI(document.getElementById('pamonth'+horse).value);
-var year= encodeURI(document.getElementById('payear'+horse).value);
-var date= year+"-"+month+"-"+day;
+var date= encodeURI(document.getElementById('padatetimepicker5'+horse).value);
 var day= encodeURI(document.getElementById('panday'+horse).value);
-var month= encodeURI(document.getElementById('panmonth'+horse).value);
-var year= encodeURI(document.getElementById('panyear'+horse).value);
-var next_date= year+"-"+month+"-"+day;
 var type= encodeURI(document.getElementById('patype'+horse).value);
 var vet_key= encodeURI(document.getElementById('pavet_key'+horse).value);
 var parasite=1;
-// Set te random number to add to URL request
 nocache = Math.random();
-// Pass the login variables like URL variable
 http.open('get','insert.php?horse_key='+horse_key+'&parasite='+parasite+'&date='+date+'&next_date='+next_date+'&type='+type+'&vet_key='+vet_key+'&nocache='+nocache);
 var responseDiv='parasite_response';
  http.onreadystatechange=function () {
@@ -571,17 +502,10 @@ var responseDiv='parasite_response';
  };
 http.send(null);
 }
-
 function insert_dental() {	
 var horse_key= encodeURI(document.getElementById('horse_key').value);
-var day= encodeURI(document.getElementById('dday').value);
-var month= encodeURI(document.getElementById('dmonth').value);
-var year= encodeURI(document.getElementById('dyear').value);
-var date= year+"-"+month+"-"+day;
-var day= encodeURI(document.getElementById('dnday').value);
-var month= encodeURI(document.getElementById('dnmonth').value);
-var year= encodeURI(document.getElementById('dnyear').value);
-var next_date= year+"-"+month+"-"+day;
+var date= encodeURI(document.getElementById('ddatetimepicker5').value);
+var next_date= encodeURI(document.getElementById('dndatetimepicker5').value);
 var procedure= encodeURI(document.getElementById('dprocedure').value);
 var procedure_other= encodeURI(document.getElementById('dprocedureother').value);
 if(procedure=="other"){
@@ -589,25 +513,19 @@ if(procedure=="other"){
 }
 var dental="1";
 var vet_key= encodeURI(document.getElementById('dvet_key').value);
-// Set te random number to add to URL request
 nocache = Math.random();
-// Pass the login variables like URL variable
 http.open('get','insert.php?horse_key='+horse_key+'&dental='+dental+'&date='+date+'&next_date='+next_date+'&procedure='+procedure+'&vet_key='+vet_key+'&nochache='+nocache);
-http.onreadystatechange = insertDentalReply;
-http.send(null);
+	var name="";
+	var ele="dental_response";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
 }
-
-
 function insert_role_dental(ele,horse) {	
 var horse_key= horse;
-var day= encodeURI(document.getElementById('dday'+horse).value);
-var month= encodeURI(document.getElementById('dmonth'+horse).value);
-var year= encodeURI(document.getElementById('dyear'+horse).value);
-var date= year+"-"+month+"-"+day;
-var day= encodeURI(document.getElementById('dnday'+horse).value);
-var month= encodeURI(document.getElementById('dnmonth'+horse).value);
-var year= encodeURI(document.getElementById('dnyear'+horse).value);
-var next_date= year+"-"+month+"-"+day;
+var date= encodeURI(document.getElementById('ddatetimepicker5'+horse).value);
+var next_date= encodeURI(document.getElementById('dndatetimepicker5'+horse).value);
 var procedure= encodeURI(document.getElementById('dprocedure'+horse).value);
 var procedure_other= encodeURI(document.getElementById('dprocedureother'+horse).value);
 if(procedure=="other"){
@@ -615,191 +533,158 @@ if(procedure=="other"){
 }
 var dental="1";
 var vet_key= encodeURI(document.getElementById('dvet_key'+horse).value);
-// Set te random number to add to URL request
 nocache = Math.random();
-// Pass the login variables like URL variable
 http.open('get','insert.php?horse_key='+horse_key+'&dental='+dental+'&date='+date+'&next_date='+next_date+'&procedure='+procedure+'&vet_key='+vet_key+'&nochache='+nocache);
  http.onreadystatechange=function () {
         callResponse(ele, horse);
  };
 http.send(null);
 }
-
 function insert_farrier() {	
-var horse_key= encodeURI(document.getElementById('horse_key').value);
-var day= encodeURI(document.getElementById('fday').value);
-var month= encodeURI(document.getElementById('fmonth').value);
-var year= encodeURI(document.getElementById('fyear').value);
-var date= year+"-"+month+"-"+day;
-var day= encodeURI(document.getElementById('fnday').value);
-var month= encodeURI(document.getElementById('fnmonth').value);
-var year= encodeURI(document.getElementById('fnyear').value);
-var next_date= year+"-"+month+"-"+day;
-var comments= encodeURI(document.getElementById('fcomments').value);
-var procedure= encodeURI(document.getElementById('fprocedure').value);
-var procedure_other= encodeURI(document.getElementById('fprocedureother').value);
-if(procedure=="other"){
-	procedure=procedure_other;
-}
-var farrier="1";
-var vet_key= encodeURI(document.getElementById('fvet_key').value);
-// Set te random number to add to URL request
-nocache = Math.random();
-// Pass the login variables like URL variable
-http.open('get','insert.php?horse_key='+horse_key+'&farrier='+farrier+'&date='+date+'&next_date='+next_date+'&procedure='+procedure+'&comments='+comments+'&vet_key='+vet_key+'&nocache='+nocache);
-http.onreadystatechange = insertFarrierReply;
-http.send(null);
-}
-
+	var horse_key= encodeURI(document.getElementById('horse_key').value);
+	var date= encodeURI(document.getElementById('fdatetimepicker5').value);
+	var next_date= encodeURI(document.getElementById('fndatetimepicker5').value);
+	var comments= encodeURI(document.getElementById('fcomments').value);
+	var procedure= encodeURI(document.getElementById('fprocedure').value);
+	var procedure_other= encodeURI(document.getElementById('fprocedureother').value);
+	if(procedure=="other"){
+		procedure=procedure_other;
+	}
+	var farrier="1";
+	var vet_key= encodeURI(document.getElementById('fvet_key').value);
+	nocache = Math.random();
+	http.open('get','insert.php?horse_key='+horse_key+'&farrier='+farrier+'&date='+date+'&next_date='+next_date+'&procedure='+procedure+'&comments='+comments+'&vet_key='+vet_key+'&nocache='+nocache);
+	var name="";
+	var ele="farrier_response";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
+};
 function insert_role_farrier(ele,horse) {	
-var horse_key= horse;
-var day= encodeURI(document.getElementById('fday'+horse).value);
-var month= encodeURI(document.getElementById('fmonth'+horse).value);
-var year= encodeURI(document.getElementById('fyear'+horse).value);
-var date= year+"-"+month+"-"+day;
-var day= encodeURI(document.getElementById('fnday'+horse).value);
-var month= encodeURI(document.getElementById('fnmonth'+horse).value);
-var year= encodeURI(document.getElementById('fnyear'+horse).value);
-var next_date= year+"-"+month+"-"+day;
-var comments= encodeURI(document.getElementById('fcomments'+horse).value);
-var procedure= encodeURI(document.getElementById('fprocedure'+horse).value);
-var procedure_other= encodeURI(document.getElementById('fprocedureother'+horse).value);
-if(procedure=="other"){
-	procedure=procedure_other;
+	var horse_key= horse;
+	var date= encodeURI(document.getElementById('fdatetimepicker5'+horse).value);
+	var next_date= encodeURI(document.getElementById('fndatetimepicker5'+horse).value);
+	var comments= encodeURI(document.getElementById('fcomments'+horse).value);
+	var procedure= encodeURI(document.getElementById('fprocedure'+horse).value);
+	var procedure_other= encodeURI(document.getElementById('fprocedureother'+horse).value);
+	if(procedure=="other"){
+		procedure=procedure_other;
+	}
+	var farrier="1";
+	var vet_key= encodeURI(document.getElementById('fvet_key'+horse).value);
+	// Set te random number to add to URL request
+	nocache = Math.random();
+	// Pass the login variables like URL variable
+	http.open('get','insert.php?horse_key='+horse_key+'&farrier='+farrier+'&date='+date+'&next_date='+next_date+'&procedure='+procedure+'&comments='+comments+'&vet_key='+vet_key+'&nocache='+nocache);
+	http.onreadystatechange=function () {
+		var name="";
+		callResponse(ele, name);
+	};
+	http.send(null);
 }
-var farrier="1";
-var vet_key= encodeURI(document.getElementById('fvet_key'+horse).value);
-// Set te random number to add to URL request
-nocache = Math.random();
-// Pass the login variables like URL variable
-http.open('get','insert.php?horse_key='+horse_key+'&farrier='+farrier+'&date='+date+'&next_date='+next_date+'&procedure='+procedure+'&comments='+comments+'&vet_key='+vet_key+'&nocache='+nocache);
- http.onreadystatechange=function () {
-        callResponse(ele, horse);
- };
-http.send(null);
-}
-
 function insert_history() {	
 var horse_key= encodeURI(document.getElementById('horse_key').value);
-var day= encodeURI(document.getElementById('hday').value);
-var month= encodeURI(document.getElementById('hmonth').value);
-var year= encodeURI(document.getElementById('hyear').value);
-var date= year+"-"+month+"-"+day;
+var date= encodeURI(document.getElementById('hdatetimepicker5').value);
 var comment= encodeURI(document.getElementById('hcomment').value);
 var history="1";
-// Set te random number to add to URL request
 nocache = Math.random();
-// Pass the login variables like URL variable
 http.open('get','insert.php?horse_key='+horse_key+'&date='+date+'&comment='+comment+'&history='+history+'&nocache='+nocache);
-http.onreadystatechange = insertHistoryReply;
-http.send(null);
+	var name="";
+	var ele="history_response";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
 }
-
 function insert_role_history(ele,horse) {	
 var horse_key= horse;
-var day= encodeURI(document.getElementById('hday'+horse).value);
-var month= encodeURI(document.getElementById('hmonth'+horse).value);
-var year= encodeURI(document.getElementById('hyear'+horse).value);
-var date= year+"-"+month+"-"+day;
+var date= encodeURI(document.getElementById('hdatetimepicker5'+horse).value);
 var comment= encodeURI(document.getElementById('hcomment'+horse).value);
 var history="1";
-// Set te random number to add to URL request
 nocache = Math.random();
-// Pass the login variables like URL variable
 http.open('get','insert.php?horse_key='+horse_key+'&date='+date+'&comment='+comment+'&history='+history+'&nocache='+nocache);
  http.onreadystatechange=function () {
         callResponse(ele, horse);
- };
+};
 http.send(null);
 }
-
-//insert new horse
 function insert_horse() {
-//hide modal on submit
-$("#myModal_horse").modal("hide"); 
-
-var horse_record= encodeURI(document.getElementById('nhorse_record').value);
-var horse_key= encodeURI(document.getElementById('nhorse_key').value);
-var horse_image= encodeURI(document.getElementById('nhorse_image').value);
-var horse_name= encodeURI(document.getElementById('nhorse_name').value);
-var owner_key= encodeURI(document.getElementById('nowner_key').value);
-var vet_key= encodeURI(document.getElementById('nvet_key').value);
-var farrier_key= encodeURI(document.getElementById('nfarrier_key').value);
-var contact= encodeURI(document.getElementById('nowner_phone_number').value);
-var breed= encodeURI(document.getElementById('nbreed').value);
-var day= encodeURI(document.getElementById('nday').value);
-var month= encodeURI(document.getElementById('nmonth').value);
-var year= encodeURI(document.getElementById('nyear').value);
-var birth= year+"-"+month+"-"+day;
-var height= encodeURI(document.getElementById('nheight').value);
-var weight= encodeURI(document.getElementById('nweight').value);
-var temp= encodeURI(document.getElementById('ntemperature').value);
-var heart= encodeURI(document.getElementById('npulse').value);
-var resp= encodeURI(document.getElementById('nrespiration').value);
-var vices= encodeURI(document.getElementById('nvices').value);
-var considerations= encodeURI(document.getElementById('nspecial_medical_conditions').value);
-var brand= encodeURI(document.getElementById('ntatoo_or_brand').value);
-var markings= encodeURI(document.getElementById('nmarkings').value);
-var color= encodeURI(document.getElementById('ncolor').value);
-var sex= encodeURI(document.getElementById('nsex').value);
-var stall= encodeURI(document.getElementById('nstall').value);
-
-// Set te random number to add to URL request
-nocache = Math.random();
-// Pass the login variables like URL variable
-http.open('get','insert.php?horse_name='+horse_name+'&horse_key='+horse_key+'&horse_record='+horse_record+'&horse_image='+horse_image+'&owner_key='+owner_key+'&vet_key='+vet_key+'&farrier_key='+farrier_key+'&contact='+contact+'&breed='+breed+'&birth='+birth+'&height='+height+'&weight='+weight+'&temp='+temp+'&heart='+heart+'&resp='+resp+'&vices='+vices+'&considerations='+considerations+'&brand='+brand+'&markings='+markings+'&color='+color+'&sex='+sex+'&stall='+stall+'&nocache='+nocache);
-if(horse_record=="new"){
-http.onreadystatechange = insertReply;
-}else{
-http.onreadystatechange = insertHorseUpdateReply;
-}	
-http.send(null);
+	//hide modal on submit
+	$("#myModal_horse").modal("hide"); 
+	var horse_record= encodeURI(document.getElementById('nhorse_record').value);
+	var horse_key= encodeURI(document.getElementById('nhorse_key').value);
+	var horse_image= encodeURI(document.getElementById('nhorse_image').value);
+	var horse_name= encodeURI(document.getElementById('nhorse_name').value);
+	var owner_key= encodeURI(document.getElementById('nowner_key').value);
+	var vet_key= encodeURI(document.getElementById('nvet_key').value);
+	var farrier_key= encodeURI(document.getElementById('nfarrier_key').value);
+	var contact= encodeURI(document.getElementById('nowner_phone_number').value);
+	var breed= encodeURI(document.getElementById('nbreed').value);
+	var birth= encodeURI(document.getElementById('ndatetimepicker5').value);
+	var height= encodeURI(document.getElementById('nheight').value);
+	var weight= encodeURI(document.getElementById('nweight').value);
+	var temp= encodeURI(document.getElementById('ntemperature').value);
+	var heart= encodeURI(document.getElementById('npulse').value);
+	var resp= encodeURI(document.getElementById('nrespiration').value);
+	var vices= encodeURI(document.getElementById('nvices').value);
+	var considerations= encodeURI(document.getElementById('nspecial_medical_conditions').value);
+	var brand= encodeURI(document.getElementById('ntatoo_or_brand').value);
+	var markings= encodeURI(document.getElementById('nmarkings').value);
+	var color= encodeURI(document.getElementById('ncolor').value);
+	var sex= encodeURI(document.getElementById('nsex').value);
+	var stall= encodeURI(document.getElementById('nstall').value);
+	nocache = Math.random();
+	// Pass the login variables like URL variable
+	http.open('get','insert.php?horse_name='+horse_name+'&horse_key='+horse_key+'&horse_record='+horse_record+'&horse_image='+horse_image+'&owner_key='+owner_key+'&vet_key='+vet_key+'&farrier_key='+farrier_key+'&contact='+contact+'&breed='+breed+'&birth='+birth+'&height='+height+'&weight='+weight+'&temp='+temp+'&heart='+heart+'&resp='+resp+'&vices='+vices+'&considerations='+considerations+'&brand='+brand+'&markings='+markings+'&color='+color+'&sex='+sex+'&stall='+stall+'&nocache='+nocache);
+	if(horse_record=="new"){
+	http.onreadystatechange = insertReply;
+	}else{
+		var name="";
+		var ele="horseUpdateResponse";
+		http.onreadystatechange=function () {
+	        callResponse(ele, name);
+	    }; 
+	 } 
+    http.send(null);
 }
-//update horse
 function update_horse() {
-
-var horse_record= encodeURI(document.getElementById('uhorse_record').value);
-var horse_key= encodeURI(document.getElementById('uhorse_key').value);
-var horse_image= encodeURI(document.getElementById('uhorse_image').value);
-var horse_name= encodeURI(document.getElementById('uhorse_name').value);
-var owner_key= encodeURI(document.getElementById('uowner_key').value);
-var vet_key= encodeURI(document.getElementById('uvet_key').value);
-var farrier_key= encodeURI(document.getElementById('ufarrier_key').value);
-var contact= encodeURI(document.getElementById('uowner_phone_number').value);
-var breed= encodeURI(document.getElementById('ubreed').value);
-var day= encodeURI(document.getElementById('uday').value);
-var month= encodeURI(document.getElementById('umonth').value);
-var year= encodeURI(document.getElementById('uyear').value);
-var birth= year+"-"+month+"-"+day;
-var height= encodeURI(document.getElementById('uheight').value);
-var weight= encodeURI(document.getElementById('uweight').value);
-var temp= encodeURI(document.getElementById('utemperature').value);
-var heart= encodeURI(document.getElementById('upulse').value);
-var resp= encodeURI(document.getElementById('urespiration').value);
-var vices= encodeURI(document.getElementById('uvices').value);
-var considerations= encodeURI(document.getElementById('uspecial_medical_conditions').value);
-var brand= encodeURI(document.getElementById('utatoo_or_brand').value);
-var markings= encodeURI(document.getElementById('umarkings').value);
-var color= encodeURI(document.getElementById('ucolor').value);
-var sex= encodeURI(document.getElementById('usex').value);
-var stall= encodeURI(document.getElementById('ustall').value);
-
-
-// Set te random number to add to URL request
-nocache = Math.random();
-// Pass the login variables like URL variable
-http.open('get','insert.php?horse_name='+horse_name+'&horse_key='+horse_key+'&horse_record='+horse_record+'&horse_image='+horse_image+'&owner_key='+owner_key+'&vet_key='+vet_key+'&farrier_key='+farrier_key+'&contact='+contact+'&breed='+breed+'&birth='+birth+'&height='+height+'&weight='+weight+'&temp='+temp+'&heart='+heart+'&resp='+resp+'&vices='+vices+'&considerations='+considerations+'&brand='+brand+'&markings='+markings+'&color='+color+'&sex='+sex+'&stall='+stall+'&nocache='+nocache);
-if(horse_record=="new"){
-http.onreadystatechange = insertReply;
-}else{
-http.onreadystatechange = insertHorseUpdateReply;
-}	
-http.send(null);
+	var horse_record= encodeURI(document.getElementById('uhorse_record').value);
+	var horse_key= encodeURI(document.getElementById('uhorse_key').value);
+	var horse_image= encodeURI(document.getElementById('uhorse_image').value);
+	var horse_name= encodeURI(document.getElementById('uhorse_name').value);
+	var owner_key= encodeURI(document.getElementById('uowner_key').value);
+	var vet_key= encodeURI(document.getElementById('uvet_key').value);
+	var farrier_key= encodeURI(document.getElementById('ufarrier_key').value);
+	var contact= encodeURI(document.getElementById('uowner_phone_number').value);
+	var breed= encodeURI(document.getElementById('ubreed').value);
+	var birth= encodeURI(document.getElementById('pdatetimepicker5').value);
+	var height= encodeURI(document.getElementById('uheight').value);
+	var weight= encodeURI(document.getElementById('uweight').value);
+	var temp= encodeURI(document.getElementById('utemperature').value);
+	var heart= encodeURI(document.getElementById('upulse').value);
+	var resp= encodeURI(document.getElementById('urespiration').value);
+	var vices= encodeURI(document.getElementById('uvices').value);
+	var considerations= encodeURI(document.getElementById('uspecial_medical_conditions').value);
+	var brand= encodeURI(document.getElementById('utatoo_or_brand').value);
+	var markings= encodeURI(document.getElementById('umarkings').value);
+	var color= encodeURI(document.getElementById('ucolor').value);
+	var sex= encodeURI(document.getElementById('usex').value);
+	var stall= encodeURI(document.getElementById('ustall').value);
+	nocache = Math.random();
+	http.open('get','insert.php?horse_name='+horse_name+'&horse_key='+horse_key+'&horse_record='+horse_record+'&horse_image='+horse_image+'&owner_key='+owner_key+'&vet_key='+vet_key+'&farrier_key='+farrier_key+'&contact='+contact+'&breed='+breed+'&birth='+birth+'&height='+height+'&weight='+weight+'&temp='+temp+'&heart='+heart+'&resp='+resp+'&vices='+vices+'&considerations='+considerations+'&brand='+brand+'&markings='+markings+'&color='+color+'&sex='+sex+'&stall='+stall+'&nocache='+nocache);
+	if(horse_record=="new"){
+	http.onreadystatechange = insertReply;
+	}else{
+		var name="";
+		var ele="horseUpdateResponse";
+		http.onreadystatechange=function () {
+	        callResponse(ele, name);
+	    }
+    };  
+    http.send(null);
 }
-
-//role update horse
 function role_update_horse(ele,horse) {
-
 var horse_record='role';
 var horse_key=horse;
 var horse_image= encodeURI(document.getElementById('uhorse_image'+horse).value);
@@ -809,10 +694,7 @@ var vet_key= encodeURI(document.getElementById('uvet_key'+horse).value);
 var farrier_key= encodeURI(document.getElementById('ufarrier_key'+horse).value);
 var contact= encodeURI(document.getElementById('uowner_phone_number'+horse).value);
 var breed= encodeURI(document.getElementById('ubreed'+horse).value);
-var day= encodeURI(document.getElementById('uday'+horse).value);
-var month= encodeURI(document.getElementById('umonth'+horse).value);
-var year= encodeURI(document.getElementById('uyear'+horse).value);
-var birth= year+"-"+month+"-"+day;
+var birth= encodeURI(document.getElementById('pdatetimepicker5'+horse).value);
 var height= encodeURI(document.getElementById('uheight'+horse).value);
 var weight= encodeURI(document.getElementById('uweight'+horse).value);
 var temp= encodeURI(document.getElementById('utemperature'+horse).value);
@@ -825,19 +707,13 @@ var markings= encodeURI(document.getElementById('umarkings'+horse).value);
 var color= encodeURI(document.getElementById('ucolor'+horse).value);
 var sex= encodeURI(document.getElementById('usex'+horse).value);
 var stall= encodeURI(document.getElementById('ustall'+horse).value);
-
-
-// Set te random number to add to URL request
 nocache = Math.random();
-// Pass the login variables like URL variable
 http.open('get','insert.php?horse_name='+horse_name+'&horse_key='+horse_key+'&horse_record='+horse_record+'&horse_image='+horse_image+'&owner_key='+owner_key+'&vet_key='+vet_key+'&farrier_key='+farrier_key+'&contact='+contact+'&breed='+breed+'&birth='+birth+'&height='+height+'&weight='+weight+'&temp='+temp+'&heart='+heart+'&resp='+resp+'&vices='+vices+'&considerations='+considerations+'&brand='+brand+'&markings='+markings+'&color='+color+'&sex='+sex+'&stall='+stall+'&nocache='+nocache);
  http.onreadystatechange=function () {
         callResponse(ele, horse_name);
  }; 	
 http.send(null);
 }
-
-//insert new owner
 function insert_owner() {
 //hide modal on submit
 $("#myModal_owner").modal("hide"); 
@@ -860,48 +736,53 @@ http.open('get','insert.php?first_name='+first_name+'&new_vet'+new_vet+'&last_na
 http.onreadystatechange = insertReply;
 http.send(null);
 }
-
 //insert new vet
 function insert_vet() {
-var new_vet=1;
-var first_name= encodeURI(document.getElementById('vetfirst_name').value);
-var last_name= encodeURI(document.getElementById('vetlast_name').value);
-var street_address= encodeURI(document.getElementById('vetstreet_address').value);
-var city= encodeURI(document.getElementById('vetcity').value);
-var state= encodeURI(document.getElementById('vetstate').value);
-var zip= encodeURI(document.getElementById('vetzip').value);
-var phone= encodeURI(document.getElementById('vetphone').value);
-var horse_key= encodeURI(document.getElementById('vethorse_key').value);
-var email= encodeURI(document.getElementById('vetemail').value);
-var access= encodeURI(document.getElementById('vetaccess').value);
-var pass= encodeURI(document.getElementById('vetpass').value);
-// Set te random number to add to URL request
-nocache = Math.random();
-// Pass the login variables like URL variable
-http.open('get','insert.php?first_name='+first_name+'&new_vet='+new_vet+'&last_name='+last_name+'&street_address='+street_address+'&city='+city+'&state='+state+'&zip='+zip+'&phone='+phone+'&horse_key='+horse_key+'&email='+email+'&access='+access+'&pass='+pass+'&nocache='+nocache);
-http.onreadystatechange = insertVetReply;
-http.send(null);
+	var new_vet=1;
+	var first_name= encodeURI(document.getElementById('vetfirst_name').value);
+	var last_name= encodeURI(document.getElementById('vetlast_name').value);
+	var street_address= encodeURI(document.getElementById('vetstreet_address').value);
+	var city= encodeURI(document.getElementById('vetcity').value);
+	var state= encodeURI(document.getElementById('vetstate').value);
+	var zip= encodeURI(document.getElementById('vetzip').value);
+	var phone= encodeURI(document.getElementById('vetphone').value);
+	var horse_key= encodeURI(document.getElementById('vethorse_key').value);
+	var email= encodeURI(document.getElementById('vetemail').value);
+	var access= encodeURI(document.getElementById('vetaccess').value);
+	var pass= encodeURI(document.getElementById('vetpass').value);
+	// Set te random number to add to URL request
+	nocache = Math.random();
+	// Pass the login variables like URL variable
+	http.open('get','insert.php?first_name='+first_name+'&new_vet='+new_vet+'&last_name='+last_name+'&street_address='+street_address+'&city='+city+'&state='+state+'&zip='+zip+'&phone='+phone+'&horse_key='+horse_key+'&email='+email+'&access='+access+'&pass='+pass+'&nocache='+nocache);
+	var name="";
+	var ele="insert_vet_response";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
 }
-
 //insert new training data
-function insert_training(key) {	
+function insert_training(ele, key) {	
+
 	var horse_key= encodeURI(document.getElementById('horse_key'+key).value);
 	var facility_key= encodeURI(document.getElementById('facility_key'+key).value);
 	var trainer_key= encodeURI(document.getElementById('trainer_key'+key).value);
 	var student_key= encodeURI(document.getElementById('student_key'+key).value);
 	var training_date= encodeURI(document.getElementById('datetimepicker5'+key).value);
+	var duration= encodeURI(document.getElementById('duration'+key).value);
+	var quality= encodeURI(document.getElementById('quality'+key).value);
 	var goal= encodeURI(document.getElementById('goal'+key).value);
 	var comment= encodeURI(document.getElementById('comment'+key).value);
 	var video_url= encodeURI(document.getElementById('video_url'+key).value);
-
-	// Set te random number to add to URL request
 	nocache = Math.random();
-	// Pass the login variables like URL variable
-	http.open('get','insert.php?horse_key='+horse_key+'&facility_key='+facility_key+'&trainer_key='+trainer_key+'&student_key='+student_key+'&training_date='+training_date+'&goal='+goal+'&comment='+comment+'&video_url='+video_url+'&nocache='+nocache);
-	http.onreadystatechange = insertTrainingReply;
-	http.send(null);
+	http.open('get','insert.php?horse_key='+horse_key+'&facility_key='+facility_key+'&trainer_key='+trainer_key+'&student_key='+student_key+'&training_date='+training_date+'&duration='+duration+'&quality='+quality+'&goal='+goal+'&comment='+comment+'&video_url='+video_url+'&nocache='+nocache);
+	// http.onreadystatechange = insertTrainingReply;
+	var name="";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
 }
-
 //insert new admin
 function insert_admin() {	
 var first_name= encodeURI(document.getElementById('login_first_name').value);
@@ -920,10 +801,13 @@ var role= encodeURI(document.getElementById('login_role').value);
 nocache = Math.random();
 // Pass the login variables like URL variable
 http.open('get','insert.php?first_name='+first_name+'&last_name='+last_name+'&access='+access+'&password='+password+'&address='+address+'&city='+city+'&state='+state+'&zip='+zip+'&phone='+phone+'&email='+email+'&role='+role+'&nocache='+nocache);
-http.onreadystatechange = insertAdminReply;
-http.send(null);
+	var name="";
+	var ele="insert_admin_response";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
 }
-
 function insert_facility() {	
 var name= encodeURI(document.getElementById('facilityname').value);
 var owner= encodeURI(document.getElementById('facilityowner').value);
@@ -933,19 +817,27 @@ var phone= encodeURI(document.getElementById('facilityphone').value);
 nocache = Math.random();
 // Pass the login variables like URL variable
 http.open('get','insert.php?facilityname='+name+'&owner='+owner+'&address='+address+'&phone='+phone+'&nocache='+nocache);
-http.onreadystatechange = insertFacilityReply;
-http.send(null);
+	var name="";
+	var ele="facility_response";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
 }
-
 function delete_precord(key){
 	var record_key= encodeURI(document.getElementById(key).value);
 	var table_name= encodeURI(document.getElementById('ptable_name').value);
 	var delete_date= encodeURI(document.getElementById('pdate').value);
 	nocache = Math.random();
 	http.open('get','insert.php?record_key='+record_key+'&table_name='+table_name+'&delete_date='+delete_date+'&nocache='+nocache);
-	http.onreadystatechange = insertPhysicalDeleteReply;
-	http.send(null);
+	var name="";
+	var ele="physical";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
 }
+
 function reloadPage(){
 	location.reload(true);
 }
@@ -954,172 +846,52 @@ function deleteFunction(record_key, table_name){
 	http.open('get','delete.php?record_key='+record_key+'&table_name='+table_name+'&nocache='+nocache);
 
 }
-
 function delete_record(record_key, table, ele, name){
 	if(!confirm('Absolutely, Definitely, Delete '+name+' Data?')){
 		return false;
 		}else{
-			//alert(record_key+' '+table+' '+ele+' '+name);
 	nocache = Math.random();
 	var table=table;
 	var record_key=record_key;
 	var ele=ele;
-        http.open('get', 'deleterecord.php?record_key='+record_key+'&table='+table+'&nocache='+nocache);
-    	http.onreadystatechange=function () {
-            callResponse(ele, name);
-        };  
-        http.send(null);
-		}
-    }
- 	
+    http.open('get', 'deleterecord.php?record_key='+record_key+'&table='+table+'&nocache='+nocache);
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
+	}
+}
 function callResponse(ele, name) {
 	if(http.readyState == 4){ 
 		var response = http.responseText;
 		document.getElementById(ele).innerHTML = name + response;
 	}
 }
-
 function delete_drecord(){
 	var record_key= encodeURI(document.getElementById('drecord_key').value);
 	var table_name= encodeURI(document.getElementById('dtable_name').value);
 	var delete_date= encodeURI(document.getElementById('ddate').value);
 	nocache = Math.random();
 	http.open('get','insert.php?record_key='+record_key+'&table_name='+table_name+'&delete_date='+delete_date+'&nocache='+nocache);
-	http.onreadystatechange = insertDentalDeleteReply;
-	http.send(null);
-}
-function insertPhysicalReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('physical_response').innerHTML = response;
-}
-}
-function insertVaccinationReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('vaccination_response').innerHTML = response;
-}
-}
-function insertDentalReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('dental_response').innerHTML = response;
-}
-}
-function insertFarrierReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('farrier_response').innerHTML = response;
-}
-}
-function insertFacilityReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('facility_response').innerHTML = response;
-}
-}
-function insertHistoryReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('history_response').innerHTML = response;
-}
-}
-
-function insertParasiteReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('parasite_response').innerHTML = response;
-}
+	var name="";
+	var ele="dental";
+	http.onreadystatechange=function () {
+        callResponse(ele, name);
+    };  
+    http.send(null);
 }
 function insertReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('insert_response').innerHTML = response;
+	if(http.readyState == 4){ 
+		var response = http.responseText;
+	document.getElementById('insert_response').innerHTML = response;
+	}
 }
-}
-function insertImageReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('insert_image_response').innerHTML = 'Image upload:'+response;
-}
-}
-function insertTrainingReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('insert_training_response').innerHTML=response;
-}
-}
-function insertAdminReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('insert_admin_response').innerHTML=response;
-}
-}
-function insertVetReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('insert_vet_response').innerHTML=response;
-}
-}
-
 function insertmyModalOwnerreply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('myModal_owner').innerHTML = '-->'+response;
-}
+	if(http.readyState == 4){ 
+		var response = http.responseText;
+	document.getElementById('myModal_owner').innerHTML = '-->'+response;
+	}
 } 
-function insertHorseUpdateReply() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-document.getElementById('horseUpdateResponse').innerHTML = response;
-}
-} 
- 
-function insertPhysicalDeleteReply() {
-	if(http.readyState == 4){ 
-	var response = http.responseText;
-	document.getElementById('physical').innerHTML=response;
-	}
-}
-function insertVaccinationDeleteReply() {
-	if(http.readyState == 4){ 
-	var response = http.responseText;
-	document.getElementById('vaccination').innerHTML=response;
-	}
-}
-function insertDentalDeleteReply() {
-	if(http.readyState == 4){ 
-	var response = http.responseText;
-	document.getElementById('dental').innerHTML=response;
-	}
-}
-function insertFarrierDeleteReply() {
-	if(http.readyState == 4){ 
-	var response = http.responseText;
-	document.getElementById('farrier').innerHTML=response;
-	}
-}
-function adminDeleteResponse() {
-if(http.readyState == 4){ 
-var response = http.responseText;
-// else if login is ok show a message: "Site added+ site URL".
-alert(response);
-}
-}
 </script>
 </head>
 <?	 
@@ -1130,6 +902,7 @@ if(isset($_REQUEST['horse_choice'])){
 	$horse_key=$_REQUEST['horse_choice'];
 	$_SESSION['horse_key']=$horse_key;
 	$_SESSION['role_mode']=0;
+	$_POST['horse_key']=$horse_key;
 }
 
 if(isset($_REQUEST['filter'])){
@@ -1184,15 +957,54 @@ if($_SESSION['passwordcheck']=='pass'){
 	$owner_data=GetTableDataFacility("owner","owner_key", "login", $dbname ,$_SESSION['facility']);
 	$vet_data=GetTableDataFacility("vet","vet_key", "login", $dbname ,$_SESSION['facility']);
 	$farrier_data=GetTableDataFacility("farrier","farrier_key", "login", $dbname ,$_SESSION['facility']);
-	$vacc_products=GetMysqlFieldNames("vacc_products", $dbname);
-	$deworm_products=GetMysqlFieldNames("dewormer_products", $dbname);
-	$vacc_product_data=GetProductTableData("key","ALL", "vacc_products", $dbname);
-	$deworm_product_data=GetProductTableData("key","ALL", "dewormer_products", $dbname);
-	$vacc_product_expiration=GetProductTableData("infection","frequency", "vacc_products", $dbname);
-	$vacc_product_labels=GetMysqlFieldNames("vacc_products", $dbname);
-	$vacc_data=GetTableDataFacility("key","ALL", "vaccination", $dbname ,$_SESSION['facility']);//delete this when done
 
-	$horse_data=GetTableDataFacility("key","ALL", "information", $dbname ,$_SESSION['facility']);
+	if(isset($_SESSION['vacc_products'])){
+		$vacc_products = $_SESSION['vacc_products'];
+	}else{
+		$vacc_products=GetMysqlFieldNames("vacc_products", $dbname);
+		$_SESSION['vacc_products'] = $vacc_products;
+	}
+
+	if(isset($_SESSION['dewormer_products'])){
+		$dewormer_products = $_SESSION['dewormer_products'];
+	}else{
+		$dewormer_products=GetMysqlFieldNames("dewormer_products", $dbname);
+		$_SESSION['dewormer_products'] = $dewormer_products;
+	}
+
+
+	if(isset($_SESSION['vacc_product_data'])){
+		$vacc_product_data = $_SESSION['vacc_product_data'];
+	}else{
+		$vacc_product_data=GetProductTableData("key","ALL", "vacc_products", $dbname);
+		$_SESSION['vacc_product_data'] = $vacc_product_data;
+	}
+
+	if(isset($_SESSION['deworm_product_data'])){
+		$deworm_product_data = $_SESSION['deworm_product_data'];
+	}else{
+		$deworm_product_data=GetProductTableData("key","ALL", "dewormer_products", $dbname);
+		$_SESSION['deworm_product_data'] = $deworm_product_data;
+	}
+
+	if(isset($_SESSION['vacc_product_expiration'])){
+		$vacc_product_expiration=$_SESSION['vacc_product_expiration'];
+	}else{
+		$vacc_product_expiration=GetProductTableData("infection","frequency", "vacc_products", $dbname);
+		$_SESSION['vacc_product_expiration'] = $vacc_product_expiration;
+	}
+
+
+	//$vacc_product_labels=GetMysqlFieldNames("vacc_products", $dbname);
+	//$vacc_data=GetTableDataFacility("key","ALL", "vaccination", $dbname ,$_SESSION['facility']);//delete this when done
+
+	if(isset($_SESSION['horse_data'])){
+		$horse_data=$_SESSION['horse_data'];
+	}else{
+		$horse_data=GetTableDataFacility("key","ALL", "information", $dbname ,$_SESSION['facility']);
+		$_SESSION['horse_data'] = $horse_data;
+	}
+
 	$physicals=getReminders("physical",1, $dbname ,$_SESSION['facility']);
 	//$vaccinations=getReminders("vaccination",1,$dbname ,$_SESSION[facility]);
 	$dental=getReminders("dental",1,$dbname ,$_SESSION['facility']);
@@ -1200,11 +1012,15 @@ if($_SESSION['passwordcheck']=='pass'){
 	$role_results=getRoles($_SESSION['facility'], $dbname);
 
 }
+if(isset($_SESSION['horse_key'])){
+	$horse_key=$_SESSION['horse_key'];
+}
 if (isset($horse_key)&&$horse_key){// use this to load horse data for page
 		$horse_info=GetTableDataFacility("key",$horse_key,"information", $dbname ,$_SESSION['facility']);
 		$vet_key=$horse_info[0]['vet_key'];
 		$owner_key=$horse_info[0]['owner_key'];
 		$vet=GetTableDataFacility("key",$vet_key, "login", $dbname ,$_SESSION['facility']);
+
 		$owner=GetTableDataFacility('key',$owner_key, "login", $dbname ,$_SESSION['facility']);
 		$owner_name=$owner[0]['first_name']." ".$owner[0]['last_name'];
 		$vet_name=$vet[0]['first_name']." ".$vet[0]['last_name'];
@@ -1234,10 +1050,10 @@ if($_SESSION['passwordcheck']!='pass'){
 	if(isset($horse_name)&&$horse_name&&$_SESSION['role_mode']==0){
 		print "<span id='title'>".$horse_name." Caval-Connected </span><span><input id='logout' type ='submit' name ='logout' class= 'btn btn-danger' value = 'Logout $_SESSION[first]' onclick='parent.location=&quot;logout.php&quot;'></span>";
 	}elseif(isset($role_mode)&&$role_mode==1){
-		print "<span id='title'> Caval-Connected as ".$filter.": ".$role_name." </span><span><input id='logout' type ='submit' name ='logout' class= 'btn btn-danger' value = 'Logout $_SESSION[first]' onclick='parent.location=&quot;logout.php&quot;'></span>";
+		print "<span id='title'> Caval-Connected as ".$filter.": ".$role_name." </span><span class='login'><input id='logout' type ='submit' name ='logout' class= 'btn btn-danger' value = 'Logout $_SESSION[first]' onclick='parent.location=&quot;logout.php&quot;'></span>";
 	}
 	else{
-		print "<span id='title'>Caval-Connect </span><span><input id='logout' type ='submit' name ='logout' class= 'btn btn-danger' value = 'Logout $_SESSION[first]' onclick='parent.location=&quot;logout.php&quot;'></span>";
+		print "<span id='title'>Caval-Connect </span><span class='logout'><input id='logout' type ='submit' name ='logout' class= 'btn btn-danger' value = 'Logout $_SESSION[first]' onclick='parent.location=&quot;logout.php&quot;'></span>";
 	}
 }
 	
@@ -1369,7 +1185,9 @@ if($_SESSION['passwordcheck']!='pass'){
 		
 		print "</h6></td></tr>";
 		?>
-		<tr><td>Reminders:</tr></td></table><!--end west container div>-->
+		<tr><td>Reminders:</tr></td>
+		<tr><td id='notification_center'></td></tr>
+		</table><!--end west container div>-->
 		
 		<div  class='DivWithScroll ui-layout-content'>
 		<table id="west_data2" width="100%" align="center">
@@ -1382,7 +1200,7 @@ print "<h6>";
 if($physicals){
 	print"<tr id='remind'><td class='bold'>Physicals:</td></tr>";
 		foreach($physicals as $data){
-			print "<tr id='remind'>";
+			print "<tr class='remind' id='remind'>";
 				print "<td>".getHorseName($data['horse_key'],$horse_data)." ".date('l',strtotime($data['next_date']))."</td>";
 			print "</tr>";
 		}
@@ -1392,7 +1210,7 @@ if($physicals){
 if($farrier){
 	print"<tr id='remind'><td class='bold'>Farrier:</td></tr>";
 		foreach($farrier as $data){
-			print "<tr id='remind'>";
+			print "<tr class='remind' id='remind'>";
 				print "<td>".getHorseName($data['horse_key'],$horse_data)." ".date('l',strtotime($data['next_date']))."</td>";
 			print "</tr>";
 		}
@@ -1402,7 +1220,7 @@ if($farrier){
 if($dental){
 	print"<tr id='remind'><td class='bold'>Dental:</td></tr>";
 		foreach($dental as $data){
-			print "<tr id='remind'>";
+			print "<tr class='remind' id='remind'>";
 				print "<td>".getHorseName($data['horse_key'],$horse_data)." ".date('l',strtotime($data['next_date']))."</td>";
 			print "</tr>";
 		}
@@ -1459,12 +1277,10 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
     	if(isset($horse_info)){
         	foreach($horse_info as $row){
   	  	 		print "<h3 id='insert_image_response'>".$row['horse_name']."'s information</h3>";
-  	  	 		
   	  	 		print "<div id='delete_info".$row['key']."'>";
   	  	 		print "<table>";//big table
-  	  	 			print "<tr><td width='260'><IMG STYLE='border:2px solid black; border-radius:5px; width:250px;' SRC='".str_replace('_',' ',$row['horse_image'])."' ALT='Home'></td>";
+  	  	 			print "<tr><td width='260'><IMG STYLE='border:2px solid black; border-radius:5px; width:250px;' SRC='".str_replace('_',' ',$row['image'])."' ALT='No Image on File'></td>";
 						print "<td><table id='horse_info'>";//small table
-
 		  	  	 		foreach($info_field_labels as $label){
 		  	  	 			if($label!="key"&&$label!="horse_key"&&$label!="horse_image"&&$label!="facility_key"){
 		  	  	 				print "<tr>";
@@ -1488,20 +1304,23 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	  	 			print "</td></tr>";
   	  	 		print "<tr><td><br></td></tr>";
   				print "</table>";//end big table
-  	  	 		?><div id='insert_image_response'>
-
+  				?>
+  	  	 		<div id='insert_image_response'>
 	 				<form action="image_upload.php" method="post" enctype="multipart/form-data">
 						<label for="file">Choose New Image:</label>
-						<? print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";?>
-						<input type="file" name="file" id="file" value=><br>
-						<input type='hidden' name='table' id='table' value="information" />
-						<input type='hidden' name='image_type' id='image_type' value="horse_image" />
-						<!--<input type="submit" name="submit" value="Submit Image" class= "btn btn-warning">-->
+						<? print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";
+						print "<input type='hidden' name='record_key' value= ".$row['key']." />";?>
+						<input type='hidden' name='tab_name' id='tab_name' value="information" />
+						<input type='hidden' name='description' id='p_description' value="" />
+						<input type='file' name='file' id='file'  value=><br>
+						<input type='hidden' name='content'  value="info" />
+						<input type='hidden' name='image_key' value="" />
 						<input 	id="submit_image" type = "submit" name = "submit_image" class= "btn btn-warning" value = "Submit-Image"/>
 					</form>
-				</div><!--image response div-->
-				<?
-	  	     		print "<table><tr>";
+				</div>
+
+			
+	  	     		<?print "<table><tr>";
 	   	  			if($_SESSION['access']<2){//script for deleting record
 	  	  				$element='delete_info'.$row['key'];
 	  	  				$name=$row['horse_name'];
@@ -1527,43 +1346,15 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
         	foreach($horse_info as $row){
 				print "<form  action='javascript:update_horse()' method='post'>";//update horse form
 				print "<input type='hidden' name='nhorse_key' id='uhorse_key' value=".$horse_key." />";
-				print "<input type='hidden' name='nhorse_image' id='uhorse_image' value=".$row['horse_image']." />";
+				print "<input type='hidden' name='nhorse_image' id='uhorse_image' value=".$row['image']." />";
 				print "<input type='hidden' name='nhorse_record' id='uhorse_record' value='update' />";
 				print "<table>";
   	  	 		foreach($info_field_labels as $label){
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="owner_key"&&$label!="vet_key"&&$label!="farrier_key"&&$label!="horse_image"&&$label!="facility_key"){
   	  	 				print "<tr>";
   	  	 					if($label=="date_foaled"||$label=="date"||$label=="next_date"){
-  	  	 						//begin date selection - datepicker has problems with touch screens!!
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='umonth' name = 'umonth' >";
-									print "<option value = '".date('m',strtotime($row[$label]))."'>".date('M',strtotime($row[$label]))."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='uday' name='uday'><option value='".date('d',strtotime($row[$label]))."'>".date('d',strtotime($row[$label]))."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='uyear' name='uyear'><option value='".date('Y',strtotime($row[$label]))."'>".date('Y',strtotime($row[$label]))."</option>";
-								for ($i=1990;$i<=date('Y');$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "</td>";
-								//end date selections
+  	  	 						print "<td><input id='udatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select'/></td>";
   	  	 					}elseif($label=="height"){
   	  	 						//slect for height
 	  	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
@@ -1573,7 +1364,6 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 											print"<option value=$j>$j</option>";
 										}//end while
 								print "</select></td>";
-  	  	 					
   	  	 					}elseif($label=="weight"){
   	  	 						//slect for weight
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='u".$label."' id='u".$label."'>";
@@ -1582,7 +1372,6 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 										print"<option value=$i>$i</option>";
 									}//end while
 								print "</select></td>";
-  	  	 					
   	  	 					}
    	  	 					elseif($label=="temperature"){
   	  	 						//slect for weight
@@ -1592,7 +1381,6 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 											print"<option value=$i>$i</option>";
 										}//end while
 								print "</select></td>";
-  	  	 					
   	  	 					}
   	  	 					elseif($label=="pulse"){
   	  	 						//slect for weight
@@ -1602,7 +1390,6 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 											print"<option value=$i>$i</option>";
 										}//end while
 								print "</select></td>";
-  	  	 					
   	  	 					}
   	  	 					elseif($label=="respiration"){
   	  	 						//slect for weight
@@ -1612,7 +1399,6 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 											print"<option value=$i>$i</option>";
 										}//end while
 								print "</select></td>";
-  	  	 					
   	  	 					}
   	  	 					elseif($label=="sex"){
   	  	 						//slect for weight
@@ -1717,35 +1503,10 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$_SE
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="owner_key"&&$label!="vet_key"&&$label!="farrier_key"&&$label!="horse_image"&&$label!="facility_key"){
   	  	 				print "<tr>";
   	  	 					if($label=="date_foaled"||$label=="date"||$label=="next_date"){
-  	  	 						//begin date selection - datepicker has problems with touch screens!!
+
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='umonth".$horse['key']."' name = 'umonth' >";
-									print "<option value = '".date('m',strtotime($horse[$label]))."'>".date('M',strtotime($horse[$label]))."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='uday".$horse['key']."' name='uday'><option value='".date('d',strtotime($horse[$label]))."'>".date('d',strtotime($horse[$label]))."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='uyear".$horse['key']."' name='uyear'><option value='".date('Y',strtotime($horse[$label]))."'>".date('Y',strtotime($horse[$label]))."</option>";
-								for ($i=1990;$i<=date('Y');$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "</td>";
+  	  	 						print "<td><input id='udatetimepicker5".$horse['key']."' name='datetimepicker5' type='text' placeholder='Click to select'/></td>";
+
 								//end date selections
   	  	 					}elseif($label=="height"){
   	  	 						//slect for height
@@ -1959,17 +1720,16 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$_SE
   	  	 		<span id="myCarousel" class="carousel slide physical" style="width:50%;">
   	  	 			<div class="carousel-inner" STYLE='border:2px solid black; border-radius:5px;'>
   	  	 				<?
-  	  	 				//print "<div class='active item'><img  src='".img/physicalimg/HM0001.jpg."' alt=''></div>";
   	  	 				$i=0;
   	  	 				foreach($imageResult as $image_row){
-  	  	 					if($image_row['type']=='xray'){
+  	  	 					if($image_row['content']=='xray'){
   	  	 						if($i==0){
   	  	 							$item="active item";
   	  	 							}else{
   	  	 								$item="item";
   	  	 							}
-  	  	 						print "<div class='".$item."'><img  src='".$image_row[location]."' alt=''>";
-  	  	 						print "<div class='carousel-caption'><p>".$image_row[description]."</p></div>";
+  	  	 						print "<div class='".$item."'><img  src='".$image_row['location']."' alt=''>";
+  	  	 						print "<div class='carousel-caption'><p>".$image_row['description']."</p></div>";
   	  	 						print "</div>";//end img div
   	  	 						$i++;
   	  	 					}
@@ -1984,8 +1744,8 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$_SE
 	  	  	 	print "<div class='new_line'></div>";
 		  	  	 	if($imageResult){
 		   	  	 		foreach($imageResult as $image_row){
-		  	  	 			if($image_row['type']=='blood_panel'){
-		  	  	 				print "<div class='physical_right' style='width:50%;'><IMG STYLE='border:2px solid black; border-radius:5px;' SRC='".$image_row[location]."' ALT='Blood Values not found'></div>";
+		  	  	 			if($image_row['content']=='blood_panel'){
+		  	  	 				print "<div class='physical_right' style='width:50%;'><IMG STYLE='border:2px solid black; border-radius:5px;' SRC='".$image_row['location']."' ALT='Blood Values not found'></div>";
 		  	  	 			}
 		  	  	 		}
 		  	  	 	} 	  	 	
@@ -2006,31 +1766,28 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$_SE
 						print "</form>";
 		  	  	 	}
 								?>
-	 				<form action="image_upload.php" method="post" enctype="multipart/form-data">	
-						<label for="file">Choose New Radiograph:</label>
-						<? print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";?>
-						<? print "<input type='hidden' name='image_key' id='image_key' value=".$row['key']." />";?>
-						<input type='hidden' name='data_type' id='data_type' value="xray" />
-						<input type='hidden' name='table' id='table' value="physical" />
-						<input type='hidden' name='image_type' id='image_type' value="xray" />
-						<input type='file' name='file' id='file' onchange="showTextArea('<? echo $ele_counter;?>',&quot;xdescription&quot;);" value=><br>
-						<textarea rows="3" placeholder="Image description. . ." name="xdescription" style='display:none;' id="xdescription"></textarea>
-						<!--<input type="submit" name="submit" value="Submit Image" class= "btn btn-warning">-->
-						<input 	id="submit_xray" type = "submit" name = "submit_image" class= "btn btn-warning" value = "Submit-Xray"/>
-					</form>
-	 				<form action="image_upload.php" method="post" enctype="multipart/form-data">	
-						<label for="file">Upload Blood Panel PDF:</label>
-						<? print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";?>
-						<? print "<input type='hidden' name='image_key' id='image_key' value=".$row['key']." />";?>
-						<input type='hidden' name='data_type' id='data_type' value="blood_panel" />
-						<input type='hidden' name='table' id='table' value="physical" />
-						<input type='hidden' name='image_type' id='image_type' value="blood_panel" />
-						<input type="file" name="file" id="file" value=><br>
-						<!--<input type="submit" name="submit" value="Submit Image" class= "btn btn-warning">-->
-						<input 	id="submit_xray" type = "submit" name = "submit_image" class= "btn btn-warning" value = "Submit Blood Values"/>
-					</form>
+
+	 				<form action="image_upload.php" method="post" enctype="multipart/form-data">
+						<label for="file">Choose New Image:</label>
+						<? 
+						print "<input type='hidden' name='horse_key' value='".$horse_key."' />";
+						print "<input type='hidden' name='record_key' value= ".$row['key']." />";
+						
+						print "<input type='hidden' name='image_key' value=5 />";
+						print "<input type='hidden' name='tab_name' value='physical' />";
+						print "<input type='hidden' name='image_key' value='' />";
+						print "<input type='file' name='file' id='file' onchange=showTextArea('".$row['key']."','p_image_') value=><br>";
+						print "<textarea rows='3' placeholder='Image description. . .'' name='description' id='".$row['key']."p_image_description' style='display:none;'></textarea>";
+						print "<select name='content' id='".$row['key']."p_image_content' style='display:none;'>";
+							print "<option value=''>Select Image Content</option>";
+							print "<option value='xray'>xray</option>";
+							print "<option value='blood_panel'>blood panel</option>";
+						print "</select><br>";
+						
+						print "<input 	id='submit_image' type = 'submit' name = 'submit_image' class= 'btn btn-warning' value = 'Submit-Image'/>";
+					print "</form>";
 			
-					<?
+					
 	  	     		if($_SESSION['access'] <2){//only manager can delete
 	  	     		print "<table><tr>";
 	   	  			if($_SESSION['access']<2){//script for deleting record
@@ -2069,63 +1826,15 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$_SE
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="facility_key"){
   	  	 				print "<tr>";
   	  	 					if($label=="date"){
+
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='pmonth' name = 'pmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='pday' name='pday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='pyear' name='pyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "</td>";
+  	  	 						print "<td><input id='pdatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select'/></td>";
+
   	  	 					}elseif($label=="next_date"){
+
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='pnmonth' pname = 'umonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='pnday' name='pnday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='pnyear' name='pnyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "</td>";
+  	  	 						print "<td><input id='pndatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select'/></td>";
+
   	  	 					}elseif($label=="blood_drawn"||$label=="fecal_sampled"||$label=="sheath_cleaned"||$label=="teeth_floated"||$label=="vaccination_given"||$label=="fecal_sampled"||$label=="radiograph_taken"){
   	  	 						print "<tr height='30'><td width='150'>".str_replace('_',' ',$label)."</td><td><input type='radio' id='p".$label."' name='p".$label."' value='2'> Yes <input type='radio' id='p".$label."' name='p".$label."' value='1' checked> No </td></tr>";
   	  	 					}elseif($label=="temperature"){
@@ -2263,63 +1972,15 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$_SE
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="facility_key"){
   	  	 				print "<tr>";
   	  	 					if($label=="date"){
+
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='pmonth".$horse['key']."' name = 'pmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='pday".$horse['key']."' name='pday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='pyear".$horse['key']."' name='pyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "</td>";
+  	  	 						print "<td><input id='pdatetimepicker5".$horse['key']."' name='datetimepicker5' type='text' placeholder='Click to select'/></td>";
+
   	  	 					}elseif($label=="next_date"){
+
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='pnmonth".$horse['key']."' pname = 'umonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='pnday".$horse['key']."' name='pnday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='pnyear".$horse['key']."' name='pnyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "</td>";
+  	  	 						print "<td><input id='pndatetimepicker5".$horse['key']."' name='datetimepicker5' type='text' placeholder='Click to select'/></td>";
+
   	  	 					}elseif($label=="blood_drawn"||$label=="fecal_sampled"||$label=="sheath_cleaned"||$label=="teeth_floated"||$label=="vaccination_given"||$label=="fecal_sampled"||$label=="radiograph_taken"){
   	  	 						print "<tr height='30'><td width='150'>".str_replace('_',' ',$label)."</td><td><input type='radio' id='p".$label.$horse['key']."' name='p".$label.$horse['key']."' value='2'> Yes <input type='radio' id='p".$label.$horse['key']."' name='p".$label.$horse['key']."' value='1' checked> No </td></tr>";
   	  	 					}elseif($label=="temperature"){
@@ -2451,18 +2112,6 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$_SE
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 <div id="fragment-2"><!-- ############################### VACCINATION TAB  #################################!!!!!!!! -->
 
 <?
@@ -2488,9 +2137,9 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 				if($infection[$row['type']]==1){	
 					if(in_array($infection['infection'],$immune['infection'])){
 						$key = array_search($infection['infection'],$immune['infection']);
-						if(strtotime($immune['date'][$key])<strtotime($row['date'])){
+						if(strtotime($immune['treat_date'][$key])<strtotime($row['date'])){
 							
-							$immune['date'][$key]=$row['date'];
+							// $immune['date'][$key]=$row['date'];
 							$immune['product'][$key]=$row['type'];
 							$immune['infection'][$key]=$infection['infection'];
 							$immune['treat_date'][$key]=$row['date'];
@@ -2546,12 +2195,14 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
       	print "<tr class='bottom_borderh'  style='font-weight:bold; padding-right:5px'><td class='bottom_borderh'  width='150'>Product</td><td class='bottom_borderh'  width='150'>Infection</td><td class='bottom_borderh'  width='150'>Treatment Date</td><td class='bottom_borderh'  width='150'>Expiration</td></tr>";
       	$i=0;
       	for($i==0;$i<count($immune['product']);$i++){
-      		print "<tr>";
-      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',$immune['product'][$i])."</td>";
-      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',$immune['infection'][$i])."</td>";
-      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',date('F j Y',strtotime($immune['treat_date'][$i])))."</td>";
-      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',date('F j Y',strtotime($immune['expiration'][$i])))."</td>"; 
-      		print "</tr>";
+      		if(date("Y-m-d")<$immune['expiration'][$i]){
+	      		print "<tr>";
+	      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',$immune['product'][$i])."</td>";
+	      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',$immune['infection'][$i])."</td>";
+	      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',date('F j Y',strtotime($immune['treat_date'][$i])))."</td>";
+	      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',date('F j Y',strtotime($immune['expiration'][$i])))."</td>"; 
+	      		print "</tr>";
+	      	}
       	}//end immune while   
       	print "</table>"; 
    print "</div>";
@@ -2575,61 +2226,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	  	 				print "<tr>";
   	  	 					if($label=="date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='vmonth' name = 'vmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='vday' name='vday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='vyear' name='vyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='".$i."'>".$i."</option>";
-								}
-								print "</select>";
+  	  	 						print "<td>";						
+									print "<input id='vdatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="next_date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='vnmonth' name = 'vnmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='vnday' name='vnday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='vnyear' name='vnyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+			  	  	 				print "<input id='vndatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="type"){// Vaccination Product
 								print "<tr><td width='150'>Vaccination Product</td>";
@@ -2711,61 +2314,13 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	  	 				print "<tr>";
   	  	 					if($label=="date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='vmonth".$horse['key']."' name = 'vmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='vday".$horse['key']."' name='vday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='vyear".$horse['key']."' name='vyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='".$i."'>".$i."</option>";
-								}
-								print "</select>";
+  	  	 						print "<td>";						
+									print "<input id='vdatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="next_date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='vnmonth".$horse['key']."' name = 'vnmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='vnday".$horse['key']."' name='vnday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='vnyear".$horse['key']."' name='vnyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+									print "<input id='vndatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="type"){// Vaccination Product
 								print "<tr><td width='150'>Vaccination Product</td>";
@@ -2862,7 +2417,7 @@ $dental_field_labels=GetMysqlFieldNames("dental", $dbname);
         		$ele_counter=0;
         	foreach($dentalResult as $row){
   	  	 		print "<h3>".$row['date']."</h3>";
-  	  	 		print "<div id='dental".$row[key]."'>";
+  	  	 		print "<div id='dental".$row['key']."'>";
   	  	 		$delete_table=3;
   	  	 		print "<span class='physical'>"; 	 	
   	  	 		print "<table>";
@@ -2886,7 +2441,7 @@ $dental_field_labels=GetMysqlFieldNames("dental", $dbname);
   	  	 		<form action="image_upload.php" method="post" enctype="multipart/form-data">
   	  	 			<br></br>
   	  	 			<? print "<input type='hidden' name='horse_key' id='horse_key' value=".$horse_key." />";?>
-					<? print "<input type='hidden' name='image_key' id='image_key' value=".$row[key]." />";?>	
+					<? print "<input type='hidden' name='image_key' id='image_key' value=".$row['key']." />";?>	
 					<label for="file">Choose New Dental Image:</label>
 					<input type='hidden' name='data_type' id='data_type' value="dimage" />
 					<input type='hidden' name='table' id='table' value="dental" />
@@ -2929,12 +2484,12 @@ $dental_field_labels=GetMysqlFieldNames("dental", $dbname);
 <?				}// end if $imageResult	
      		
      		
-  	     		if($_SESSION[access] <2){//only manager can delete
+  	     		if($_SESSION['access'] <2){//only manager can delete
   	  	 			$delete_table=1;
   	     		print "<table style='float:left;'><tr>";
    	  			if($_SESSION['access']<2){//script for deleting record
   	  				$element='dental'.$row['key'];
-  	  				$name=$row['horse_name'];
+  	  				$name=$row['horse_key'];
   	  				$delete_table='dental';
   	  				print "<form action='javascript:delete_record(".$row['key'].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
   	  	 			//print "<input type='hidden' id='physical_delete' value='info".$row[key]."'>";
@@ -2970,60 +2525,12 @@ $dental_field_labels=GetMysqlFieldNames("dental", $dbname);
   	  	 					if($label=="date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='dmonth' name = 'dmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='dday' name='dday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='dyear' name='dyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+									print "<input id='ddatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="next_date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='dnmonth' name = 'dnmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='dnday' name='dnday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='dnyear' name='dnyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+  	  	 						print "<td>";						
+									print "<input id='dndatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="procedure"){
   	  								print "<td width='150'>".$label."</td>";
@@ -3087,60 +2594,12 @@ $dental_field_labels=GetMysqlFieldNames("dental", $dbname);
   	  	 					if($label=="date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='dmonth".$horse['key']."' name = 'dmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='dday".$horse['key']."' name='dday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='dyear".$horse['key']."' name='dyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+									print "<input id='ddatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="next_date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='dnmonth".$horse['key']."' name = 'dnmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='dnday".$horse['key']."' name='dnday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='dnyear".$horse['key']."' name='dnyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+  	  	 						print "<td>";						
+									print "<input id='dndatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="procedure"){
   	  								print "<td width='150'>".$label."</td>";
@@ -3193,20 +2652,6 @@ $dental_field_labels=GetMysqlFieldNames("dental", $dbname);
 
 	</div> <!--end accordion-->  
 	</div> <!--end fragment-3-->
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 <div id="fragment-4"><!--FARRIER ACCORDION -->
@@ -3277,60 +2722,12 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	  	 					if($label=="date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='fmonth' name = 'fmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='fday' name='fday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='fyear' name='fyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+									print "<input id='fdatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="next_date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='fnmonth' name = 'fnmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='fnday' name='fnday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='fnyear' name='fnyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+  	  	 						print "<td>";						
+									print "<input id='fndatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="comments"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td><td><textarea rows='3' placeholder='Enter general comments or recommendations. . .' id='f".$label."'></textarea></td>";
@@ -3363,7 +2760,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 								foreach($farrier_data as $data){
 									print"<option value=$data[key]>$data[first_name] $data[last_name]</option>";
 								}//end foreach
-							print "<option value='0'>New Vet</select>";
+							print "<option value='0'>New Farrier</select>";
 						print "</select>";
   	 					print "</td>";
   	 				print "</tr>";
@@ -3395,63 +2792,15 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$_SE
   	  	 					if($label=="date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
   	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='fmonth".$horse['key']."' name = 'fmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='fday".$horse['key']."' name='fday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='fyear".$horse['key']."' name='fyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+									print "<input id='fdatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="next_date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='fnmonth".$horse['key']."' name = 'fnmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='fnday".$horse['key']."' name='fnday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='fnyear".$horse['key']."' name='fnyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+  	  	 						print "<td>";						
+									print "<input id='fndatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="comments"){
-  	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td><td><textarea rows='3' placeholder='Enter general comments or recommendations. . .' id='f".$label."'></textarea></td>";
+  	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td><td><textarea rows='3' id='fcomments".$horse['key']."' placeholder='Enter general comments or recommendations. . .' id='f".$label."'></textarea></td>";
   	  	 					}elseif($label=="procedure"){
   	  								print "<td width='150'>".$label."</td>";
   	  								print "<td><select id ='fprocedure".$horse['key']."' name = 'fprocedure' onchange='showOtherText(this.value,&quot;fprocedure_other".$horse['key']."&quot;); showOtherText(this.value,&quot;fprocedureother".$horse['key']."&quot;);'>";
@@ -3483,7 +2832,7 @@ elseif(isset($role_key)&&$role_mode==1&&$_SESSION['passwordcheck']=='pass'&&$_SE
 										foreach($farrier_data as $data){
 											print"<option value=$data[key]>$data[first_name] $data[last_name]</option>";
 										}//end foreach
-									print "<option value='0'>New Vet</select>";
+									print "<option value='0'>New Farrier</select>";
 								print "</select>";
   	  	 					print "</td>";
   	  	 				print "</tr>";
@@ -3545,7 +2894,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 				}//end outer if
 			}//end inner foreach
     		
-  	  	 		print "<h3>".$row['date']." Parasite</h3>";
+  	  	 		print "<h3>".$row['date']." Treatment</h3>";
   	  	 		print "<div id='parasite".$row['key']."'>"; 	  	 		
   	  	 		print "<table>";
   	  	 		foreach($parasite_field_labels as $label){
@@ -3562,10 +2911,10 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	  	 			}
   	  	 		}
   	  	 		
-  	     		if($_SESSION[access] <2){//only manager can delete
+  	     		if($_SESSION['access'] <2){//only manager can delete
   	     		print "<tr><td><br></td></tr><tr>";
   	  				$element='parasite'.$row['key'];
-  	  				$name=$row['horse_name'];
+  	  				$name=$row['horse_key'];
   	  				$delete_table='parasite';
   	  				print "<form action='javascript:delete_record(".$row['key'].",&quot;".$delete_table."&quot;,&quot;".$element."&quot;,&quot;".$name."&quot;)' method='post' enctype='multipart/form-data'>";
   	     			print "<td id='delete_parasite".$row['key']."'><input id='delete_par".$row['key']."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete ".$row['date']." Deworm' /></td>";
@@ -3584,12 +2933,14 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
       	print "<tr class='bottom_borderh' style='font-weight:bold; padding-right:5px'><td class='bottom_borderh' width='150'>Product</td><td class='bottom_borderh' width='150'>Infection</td><td class='bottom_borderh' width='150'>Treatment Date</td><td class='bottom_borderh' width='150'>Expiration</td></tr>";
       	$i=0;
       	for($i==0;$i<count($immune['product']);$i++){
-      		print "<tr>";
-      			print "<td class='bottom_borderr' width='150'>".str_replace('_',' ',$immune['product'][$i])."</td>";
-      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',$immune['infection'][$i])."</td>";
-      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',$immune['treat_date'][$i])."</td>";
-      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',$immune['expiration'][$i])."</td>"; 
-      		print "</tr>";
+      		if(date("Y-m-d")<$immune['expiration'][$i]){
+	      		print "<tr>";
+	      			print "<td class='bottom_borderr' width='150'>".str_replace('_',' ',$immune['product'][$i])."</td>";
+	      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',$immune['infection'][$i])."</td>";
+	      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',$immune['treat_date'][$i])."</td>";
+	      			print "<td class='bottom_borderr'  width='150'>".str_replace('_',' ',$immune['expiration'][$i])."</td>"; 
+	      		print "</tr>";
+	      	}
       	}//end immune while   
       	print "</table>"; 
       print "</div>";
@@ -3616,68 +2967,20 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	  	 				print "<tr>";
   	  	 					if($label=="date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='pamonth' name = 'pamonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='paday' name='paday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='payear' name='payear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+  	  	 						print "<td>";						
+									print "<input id='padatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="next_date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='panmonth' name = 'panmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='panday' name='panday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='panyear' name='panyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+  	  	 						print "<td>";						
+									print "<input id='pandatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="type"){// PARASITE Product
 								print "<tr><td width='150'>Parasite Product</td>";
 								print "<td td width='150'>";
 								print "<select style='width: 150;' id='patype' name='patype'>";
 								print "<option value=''>Select Product</option>";
-								foreach($deworm_products as $product){
+								foreach($dewormer_products as $product){
 									if($product!="infection"){
 										print "<option value='".$product."'>".str_replace('_',' ',$product)."</option>";
 									}
@@ -3726,68 +3029,20 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	  	 				print "<tr>";
   	  	 					if($label=="date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='pamonth".$horse['key']."' name = 'pamonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='paday".$horse['key']."' name='paday".$horse['key']."'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='payear".$horse['key']."' name='payear".$horse['key']."'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+  	  	 						print "<td>";						
+									print "<input id='padatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="next_date"){
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='panmonth".$horse['key']."' name = 'panmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='panday".$horse['key']."' name='panday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='panyear".$horse['key']."' name='panyear'><option value='".(date('Y')+1)."'>".(date('Y')+1)."</option>";
-								for ($i=date('Y')-1;$i<=date('Y')+2;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+  	  	 						print "<td>";						
+									print "<input id='pandatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/>";
 								print "</td>";
   	  	 					}elseif($label=="type"){// PARASITE Product
 								print "<tr><td width='150'>Parasite Product</td>";
 								print "<td td width='150'>";
 								print "<select style='width: 150;' id='patype".$horse['key']."' name='patype'>";
 								print "<option value=''>Select Product</option>";
-								foreach($deworm_products as $product){
+								foreach($dewormer_products as $product){
 									if($product!="infection"){
 										print "<option value='".$product."'>".str_replace('_',' ',$product)."</option>";
 									}
@@ -4061,7 +3316,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	     					}
   	  	 				}
   	  	 				
-  	  	 			if($_SESSION[access]=="1"){
+  	  	 			if($_SESSION['access']=="1"){
   	  	 				print "<input type='hidden' id='admin_delete' value='".$row['key']."'>";
   	     				print "<tr><td><input 	id='delete_history' type = 'submit' name = 'delete_history' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete Record' /></td></tr>";
   	  	 			}//end session global if
@@ -4088,34 +3343,9 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 			print "<table>";
   	  	 		foreach($history_field_labels as $label){
   	  	 			  	  if($label=="date"){
-  	  	 						
-  	  	 						print "<tr><td>";						
-  	  	 						print "<select style='width: auto;' id ='hmonth' name = 'hmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='hday' name='hday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='hyear' name='hyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "</td></tr>";
+  	  	 			  	  		print "</tr>";
+	  	  	 						print "<td><input id='hdatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/></td>";
+								print "</tr>";
   	  	 					}//end date if  	  	 			
   	  	 					elseif($label!="key"&&$label!="horse_key"&&$label!="facility_key"){
   	  	 						print "<tr>";
@@ -4148,34 +3378,9 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	 			print "<table>";
   	  	 		foreach($history_field_labels as $label){
   	  	 			  	  if($label=="date"){
-  	  	 						
-  	  	 						print "<tr><td>";						
-  	  	 						print "<select style='width: auto;' id ='hmonth".$horse['key']."' name = 'hmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='hday".$horse['key']."' name='hday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='hyear".$horse['key']."' name='hyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "</td></tr>";
+  	  	 			  	  		print "<tr>";
+	  	  	 						print "<td><input id='hdatetimepicker5".$horse_key."' name='datetimepicker5' type='text' placeholder='Click to select DATE and TIME'/></td>";
+								print "</tr>";
   	  	 					}//end date if  	  	 			
   	  	 					elseif($label!="key"&&$label!="horse_key"&&$label!="facility_key"){
   	  	 						print "<tr>";
@@ -4240,7 +3445,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 				print "</td></tr>";
   	  	 		print "</table>";
   	  	 		print "<IMG STYLE='border:2px solid black; border-radius:5px; width:60%;' SRC='".$coggins."' ALT='".$coggins."'>";
-  	     		if($_SESSION[access]=="1"){
+  	     		if($_SESSION['access']=="1"){
   	  	 			$delete_table=8;
  			 		/*print "<form action='javascript:delete_record(".$row[key].",".$delete_table.")' method='post' enctype='multipart/form-data'>"; 
   	     			print "<input 	id='delete_physical' type = 'submit' name = 'delete_physical' class= 'btn btn-danger delete_record' value = 'Delete ".$row['date']." Data' onclick='delete_precord(".$row[key].")'/>";*/
@@ -4250,7 +3455,7 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	     		print "</div>";
  			 }//end foreach loop
         }else{
- 		 	print "No Coggins has been recorded for". $horse_name;
+ 		 	print "No Coggins has been recorded for ". $horse_name;
  		 	$cimage_key=0;
  		 }//end if coggins result
         }//end access
@@ -4261,60 +3466,29 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	  	 print "<div id='coggins_response'>";
   	  	 if($_SESSION['access']<5){//allow to update information
   	  	 if($horse_key!=''){
-  	  	 	
-  	  	 ?>
-  	  	 <!-- Show Message for AJAX response -->
-			
-  	  	 <form action="image_upload.php" method="post" enctype="multipart/form-data">
-  	  	 <?
+  	  	 print "<form action='image_upload.php' method='post' enctype='multipart/form-data'>";
 			print "<table>";
-  	  	 		foreach($coggins_field_labels as $label){
-  	  	 			if($label!="key"&&$label!="horse_key"&&$label!="image"&&$label!="facility_key"){
-  	  	 				print "<tr>";
-  	  	 					if($label=="date"){
-  	  	 						print "<td>".str_replace('_',' ',$label)."</td>";
-  	  	 						  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='cmonth' name = 'cmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='cday' name='cday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='cyear' name='cyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "</td>";
-  	  	 					}//end date if
-  	  	 			}//end label if
-  	  	 		}//foreach
-  	  	 		?>
-					<tr><td><label for="file">Choose New Coggins File:</label></td></tr>
-					  	  	<?print "<input type='hidden' name='horse_key' id='horse_key' value='".$horse_key."'/>";
-		print "<input type='hidden' name='horse_key' id='horse_key' value='".$horse_key."'/>";
-		print "<input type='hidden' name='cimage_key' id='cimage_key' value='".$cimage_key."'/>";
-		print "<tr><td><input type='hidden' name='table' id='table' value='coggins' />";?>
-					<input type='hidden' name='image_type' id='image_type' value="coggins" />
-					<input type="file" name="file" id="file" value=><br></td></tr>
-					<tr><td><input 	id="submit_coggins" type = "submit" name = "submit_image" class= "btn btn-warning" value = "Submit-Coggins"/></td></tr>
-				</table>
-				</form>
-				<?
+					print "<tr><td><label for='file'>Choose New Coggins File:</label></td></tr>";
+					  	  	print "<input type='hidden' name='horse_key' id='horse_key' value='".$horse_key."'/>";
+								print "<input type='hidden' name='horse_key' id='horse_key' value='".$horse_key."'/>";
+								print "<input type='hidden' name='cimage_key' id='cimage_key' value='".$cimage_key."'/>";
+								print "<tr><td><input type='hidden' name='table' id='table' value='coggins' />";
+								print "<input type='hidden' name='image_type' id='image_type' value='coggins' />";
+								print "<input type='file' name='file' id='file' value=><br></td></tr>";
+			  	  	 		foreach($coggins_field_labels as $label){
+			  	  	 			if($label!="key"&&$label!="horse_key"&&$label!="image"&&$label!="facility_key"){
+			  	  	 				print "<tr>";
+			  	  	 					if($label=="date"){
+			  	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
+			  	  	 						print "<td><input id='cdatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select'/></td>";
+			  	  	 					}//end date if
+			  	  	 				print "</tr>";
+			  	  	 			}//end label if
+			  	  	 		}//foreach
+					print "<tr><td><input 	id='submit_coggins' type = 'submit' name = 'submit_image' class= 'btn btn-warning' value = 'Submit-Coggins'/></td></tr>";
+				print "</table>";
+				print "</table>";
+				print "</form>";
   	  	 }else{//end if($horse_key!='')
   	  	 	print"Please select a horse";
   	  	 }
@@ -4332,7 +3506,6 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 					print "<h3><strong>".$horse['horse_name']."</strong>  ".$message."</h3>";
      				print "<div id='coggins_response".$horse['key']."'>";//place content here
    				 	$element='coggins_response'.$horse['key'];
-   				 	
         			$cogginsResult=GetTableData("horse_key",$horse['key'], "coggins", $dbname);
         			if($cogginsResult){
         				foreach($cogginsResult as $row){
@@ -4348,33 +3521,8 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="image"&&$label!="facility_key"){
   	  	 				print "<tr>";
   	  	 					if($label=="date"){
-  	  	 						print "<td>".str_replace('_',' ',$label)."</td></tr>";
-  	  	 						print "<tr><td>";						
-  	  	 						print "<select style='width: auto;' id ='cmonth' name = 'cmonth' >";
-									print "<option value = '".date('m')."'>".date('M')."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='cday' name='cday'><option value='".date('d')."'>".date('d')."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='cyear' name='cyear'><option value='".date('Y')."'>".date('Y')."</option>";
-								for ($i=date('Y')-3;$i<=date('Y')+1;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
+	  	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
+	  	  	 						print "<td><input id='cdatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select'/></td>";
 								print "</td>";
   	  	 					}//end date if
   	  	 			}//end label if
@@ -4398,88 +3546,140 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 			}//end if horses exists
     }  	     	     		 
  		 ?>
-
-		</div> <!--end accordion-->  
-	</div> <!--end fragment-8 COGGINS-->
-
-
-
-
+	</div> <!--end accordion-->  
+</div> <!--end fragment-8 COGGINS-->
 <!-- ########################## Start Training TAB !!!!! ################################-->
-
 <div id="fragment-10">
 	<?
-
 	print "<div class='roleaccordion'>";
 	if($_SESSION['access']<3){//dont see this tab if vet or farrier
-
 	}// end $_SESSION['access']<3
-
 		$training_field_labels=GetMysqlFieldNames('training', $dbname);
-
 		$training_data=GetTableData('student_key',$_SESSION['login_key'],'training',$dbname);
-
-		$facility_horses=GetTableDataFacility('horse_key','ALL','Information',$dbname,$_SESSION['facility']);
-
+		$facility_horses=GetTableDataFacility('horse_key','ALL','information',$dbname,$_SESSION['facility']);
 		$trainers=GetTableData('trainer_key','ALL','login',$dbname);
-
+		$training_stats=GetStats('training','horse_key','duration','quality', 'training_date', $dbname);
 		$video_url = '';
-
 		if(isset($facility_horses)){
-			foreach($facility_horses as $horse){	
-				print "<h3 id='insert_training_response'>".$horse['horse_name']." Training logs</h3>";
+			foreach($facility_horses as $horse){
+				$ride=False;	
+				print "<h3 id='insert_training_response".$horse['key']."'>".$horse['horse_name']." Training logs</h3>";
 				print "<div>";
 					print "<div>";
-						print "<table width='500px' class='bottom_borderr'>";
-							foreach($training_data as $data){
-								if($data['horse_key']==$horse['key']){
-								
-									print "<tr><td width='75px' class='bottom_borderr bold'>Training Date:</td><td class='bottom_borderr'>".$data['training_date']."</td>";
-									print "<td width='75px' class='bottom_borderr bold'><strong>Trainer:</td><td class='bottom_borderr'>".getName($data['trainer_key'], 'login', $dbname)."</td>";
-									print "<td width='50px' class='bottom_borderr bold'><strong>Video:</td><td class='bottom_borderr'>".$data['video_url']."</td></tr>";
-									print "<tr><td width='100px' class='bottom_borderr bold'>Goals:</td><td class='bottom_borderr'>".$data['goal']."</td></tr>";
-									print "<tr><td width='100px' class='bottom_borderr bold'>Comments:</td><td class='bottom_borderr'>".$data['comment']."</td></tr>";
-									print "<tr class='blank_row bottom_borderr'><td colspan='4'></td></tr>";
-								}
-								
-							}
+
+						print "<table class='records'>";
+							print "<tr class='bottom_borderh'  style='font-weight:bold; padding-right:5px'><td class='bottom_borderh'  width='125'>Date (video link)</td><td class='bottom_borderh'  width='100'>Trainer</td><td class='bottom_borderh'  width='50'>Duration</td><td class='bottom_borderh'  width='50'>Quality</td>    <td class='bottom_borderh'  width='275'>Comments</td>  <td class='bottom_borderh'  width='250'>goals</td></tr>";
+									foreach($training_data as $data){
+										if($data['horse_key']==$horse['key']){
+											$ride=True;
+	      									print "<tr>";
+	      										if($data['video_url']!=''){
+								      				print "<td class='bottom_borderr'  width='125'><a href=".$data['video_url']." >".date('Y-m-d H:m',strtotime($data['training_date']))."</a></td>";
+								      			}else{
+								      				print "<td class='bottom_borderr'  width='125'>".date('Y-m-d H:m',strtotime($data['training_date']))."</td>";
+								      			}
+								      			if($data['trainer_key']<0){
+													print "<td class='bottom_borderr'  width='100'>Self</td>";
+								      			}else{
+								      				print "<td class='bottom_borderr'  width='100'>".getName($data['trainer_key'], 'login', $dbname)."</td>";
+								      			}
+								      			print "<td class='bottom_borderr'  width='50'>".$data['duration']."</td>";
+								      			print "<td class='bottom_borderr'  width='50'>".$data['quality']."</td>";
+								      			print "<td class='bottom_borderr'  width='250'>".$data['comment']."</td>";
+								      			print "<td class='bottom_borderr'  width='225'>".$data['goal']."</td>";
+
+	      									print "</tr>";
+	      								}
+	      							}
+	      					if($ride){
+								print "<tr class='bottom_borderh'  style='font-weight:bold; padding-right:5px'><td class='bottom_borderh'  width='125'>Training Interval</td><td class='bottom_borderh'  width='125'>Number of Rides</td><td class='bottom_borderh'  width='125'>Total Ride Duration (min)</td><td class='bottom_borderh'  width='125'>Average Ride Length (min)</td><td class='bottom_borderh'  width='125'>Average Ride Quality</td></tr>";
+									foreach($training_stats['week'] as $stat){
+
+										if($stat['horse_key']==$horse['key']){
+											print "<tr>";
+												print "<td class='bottom_borderr'  width='125'>Current Week</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".$stat['COUNT(horse_key)']."</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".$stat['SUM(duration)']."</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".round($stat['SUM(duration)']/$stat['COUNT(horse_key)'])."</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".$stat['ROUND(AVG(quality),1)']."</td>";
+										    print "</tr>";
+
+										}
+									}
+									foreach($training_stats['month'] as $stat){
+
+										if($stat['horse_key']==$horse['key']){
+											print "<tr>";
+												print "<td class='bottom_borderr'  width='125'>Current Month</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".$stat['COUNT(horse_key)']."</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".$stat['SUM(duration)']."</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".round($stat['SUM(duration)']/$stat['COUNT(horse_key)'])."</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".$stat['ROUND(AVG(quality),1)']."</td>";
+										    print "</tr>";
+
+										}
+									}
+									foreach($training_stats['all'] as $stat){
+
+										if($stat['horse_key']==$horse['key']){
+											print "<tr>";
+												print "<td class='bottom_borderr'  width='125'>All Time</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".$stat['COUNT(`horse_key`)']."</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".$stat['SUM(`duration`)']."</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".round($stat['SUM(`duration`)']/$stat['COUNT(`horse_key`)'])."</td>";
+										      	print "<td class='bottom_borderr'  width='125'>".$stat['ROUND(AVG(`quality`),1)']."</td>";
+										    print "</tr>";
+
+										}
+									}
+	      					}
+
 						print "</table>";
 					print "</div>";//end training logs div
-
-
-					print "<div class='roleaccordion'>";
+					print "<div  id='insert_training_response_log".$horse['key']."' class='roleaccordion'>";
 					print "<h3>Log Training Session</h3>";
-
-	        			print "<form action='javascript:insert_training(".$horse['key'].")' method='post'>";
+						$element = 'insert_training_response_log'.$horse['key'];
+	        			print "<form id='".$horse['key']."' action='javascript:insert_training(&quot;$element&quot;,".$horse['key'].")' method='post'>";
 	         			print "<input type='hidden' name='horse_key' id='horse_key".$horse['key']."' value='".$horse['key']."' />";
 	         			print "<input type='hidden' name='facility_key' id='facility_key".$horse['key']."' value='".$_SESSION['facility']."' />";
 	         			print "<input type='hidden' name='student_key' id='student_key".$horse['key']."' value='".$_SESSION['login_key']."' />";
-
 							print "<table>";//Input new training data
-
 								foreach ($training_field_labels as $label) {
-
 									if($label!="key"&&$label!="facility_key"&&$label!="horse_key"&&$label!="student_key"){
 										print "<tr><td>";
-
 											if($label=='comment'){
 												print "<textarea rows='4' cols='200' id='".$label.$horse['key']."' placeholder='Training session goals...'></textarea>";
 											}elseif($label=='goal'){
 												print "<textarea rows='4' cols='200' id='".$label.$horse['key']."' placeholder='Training session comments...'></textarea>";
 											}elseif($label=='training_date'){
-												print "<input id='datetimepicker5".$horse['key']."' name='datetimepicker' type='text' placeholder='Training Session Time'/>";
+												print "<input id='datetimepicker5".$horse['key']."' name='datetimepicker5' type='text' placeholder='Training Session Time'/>";
 											}elseif($label=='trainer_key'){
 												print "<select name='".$label."' id='".$label.$horse['key']."'>";
 												print "<option value=''>Trainer</option>";
 													foreach($trainers as $trainer){
 																print"<option value=$trainer[key]>".$trainer['first_name']." ".$trainer['last_name']."</option>";	
 													}
+													print "<option value='-1'>No Trainer</option>";
 													print "</select>";
-											}else{
+											}elseif($label=='duration'){
+												print "<select name='".$label."' id='".$label.$horse['key']."'>";
+													print "<option value=''>Training minutes</option>";
+													for($i=30;$i<=120;$i+=15){
+														print "<option value=$i>".$i." minutes</option>";
+													}
+													print "</select>";
+											}elseif($label=='quality'){
+												print "<select name='".$label."' id='".$label.$horse['key']."'>";
+													print "<option value=''>Ride Quality</option>";
+													for($i=0;$i<=10;$i++){
+														print "<option value=$i>".$i."</option>";
+													}
+													print "</select>";
 
+
+											}else{
 												print "<input type='text' cols='100' id='".$label.$horse['key']."' placeholder = '".str_replace('_',' ',$label)."' value='".$video_url."'></input>";
 											}
-
 										print "</td></tr>";
 									}// end if table !=
 								} //end for each training label
@@ -4487,21 +3687,15 @@ if(isset($horse_key)&&$horse_key&&$_SESSION['passwordcheck']=='pass'&&$_SESSION[
 							print "<input  id='submit_training' type = 'submit' name = 'submit_training' class= 'btn btn-warning' value = 'Udpate Training Log'/>";
 						print "</form>";
 					print "</div>";//end update div
-
 				print "</div>";//end main horse div
 			}// end horse foreach
 		}// end horses if
-
-
 	print "</div>"; //End accordion div
 	?>
 </div>
-
-
 <!-- ########################## END Training TAB !!!!! ################################-->
 
 <!-- ########################## ADMIN TAB !!!!! ################################-->
-
 <div id="fragment-11">
 <?
 if(isset($role_mode)&&$role_mode==0){
@@ -4510,12 +3704,10 @@ if(isset($role_mode)&&$role_mode==0){
 	print "<div class='roleaccordion'>";
 }
 if($_SESSION['access']<3){//dont see this tab if vet or farrier
-
 	if($_SESSION['passwordcheck']=='pass'){
         // if($login_data){
 		if($login_field_labels&&$login_data){
         	print "<h3>Access Levels for Current Users</h3>";
-
         	print "<table>";
         	  	 print "<tr>";
   	  	 			foreach($login_field_labels as $label){
@@ -4543,19 +3735,13 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
   	  	 				print "<input type='hidden' id='admin_delete' value='ad".$row['key']."'>";
   	     				print "<td id='delete_admin".$row['key']."'><input id='delete".$row['key']."' type = 'submit' name = 'delete_admin' class= 'btn btn-danger delete_admin btn-mini' value = 'Delete User' /></td>";
   	     			print "</form>";
-  	     			
   	  	 			}
   	  	 			print "</tr>";
-  	  	 			
         	}
  			 print "</table>";
-
         }//end if login data
-  	    	
-    
         ?>		 
 <!--ADD NEW ADMIN -->
-
     <h3>Enter New Administrator, Vet, Farrier, or Trainer Information</h3>
     <div id="insert_admin_response"><!--start inner accordion div-->
 <?if($_SESSION['access']<2 && $_SESSION['passwordcheck']=='pass'){//allow to update information
@@ -4609,7 +3795,6 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
                     }
                 }
               ?>
-
             </table>
         <input  id="submit_admin" type = "submit" name = "submit_admin" class= "btn btn-warning" value = "Submit New Admin Information"/>
         </form>
@@ -4619,8 +3804,6 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
     } 
 ?>
     </div> <!-- end inner accordion --> 
-
-
 <!--ADD NEW FACILITY -->    
     <h3>Enter New Facility Data</h3>
     <div id="facility_response"><!--start inner accordion div--> 
@@ -4653,12 +3836,8 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
 	}//end if pass check
 }//end if for admin access
 ?> 
-</div> <!--end accordion--> 
-		
+</div> <!--end accordion--> 	
 </div> <!-- ################################# end fragment-10 #################################-->
-
-
-
 </div><!--end tabs div-->
 </div><!--end main_container div-->
 <!-- Modals -->
@@ -4678,36 +3857,8 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
   	  	 			if($label!="key"&&$label!="horse_key"&&$label!="horse_image"&&$label!="facility_key"){
   	  	 				print "<tr>";
   	  	 					if($label=="date_foaled"||$label=="date"||$label=="next_date"){
-  	  	 						//begin date selection - datepicker has problems with touch screens!!
   	  	 						print "<td width='150'>".str_replace('_',' ',$label)."</td>";
-  	  	 						print "<td>";						
-  	  	 						print "<select style='width: auto;' id ='nmonth' name = 'nmonth' >";
-									print "<option value = '".date('m',$row[$label])."'>".date('M',$row[$label])."</option>";
-									print "<option value = '01'>January</option>";
-									print "<option value = '02'>February</option>";
-									print "<option value = '03'>March</option>";
-									print "<option value = '04'>April</option>";
-									print "<option value = '05'>May</option>";
-									print "<option value = '06'>June</option>";
-									print "<option value = '07'>July</option>";
-									print "<option value = '08'>August</option>";
-									print "<option value = '09'>September</option>";
-									print "<option value = '10'>October</option>";
-									print "<option value = '11'>November</option>";
-									print "<option value = '12'>December</option>";
-								print "</select>";
-								print "<select style='width: auto;' id='nday' name='nday'><option value='".date('d',$row[$label])."'>".date('d',$row[$label])."</option>";
-								for ($i=1;$i<=31;$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "<select style='width: auto;' id='nyear' name='nyear'><option value='".date('Y',$row[$label])."'>".date('Y',$row[$label])."</option>";
-								for ($i=1990;$i<=date('Y');$i++){
-									print "<option value='$i'>".$i."</option>";
-								}
-								print "</select>";
-								print "</td>";
-								//end date selections
+  	  	 						print "<td><input id='ndatetimepicker5' name='datetimepicker5' type='text' placeholder='Click to select'/></td>";
   	  	 					}elseif($label=="height"){
   	  	 						//slect for height
   	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='n".$label."' id='n".$label."'>";
@@ -4717,7 +3868,6 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
 										print"<option value=$j>$j</option>";
 									}//end while
 							print "</select></td>";
-  	  	 					
   	  	 					}elseif($label=="weight"){
   	  	 						//slect for weight
   	  	 					print "<td width='150'>".str_replace('_',' ',$label)."</td><td><select name='n".$label."' id='n".$label."'>";
@@ -4726,7 +3876,6 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
 										print"<option value=$i>$i</option>";
 									}//end while
 							print "</select></td>";
-  	  	 					
   	  	 					}
    	  	 					elseif($label=="temp-farenheit"){
   	  	 						//slect for weight
@@ -4736,7 +3885,6 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
 										print"<option value=$i>$i</option>";
 									}//end while
 							print "</select></td>";
-  	  	 					
   	  	 					}
   	  	 					elseif($label=="heart_rate"){
   	  	 						//slect for weight
@@ -4756,7 +3904,6 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
 										print"<option value=$i>$i</option>";
 									}//end while
 							print "</select></td>";
-  	  	 					
   	  	 					}
   	  	 					elseif($label=="sex"){
   	  	 						//slect for weight
@@ -4812,7 +3959,6 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
   </div>
 </form>
 </div><!--end modal div-->
-
 <!--begin login modal-->
 <div id="myModal_login" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 <form  action='login.php' method='post'>
@@ -4873,7 +4019,6 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
   	  	 		print "</tr>";			
 			print "</table>";
 			?>  
-			
 			 <input id="submit_login"  type = "submit" class="btn btn-warning" aria-hidden="true"  value = "Login"/>
 			 <br></br>
   </div>
@@ -4883,11 +4028,8 @@ if($_SESSION['access']<3){//dont see this tab if vet or farrier
 	<form  action='logout.php' method='post'>
 	</form>
 </div>
-
-</body>
 <script type="text/javascript">
-
-jQuery('.datetimepicker').datetimepicker({
+$('input[name=datetimepicker5]').datetimepicker({
  datepicker:true,
  formatTime:'g:i a',
   allowTimes:['00:00 am','00:30 am','01:00 am','01:30 am','02:00 am','01:30 am','02:30 am','03:00 am','03:30 am','04:00 am','04:30 am','05:00 am','05:30 am',
@@ -4895,7 +4037,6 @@ jQuery('.datetimepicker').datetimepicker({
  	'12:00 pm','01:00 pm','01:30 pm','02:00 pm','01:30 pm','02:30 pm','03:00 pm','03:30 pm','04:00 pm','04:30 pm','05:00 pm','05:30 pm',
  	'06:00 pm','06:30 pm','07:00 pm','07:30 pm','08:00 pm','08:30 pm','09:00 pm','09:30 pm','10:00 pm','10:30 pm','11:00 pm','11:30 pm']
 });
-
 </script>
 <!-- <script type="text/javascript">$('#image_button').click(function(){
   $('#datetimepicker4').datetimepicker('show'); //support hide,show and destroy command

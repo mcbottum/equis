@@ -5,7 +5,6 @@ function get_db(){
     return $db;
 }
 
-
 //mysqli
 function get_conn($db){
     // ##### local #####
@@ -21,18 +20,20 @@ function get_conn($db){
     return $conn;
 }
 
-
 //mysqli
 function GetMysqlFieldNames($Table, $db){
+    $field_labels=array();
     $conn=get_conn($db);
     $field_names="SHOW COLUMNS FROM $Table";
     $fields=mysqli_query($conn, $field_names);
-    while($columns = mysqli_fetch_array($fields, MYSQLI_ASSOC)){ 
-            $field_labels[]=$columns['Field'];
+    if($fields){
+        while($columns = mysqli_fetch_array($fields, MYSQLI_ASSOC)){ 
+                $field_labels[]=$columns['Field'];
+        }
     }
-mysqli_free_result($fields);
-mysqli_close($conn);
-return $field_labels;
+    mysqli_free_result($fields);
+    mysqli_close($conn);
+    return $field_labels;
 }
 
 //mysqli
@@ -70,17 +71,6 @@ function GetTableDataFacility($field,$ID,$Table,$db, $facility){
     }else{
         $sql="SELECT * FROM $Table WHERE $field ='$ID' AND `facility_key`='$facility'";
     }
-    // }elseif($field=="horse_key"){
-    //     $sql="SELECT * FROM $Table WHERE horse_key ='$ID' AND `facility_key`='$facility'";
-    // }elseif($field=='infection'){
-    //     $sql="SELECT * FROM $Table WHERE infection ='$ID' AND `facility_key`='$facility'";
-    // }elseif($field=='data_key'){//choose image file
-    //     $sql="SELECT * FROM $Table WHERE data_key ='$ID' AND `facility_key`='$facility'";
-    // }elseif($field=='vet_key'){//choose image file
-    //     $sql="SELECT * FROM login WHERE `key` ='$ID' AND `facility_key`='$facility'";
-    // }
-
-    
     $result = mysqli_query($conn, $sql);
     if($result){
         while($row = mysqli_fetch_assoc($result)){
@@ -88,10 +78,8 @@ function GetTableDataFacility($field,$ID,$Table,$db, $facility){
         }
         mysqli_free_result($result);
     }
-
     mysqli_close($conn);
     return $tableResults;
-    
 }
 
 //mysqli
@@ -108,7 +96,7 @@ function GetTableData($field,$ID,$Table,$db){
     }elseif($field=='vet_key'){//choose image file
         $sql="SELECT * FROM login WHERE `key` ='$ID' ";
     }elseif($field=='student_key'){
-        $sql="SELECT * FROM $Table WHERE `student_key` ='$ID' ";
+        $sql="SELECT * FROM $Table WHERE `student_key` ='$ID' ORDER BY `training_date` DESC";
     }elseif($field=='trainer_key'){
         $sql="SELECT * FROM $Table WHERE `role`='trainer' ";
     }
@@ -123,7 +111,6 @@ function GetTableData($field,$ID,$Table,$db){
     mysqli_close($conn);
     return $tableResults;
 }
-
 
 //mysqli
 function GetRoleTableData($ID,$Table,$facillity,$db){
@@ -146,7 +133,6 @@ function GetRoleTableData($ID,$Table,$facillity,$db){
         mysqli_close($conn);    
         return;
     }
-    
 }
 
 //mysqli
@@ -162,7 +148,6 @@ function GetOwnerKeyData($ID,$Table,$db){
     return $tableResults;
     
 }
-
 
 //mysqli
 function GetFilterData($field,$Table,$facility,$db){
@@ -199,8 +184,6 @@ function GetHorsesFromAppt($Table,$time,$facility,$db){
         while($row = mysqli_fetch_assoc($result)){
             $tableResults[]=$row;
         }
-
-
         if($tableResults){
             foreach($tableResults as $horse_key){
                 $horse_key_array[]=$horse_key['horse_key'];
@@ -221,14 +204,11 @@ function GetHorsesFromAppt($Table,$time,$facility,$db){
         mysqli_close($conn);
         return;
     }
-    
 }
-
 
 //mysqli
 function getRoles($facility, $db){
     $conn=get_conn($db);
-
     $sql2="SELECT `key`,`first_name`,`last_name`,`role` FROM `login` WHERE `facility_key`='$facility' AND (`role`='owner' OR `role`='vet' OR `role`='farrier' OR `role`='manager')  ORDER BY role, last_name";
     $result = mysqli_query($conn, $sql2) or die(mysqli_error($conn));
     if($result){
@@ -270,7 +250,6 @@ function getHorseName($horse_key,$horse_data){
     return $horse;
 }
 
-
 //mysqli
 function getName($key, $table, $db){
     $conn=get_conn($db);
@@ -288,7 +267,6 @@ function getName($key, $table, $db){
     }else{
         $name='';
     }
-
     mysqli_free_result($result);
     mysqli_close($conn);
     return $name;
@@ -297,13 +275,10 @@ function getName($key, $table, $db){
 //mysqli
 function checkRole($key, $table){
     $conn=get_conn($db);
-
     $sql="SELECT role FROM `$table` WHERE `key`='$key'";
-    
     $result = mysqli_query($conn, $sql);
     while($row = mysqli_fetch_assoc($result)){
-        $results[]=$row;
-        
+        $results[]=$row;  
     }
     if($results[0]['role']){
         $role=$results[0]['role'];
@@ -311,6 +286,33 @@ function checkRole($key, $table){
     mysqli_free_result($result);
     mysqli_close($conn);
     return $role;
+}
+
+function GetStats($table, $key_field, $field_1, $field_2, $date_field, $db){
+    $results[] = array();
+    $conn=get_conn($db);
+    $sql_all="Select `$key_field`, SUM(`$field_1`), ROUND(AVG(`$field_2`),1), COUNT(`$key_field`) FROM $table GROUP BY `$key_field`";
+    $sql_week="select $key_field, SUM($field_1), ROUND(AVG($field_2),1), COUNT($key_field) from training WHERE YEARWEEK($date_field)=YEARWEEK(NOW()) GROUP BY $key_field";
+
+    $sql_month="select $key_field, SUM($field_1), ROUND(AVG($field_2),1), COUNT($key_field) from training WHERE $date_field > (NOW()-INTERVAL 1 MONTH) GROUP BY $key_field";
+    $result_week = mysqli_query($conn, $sql_week);
+    while($row_week = mysqli_fetch_assoc($result_week)){
+        $results_week[]=$row_week;  
+    }
+    $result_month = mysqli_query($conn, $sql_month);
+    while($row_month = mysqli_fetch_assoc($result_month)){
+        $results_month[]=$row_month;  
+    }
+    $result_all = mysqli_query($conn, $sql_all);
+    while($row = mysqli_fetch_assoc($result_all)){
+        $results_all[]=$row;  
+    }
+    $results = [
+        "week" => $results_week,
+        "month" => $results_month,
+        "all" => $results_all,
+    ];
+    return $results;
 }
 
 //mysqli

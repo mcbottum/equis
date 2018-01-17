@@ -16,13 +16,15 @@ if(isset($_GET['video_url'])){
 	$trainer_key=$_GET['trainer_key'];
 	$student_key=$_GET['student_key'];
 	$training_date=$_GET['training_date'];
+	$duration=$_GET['duration'];
+	$quality=$_GET['quality'];
 	$goal=$_GET['goal'];
 	$comment=$_GET['comment'];
 	$video_url=$_GET['video_url'];
 	if($training_date!=''){
-		$insert_sql = ("INSERT INTO training VALUES (NULL,'$student_key','$horse_key','$trainer_key','$facility_key','$training_date','$goal',$comment','$video_url')");
+		$insert_sql = ("INSERT INTO training VALUES (NULL,'$student_key','$horse_key','$trainer_key','$facility_key','$training_date','$duration','$quality','$goal','$comment','$video_url')");
 		$insert= mysqli_query($conn, $insert_sql) or die(mysqli_error());
-		print "Training Comments Logged   <input type='hidden' name='active_div' id='active_div' value='1' /><input id='reload_training' type ='submit' name ='reload_training' class= 'btn btn-info' value = 'Reload Page' onclick='parent.location=&quot;index.php&quot;'>";
+		print " training information updated! <input id='reload_physical' type ='submit' name ='reload_physical' class= 'btn btn-info' value = 'Reload Form' onclick='parent.location=&quot;index.php&quot;'>";
 	}
 }
 if(isset($_GET['blood'])&&isset($_GET['horse_key'])){

@@ -664,7 +664,7 @@ h2 {
 
 h3 {
   font-size: 24px;
-  line-height: 40px;
+  /*line-height: 40px;*/
 }
 
 h4 {
@@ -1621,6 +1621,7 @@ select:focus:required:invalid:focus {
 .input-append .add-on,
 .input-append .btn {
   margin-left: -1px;
+  padding-top: 10px;
 }
 
 .input-append .add-on:last-child,
