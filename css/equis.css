@@ -3,7 +3,7 @@ body{
 	padding:5px;
 }
 #north_container {
-    width: 100%;
+    width: 75%;
 	border-radius:.7ex;
   	-webkit-border-radius:.7ex;
 	border:1px solid grey;
@@ -17,7 +17,7 @@ body{
 }
 
 #title{
-	text-align: center; 
+	text-align: center;
 	width:80%;
 	z-index:-1;
 	font-weight:strong;
@@ -193,7 +193,7 @@ margin:0;
 }
 .training_table th,tr{
 	width:150px;
-}	
+}
 #iFramePdf{
 	margin-top:-1000px;
 	padding-top:0px;
@@ -247,21 +247,21 @@ margin:0;
 	margin-left:auto;
 	margin-right:auto;
 }
-.footer { 
-	//height: 80px; 
-	text-align: center; 
-	font-size:10px; 
-	color:#999999; 
-	font-family:Verdana; 
-	padding-top: 10px; 
+.footer {
+	//height: 80px;
+	text-align: center;
+	font-size:10px;
+	color:#999999;
+	font-family:Verdana;
+	padding-top: 10px;
 	width: 100%;
 	position:absolute;
-	left:0px; bottom:0; 
+	left:0px; bottom:0;
 	font-weight:normal;
 	font-style:normal;
 	//margin-bottom:0;
-	}	
-	
+	}
+
 .inner_accordion{
 	overflow:scroll;
 }
